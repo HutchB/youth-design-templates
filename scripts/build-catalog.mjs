@@ -93,6 +93,25 @@ function validateAssets(slug, meta) {
 	return resolved;
 }
 
+/**
+ * 文本资产直接内联进清单：全部条目加起来才几十 KB，客户端一次请求就能拿到完整内容，
+ * 省掉「先拉索引再逐条拉正文」的第二轮请求和一半的来源校验。
+ * 二进制资产（package/preview）永远只给路径。
+ */
+const INLINE_ASSET_KEYS = ["spec", "theme", "markup"];
+
+function inlineContent(slug, meta) {
+	const content = {};
+	for (const key of INLINE_ASSET_KEYS) {
+		const rel = meta.assets?.[key];
+		if (typeof rel !== "string") continue;
+		const filePath = join(TEMPLATES_DIR, slug, rel);
+		if (!existsSync(filePath)) continue;
+		content[key] = readFileSync(filePath, "utf8");
+	}
+	return content;
+}
+
 function validateSpec(slug, meta) {
 	if (typeof meta.assets?.spec !== "string") return;
 	const specPath = join(TEMPLATES_DIR, slug, meta.assets.spec);
@@ -189,6 +208,7 @@ function validateEntry(slug, meta) {
 		origin: meta.origin,
 		collectedAt: meta.collectedAt,
 		assets,
+		content: inlineContent(slug, meta),
 	};
 }
 
