@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "figma",
+	"name": "Figma",
+	"version": "1.0.0",
+	"order": 150,
+	"category": "creative",
+	"vibe": "light",
+	"tags": [
+		"creative",
+		"light"
+	],
+	"blurb": "Crisp light tool chrome; blue selection, purple spark, compact 1px-precision panels.",
+	"tagline": {
+		"en": "Tool white, blue select, purple spark",
+		"zh": "工具白，蓝色选中紫色灵感"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

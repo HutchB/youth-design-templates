@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "shopify",
+	"name": "Shopify",
+	"version": "1.0.0",
+	"order": 190,
+	"category": "commerce",
+	"vibe": "light",
+	"tags": [
+		"commerce",
+		"light"
+	],
+	"blurb": "Merchant back-office; cool gray floor, white bordered cards, commerce green actions.",
+	"tagline": {
+		"en": "Merchant back office, commerce green",
+		"zh": "商家后台，商业绿行动色"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

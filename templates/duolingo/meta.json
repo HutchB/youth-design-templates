@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "duolingo",
+	"name": "Duolingo",
+	"version": "1.0.0",
+	"order": 140,
+	"category": "playful",
+	"vibe": "light",
+	"tags": [
+		"playful",
+		"light"
+	],
+	"blurb": "Chunky playful game UI; vivid green, 3D-press buttons, extra-bold uppercase labels.",
+	"tagline": {
+		"en": "Vivid green, buttons that press down",
+		"zh": "鲜绿游戏感，按钮会下沉"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

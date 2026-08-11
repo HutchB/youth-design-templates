@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "slack",
+	"name": "Slack",
+	"version": "1.0.0",
+	"order": 170,
+	"category": "productivity",
+	"vibe": "light",
+	"tags": [
+		"productivity",
+		"light"
+	],
+	"blurb": "Friendly workplace white with an aubergine nav rail; candy accents, conversational blocks.",
+	"tagline": {
+		"en": "White + aubergine rail, candy accents",
+		"zh": "白底茄紫导航，糖果点缀"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "spotify",
+	"name": "Spotify",
+	"version": "1.0.0",
+	"order": 40,
+	"category": "media",
+	"vibe": "dark",
+	"tags": [
+		"media",
+		"dark"
+	],
+	"blurb": "Near-black media stage; one electric green for play, bold type, pill buttons, imagery-led.",
+	"tagline": {
+		"en": "Near-black stage, one electric green",
+		"zh": "近黑舞台，一抹电光绿"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

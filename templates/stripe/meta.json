@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "stripe",
+	"name": "Stripe",
+	"version": "1.0.0",
+	"order": 30,
+	"category": "fintech",
+	"vibe": "light",
+	"tags": [
+		"fintech",
+		"light"
+	],
+	"blurb": "Polished light fintech; blurple CTAs, white cards on airy blue-gray, refined layered shadows.",
+	"tagline": {
+		"en": "Blurple fintech polish, refined shadows",
+		"zh": "蓝紫金融质感，云淡阴影考究"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "vercel",
+	"name": "Vercel",
+	"version": "1.0.0",
+	"order": 60,
+	"category": "dev",
+	"vibe": "light",
+	"tags": [
+		"dev",
+		"light"
+	],
+	"blurb": "Stark black-on-white monochrome; Swiss precision, mono accents, one blue for links only.",
+	"tagline": {
+		"en": "Black-on-white Swiss precision",
+		"zh": "黑白极简，瑞士式精确"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

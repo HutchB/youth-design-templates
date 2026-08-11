@@ -1,0 +1,619 @@
+{
+	"schemaVersion": 1,
+	"name": "vetta-design-templates",
+	"displayName": "Vetta Design Templates",
+	"repository": "https://github.com/openvetta/vetta-design-templates",
+	"minPluginVersion": "0.4.0",
+	"templates": [
+		{
+			"kind": "design-system",
+			"slug": "linear",
+			"name": "Linear",
+			"version": "1.0.0",
+			"order": 10,
+			"category": "dev",
+			"vibe": "dark",
+			"tags": [
+				"dev",
+				"dark"
+			],
+			"blurb": "Dark, dense, engineered dev-tool calm; indigo primary, hairline borders, keyboard-first density.",
+			"tagline": {
+				"en": "Dark, dense, engineered calm",
+				"zh": "暗色高密度，工程师的冷静秩序"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/linear/DESIGN.md",
+				"theme": "templates/linear/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "doodle-pop",
+			"name": "Doodle Pop",
+			"version": "1.0.0",
+			"order": 20,
+			"category": "playful",
+			"vibe": "light",
+			"tags": [
+				"playful",
+				"light"
+			],
+			"blurb": "Lime × black sticker energy; thick ink borders, hard offset shadows, polka-dot textures, coral & pastel pops.",
+			"tagline": {
+				"en": "Lime × black polka-dot sticker pop",
+				"zh": "柠黄撞黑，波点贴纸游戏感"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/doodle-pop/DESIGN.md",
+				"theme": "templates/doodle-pop/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "stripe",
+			"name": "Stripe",
+			"version": "1.0.0",
+			"order": 30,
+			"category": "fintech",
+			"vibe": "light",
+			"tags": [
+				"fintech",
+				"light"
+			],
+			"blurb": "Polished light fintech; blurple CTAs, white cards on airy blue-gray, refined layered shadows.",
+			"tagline": {
+				"en": "Blurple fintech polish, refined shadows",
+				"zh": "蓝紫金融质感，云淡阴影考究"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/stripe/DESIGN.md",
+				"theme": "templates/stripe/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "spotify",
+			"name": "Spotify",
+			"version": "1.0.0",
+			"order": 40,
+			"category": "media",
+			"vibe": "dark",
+			"tags": [
+				"media",
+				"dark"
+			],
+			"blurb": "Near-black media stage; one electric green for play, bold type, pill buttons, imagery-led.",
+			"tagline": {
+				"en": "Near-black stage, one electric green",
+				"zh": "近黑舞台，一抹电光绿"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/spotify/DESIGN.md",
+				"theme": "templates/spotify/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "notion",
+			"name": "Notion",
+			"version": "1.0.0",
+			"order": 50,
+			"category": "productivity",
+			"vibe": "light",
+			"tags": [
+				"productivity",
+				"light"
+			],
+			"blurb": "Quiet warm-gray document UI; tiny radii, almost no chrome, typography does the hierarchy.",
+			"tagline": {
+				"en": "Warm-gray paper, text is the UI",
+				"zh": "暖灰纸面，文字即界面"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/notion/DESIGN.md",
+				"theme": "templates/notion/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "vercel",
+			"name": "Vercel",
+			"version": "1.0.0",
+			"order": 60,
+			"category": "dev",
+			"vibe": "light",
+			"tags": [
+				"dev",
+				"light"
+			],
+			"blurb": "Stark black-on-white monochrome; Swiss precision, mono accents, one blue for links only.",
+			"tagline": {
+				"en": "Black-on-white Swiss precision",
+				"zh": "黑白极简，瑞士式精确"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/vercel/DESIGN.md",
+				"theme": "templates/vercel/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "headspace",
+			"name": "Headspace",
+			"version": "1.0.0",
+			"order": 70,
+			"category": "playful",
+			"vibe": "light",
+			"tags": [
+				"playful",
+				"light"
+			],
+			"blurb": "Warm sunrise cream calm; orange CTAs, maximal roundness, soft diffuse depth, friendly.",
+			"tagline": {
+				"en": "Sunrise warmth, rounded everything",
+				"zh": "日出暖橙，圆到底的松弛感"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/headspace/DESIGN.md",
+				"theme": "templates/headspace/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "github",
+			"name": "GitHub",
+			"version": "1.0.0",
+			"order": 80,
+			"category": "dev",
+			"vibe": "dark",
+			"tags": [
+				"dev",
+				"dark"
+			],
+			"blurb": "Dimmed dark developer habitat; bordered boxes, green actions, blue links, mono everywhere.",
+			"tagline": {
+				"en": "Dimmed code habitat, green actions",
+				"zh": "暗夜代码栖息地，绿色行动"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/github/DESIGN.md",
+				"theme": "templates/github/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "apple",
+			"name": "Apple",
+			"version": "1.0.0",
+			"order": 90,
+			"category": "consumer",
+			"vibe": "light",
+			"tags": [
+				"consumer",
+				"light"
+			],
+			"blurb": "Airy premium light neutrals; huge type, pill controls, generous curves and silence.",
+			"tagline": {
+				"en": "Big type, big air, premium calm",
+				"zh": "留白与大字，高级感的呼吸"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/apple/DESIGN.md",
+				"theme": "templates/apple/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "discord",
+			"name": "Discord",
+			"version": "1.0.0",
+			"order": 100,
+			"category": "consumer",
+			"vibe": "dark",
+			"tags": [
+				"consumer",
+				"dark"
+			],
+			"blurb": "Cozy dark clubhouse; blurple energy, layered charcoals, rounded playful gaming DNA.",
+			"tagline": {
+				"en": "Cozy dark clubhouse, blurple energy",
+				"zh": "深色俱乐部，蓝紫活力"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/discord/DESIGN.md",
+				"theme": "templates/discord/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "anthropic",
+			"name": "Anthropic",
+			"version": "1.0.0",
+			"order": 110,
+			"category": "ai",
+			"vibe": "light",
+			"tags": [
+				"ai",
+				"light"
+			],
+			"blurb": "Warm book-cloth cream; ink primary, clay accent, serif headings, literary and unhurried.",
+			"tagline": {
+				"en": "Book-cloth cream, serif and clay",
+				"zh": "书页米色，衬线与陶土"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/anthropic/DESIGN.md",
+				"theme": "templates/anthropic/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "netflix",
+			"name": "Netflix",
+			"version": "1.0.0",
+			"order": 120,
+			"category": "media",
+			"vibe": "dark",
+			"tags": [
+				"media",
+				"dark"
+			],
+			"blurb": "Cinematic black; one red action, sharp corners, full-bleed imagery with gradient text.",
+			"tagline": {
+				"en": "Cinematic black, one red button",
+				"zh": "影院黑，一颗红色按钮"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/netflix/DESIGN.md",
+				"theme": "templates/netflix/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "airbnb",
+			"name": "Airbnb",
+			"version": "1.0.0",
+			"order": 130,
+			"category": "consumer",
+			"vibe": "light",
+			"tags": [
+				"consumer",
+				"light"
+			],
+			"blurb": "Warm white hospitality; coral CTAs, photo-led rounded cards, floating pill search.",
+			"tagline": {
+				"en": "Coral-warm hospitality",
+				"zh": "珊瑚色的温暖待客之道"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/airbnb/DESIGN.md",
+				"theme": "templates/airbnb/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "duolingo",
+			"name": "Duolingo",
+			"version": "1.0.0",
+			"order": 140,
+			"category": "playful",
+			"vibe": "light",
+			"tags": [
+				"playful",
+				"light"
+			],
+			"blurb": "Chunky playful game UI; vivid green, 3D-press buttons, extra-bold uppercase labels.",
+			"tagline": {
+				"en": "Vivid green, buttons that press down",
+				"zh": "鲜绿游戏感，按钮会下沉"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/duolingo/DESIGN.md",
+				"theme": "templates/duolingo/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "figma",
+			"name": "Figma",
+			"version": "1.0.0",
+			"order": 150,
+			"category": "creative",
+			"vibe": "light",
+			"tags": [
+				"creative",
+				"light"
+			],
+			"blurb": "Crisp light tool chrome; blue selection, purple spark, compact 1px-precision panels.",
+			"tagline": {
+				"en": "Tool white, blue select, purple spark",
+				"zh": "工具白，蓝色选中紫色灵感"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/figma/DESIGN.md",
+				"theme": "templates/figma/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "openai",
+			"name": "OpenAI",
+			"version": "1.0.0",
+			"order": 160,
+			"category": "ai",
+			"vibe": "light",
+			"tags": [
+				"ai",
+				"light"
+			],
+			"blurb": "Restrained lab white; teal signal only, near-flat, centered reading column, quiet cards.",
+			"tagline": {
+				"en": "Lab white with a teal signal",
+				"zh": "实验室白，青绿点睛"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/openai/DESIGN.md",
+				"theme": "templates/openai/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "slack",
+			"name": "Slack",
+			"version": "1.0.0",
+			"order": 170,
+			"category": "productivity",
+			"vibe": "light",
+			"tags": [
+				"productivity",
+				"light"
+			],
+			"blurb": "Friendly workplace white with an aubergine nav rail; candy accents, conversational blocks.",
+			"tagline": {
+				"en": "White + aubergine rail, candy accents",
+				"zh": "白底茄紫导航，糖果点缀"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/slack/DESIGN.md",
+				"theme": "templates/slack/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "coinbase",
+			"name": "Coinbase",
+			"version": "1.0.0",
+			"order": 180,
+			"category": "fintech",
+			"vibe": "light",
+			"tags": [
+				"fintech",
+				"light"
+			],
+			"blurb": "Bank-grade crypto light; one decisive blue, pill CTAs, tabular numbers front and center.",
+			"tagline": {
+				"en": "One decisive blue, numbers first",
+				"zh": "一蓝到底，数字优先"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/coinbase/DESIGN.md",
+				"theme": "templates/coinbase/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "shopify",
+			"name": "Shopify",
+			"version": "1.0.0",
+			"order": 190,
+			"category": "commerce",
+			"vibe": "light",
+			"tags": [
+				"commerce",
+				"light"
+			],
+			"blurb": "Merchant back-office; cool gray floor, white bordered cards, commerce green actions.",
+			"tagline": {
+				"en": "Merchant back office, commerce green",
+				"zh": "商家后台，商业绿行动色"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/shopify/DESIGN.md",
+				"theme": "templates/shopify/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "medium",
+			"name": "Medium",
+			"version": "1.0.0",
+			"order": 200,
+			"category": "editorial",
+			"vibe": "light",
+			"tags": [
+				"editorial",
+				"light"
+			],
+			"blurb": "Editorial white magazine; serif prose, green follow, yellow highlight, dividers not boxes.",
+			"tagline": {
+				"en": "Magazine white, serif prose",
+				"zh": "杂志白，衬线正文黄高亮"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/medium/DESIGN.md",
+				"theme": "templates/medium/theme.css"
+			}
+		},
+		{
+			"kind": "design-system",
+			"slug": "retro-95",
+			"name": "Retro 95",
+			"version": "1.0.0",
+			"order": 210,
+			"category": "retro",
+			"vibe": "light",
+			"tags": [
+				"retro",
+				"light"
+			],
+			"blurb": "1995 desktop nostalgia; beveled silver chrome, navy title bars, zero border radius.",
+			"tagline": {
+				"en": "1995 desktop, beveled silver, zero radius",
+				"zh": "1995 桌面，斜面银灰零圆角"
+			},
+			"license": "MIT",
+			"origin": {
+				"type": "curated",
+				"upstream": "https://github.com/VoltAgent/awesome-design-md",
+				"note": "Vetta-adapted from awesome-design-md (MIT)."
+			},
+			"collectedAt": "2026-08-11",
+			"assets": {
+				"spec": "templates/retro-95/DESIGN.md",
+				"theme": "templates/retro-95/theme.css"
+			}
+		}
+	],
+	"catalogVersion": "2026.08.11-2"
+}

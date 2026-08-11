@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "apple",
+	"name": "Apple",
+	"version": "1.0.0",
+	"order": 90,
+	"category": "consumer",
+	"vibe": "light",
+	"tags": [
+		"consumer",
+		"light"
+	],
+	"blurb": "Airy premium light neutrals; huge type, pill controls, generous curves and silence.",
+	"tagline": {
+		"en": "Big type, big air, premium calm",
+		"zh": "留白与大字，高级感的呼吸"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}

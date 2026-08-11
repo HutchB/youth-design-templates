@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "airbnb",
+	"name": "Airbnb",
+	"version": "1.0.0",
+	"order": 130,
+	"category": "consumer",
+	"vibe": "light",
+	"tags": [
+		"consumer",
+		"light"
+	],
+	"blurb": "Warm white hospitality; coral CTAs, photo-led rounded cards, floating pill search.",
+	"tagline": {
+		"en": "Coral-warm hospitality",
+		"zh": "珊瑚色的温暖待客之道"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css"
+	},
+	"collectedAt": "2026-08-11"
+}
