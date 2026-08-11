@@ -122,17 +122,14 @@ scripts/build-catalog.mjs
 
 ## 更新多久到用户手上
 
-客户端首选 jsDelivr（快、国内可达性好），它的 CDN 缓存是 12 小时；raw 兜底 5 分钟新鲜。
-合进 `main` 后 CI 会自动 purge jsDelivr，所以正常情况下几分钟内就能拿到。
+客户端首选 `raw.githubusercontent.com`（`max-age=300`），本地 TTL 5 分钟且带 ETag 条件
+请求。**合进 `main` 之后几分钟内、用户下次打开「设计」页就会看到**，不需要任何人工操作。
 
-客户端自己还有 6 小时的本地 TTL：**用户在「设计」页点一下「刷新」会强制跳过它**。
-所以验证「新条目上线了没」的正确姿势是：合并 → 等 CI 绿 → 在设计页点刷新。
+jsDelivr 只是兜底。它对 `@main` 会缓存「分支→commit」的解析结果（12 小时），而且
+purge 单个文件刷不掉——实测调用 purge 返回 `finished`，内容依然是半天前的。所以
+**不要把它当首选源，也不要指望 purge 能救**。
 
-手动 purge（CI 挂了时）：
-
-```bash
-curl -sS "https://purge.jsdelivr.net/gh/openvetta/vetta-design-templates@main/.vetta/design-templates.json"
-```
+想立刻确认：在设计页点一下「刷新」会强制跳过本地 TTL。
 
 ## 提交前检查清单
 

@@ -18,8 +18,9 @@ jobs:
       - run: node scripts/build-catalog.mjs --check
 
   purge:
-    # 客户端首选 jsDelivr，而它的 CDN 缓存是 s-maxage=43200（12 小时）——不主动清的话，
-    # 内容合进 main 之后最多要等半天才到用户手上，看起来就像「更新没生效」。
+    # 客户端已经改成首选 raw（5 分钟新鲜），所以这一步不再是更新能否生效的关键路径。
+    # 保留只是让兜底源尽量别太旧：jsDelivr 对 @main 会缓存「分支→commit」的解析结果，
+    # purge 单个文件常常刷不掉它（实测 finished 之后内容仍是半天前的），别指望它。
     needs: check
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
