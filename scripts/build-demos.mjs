@@ -22,7 +22,7 @@ const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const TEMPLATES_DIR = join(ROOT, "templates");
 
 /** 手写 demo 的条目：生成器不碰。 */
-const SKIP = new Set(["geometric-bold"]);
+const SKIP = new Set(["geometric-bold", "claymorphism"]);
 
 const SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const MONO = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace';
