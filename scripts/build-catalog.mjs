@@ -37,7 +37,7 @@ const REQUIRED_TOKENS = [
  * meta.json 里可以声明的**角色**。角色只是给客户端认路用的（哪个是规范、哪个是主题），
  * 条目目录里的其它文件不需要声明——截图、参考 HTML、字体样例都会被自动收进 resources。
  */
-const ASSET_ROLES = ["spec", "theme", "preview", "package"];
+const ASSET_ROLES = ["spec", "theme", "demo", "cover", "preview", "package"];
 
 /** 这些扩展名当文本内联进清单；其余只给路径，由客户端按需下载。 */
 const TEXT_EXTENSIONS = new Set(["md", "css", "html", "htm", "txt", "json", "svg", "jsx", "tsx", "ts", "js"]);
@@ -172,6 +172,34 @@ function validateSpec(slug, meta) {
 	}
 }
 
+/**
+ * demo.html 会被客户端塞进 iframe 实时渲染（悬停预览）。iframe 上了 sandbox，但源头
+ * 也必须挡：不允许脚本、不允许外部请求——预览要能离线渲染，也不该把用户的浏览行为
+ * 泄漏给第三方。
+ */
+function validateDemo(slug, meta) {
+	const rel = meta.assets?.demo;
+	if (typeof rel !== "string") return;
+	const demoPath = join(TEMPLATES_DIR, slug, rel);
+	if (!existsSync(demoPath)) return;
+	const html = readFileSync(demoPath, "utf8");
+	if (!/<html[\s>]/i.test(html)) {
+		fail(slug, "demo 必须是一份完整的 HTML 文档");
+	}
+	if (/<script[\s>]/i.test(html)) {
+		fail(slug, "demo 不允许包含 <script>：它会被塞进预览 iframe 渲染");
+	}
+	for (const [label, pattern] of [
+		["外链样式表", /<link[^>]+rel=["']?stylesheet/i],
+		["外部脚本或资源域", /(?:src|href)=["']https?:\/\//i],
+		["@import", /@import\s/i],
+	]) {
+		if (pattern.test(html)) {
+			fail(slug, `demo 不允许${label}：预览必须离线自足，样式与图片请内联`);
+		}
+	}
+}
+
 function validateTheme(slug, meta) {
 	if (typeof meta.assets?.theme !== "string") return;
 	const themePath = join(TEMPLATES_DIR, slug, meta.assets.theme);
@@ -236,6 +264,7 @@ function validateEntry(slug, meta) {
 	}
 	validateSpec(slug, meta);
 	validateTheme(slug, meta);
+	validateDemo(slug, meta);
 
 	if (assets === null) return null;
 	return {

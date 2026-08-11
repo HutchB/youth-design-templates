@@ -28,7 +28,8 @@
 	},
 	"assets": {
 		"spec": "DESIGN.md",
-		"theme": "theme.css"
+		"theme": "theme.css",
+		"demo": "demo.html"
 	},
 	"collectedAt": "2026-08-11"
 }

@@ -78,6 +78,19 @@ scripts/build-catalog.mjs
 - `reference`：`spec`
 - `remixable`：`package`
 
+## demo.html 是生成物
+
+每个条目的 `demo.html` 是「同一个产品页在这套体系下长什么样」，由
+`scripts/build-demos.mjs` 生成：**页面结构 22 套完全一致**，视觉差异全部来自各自的
+`theme.css` token 加生成器里那张形态表（字体、字重、大小写、圆角档位、边框宽度、
+按钮与卡片的特殊形态）。结构一致才能横向比较，也让改版一次改到全部。
+
+- 要调某套风格的 demo，改 `build-demos.mjs` 里 `PROFILES[slug]`，**不要手改 demo.html**。
+- 想完全手写某套的 demo，把 slug 加进生成器的 `SKIP`，生成器就不再覆盖它。
+- demo 会被客户端塞进**不给脚本执行权**的 sandbox iframe 作悬停预览，所以：
+  **不许 `<script>`、不许外链样式表/图片、不许 `@import`**，样式和图片一律内联。
+  build-catalog 会硬校验这几条。
+
 ## 顺序是有意义的
 
 `order` 决定用户看到的排列，**按风格差异交错排**（亮/暗、冷/暖、克制/张扬），
