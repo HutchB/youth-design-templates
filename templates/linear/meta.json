@@ -3,7 +3,7 @@
 	"kind": "design-system",
 	"slug": "linear",
 	"name": "Linear",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"order": 10,
 	"category": "dev",
 	"vibe": "dark",

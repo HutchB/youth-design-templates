@@ -1,5 +1,7 @@
 # Duolingo — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A cheerful game that happens to teach. Feather-green energy, chunky rounded
 shapes, buttons that physically press down. Loud, friendly, impossible to

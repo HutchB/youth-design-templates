@@ -1,5 +1,7 @@
 # Geometric Bold — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A Bauhaus poster that happens to be an interface. Flat planes of pure ink on
 white, cut by 4px black rules; circles, squares and triangles carry the meaning

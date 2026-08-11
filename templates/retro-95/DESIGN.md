@@ -1,5 +1,7 @@
 # Retro 95 — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 1995 desktop nostalgia, played straight. Teal desktop, gray chrome windows,
 navy title bars, beveled everything. Charmingly rigid — a museum piece that

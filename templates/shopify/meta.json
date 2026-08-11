@@ -3,7 +3,7 @@
 	"kind": "design-system",
 	"slug": "shopify",
 	"name": "Shopify",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"order": 190,
 	"category": "commerce",
 	"vibe": "light",

@@ -1,5 +1,7 @@
 # Coinbase — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 Institutional crypto. Bank-grade white and near-black ink with one decisive
 blue; numbers front and center, zero visual risk. Feels regulated, liquid,

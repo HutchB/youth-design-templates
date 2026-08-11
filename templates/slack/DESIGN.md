@@ -1,5 +1,7 @@
 # Slack — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A friendly workplace lobby. White and airy where you read, deep aubergine
 where you navigate, with candy-colored moments that keep it human. Chatty,

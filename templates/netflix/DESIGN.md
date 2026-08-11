@@ -1,5 +1,7 @@
 # Netflix — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A dark cinema where the interface disappears and posters glow. Black stage,
 one red signature, sharp edges, big imagery. Everything says "press play".

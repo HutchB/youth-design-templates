@@ -1,5 +1,7 @@
 # Shopify — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A merchant's clean back office. Cool light gray floor, white work cards, calm
 commerce green. Everything optimized for getting orders out the door.

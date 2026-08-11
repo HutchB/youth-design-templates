@@ -1,5 +1,7 @@
 # Figma — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 A bright tool canvas with a designer's wink. Neutral chrome that stays out of
 the way, blue for the active tool, purple for the spark of fun. Crisp 1px

@@ -1,5 +1,7 @@
 # Claymorphism — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 Every surface looks moulded out of soft modelling clay: fat rounded corners, a
 candy pastel fill, a white sheen along the top edge, and a hard offset drop

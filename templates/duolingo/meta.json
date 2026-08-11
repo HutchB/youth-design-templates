@@ -3,7 +3,7 @@
 	"kind": "design-system",
 	"slug": "duolingo",
 	"name": "Duolingo",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"order": 140,
 	"category": "playful",
 	"vibe": "light",

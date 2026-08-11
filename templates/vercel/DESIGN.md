@@ -1,5 +1,7 @@
 # Vercel — Vetta Edition
 
+A complete worked example of this system ships alongside this spec as `demo.html`: every rule below applied to one real page, including its mobile layout and a set of deliberately off-style counter-examples. It is the reference for what "on-style" looks like here.
+
 ## Atmosphere
 Stark, editorial, monochrome. Black text on white space with engineering
 confidence; color is an event, not a decoration. Feels like a spec sheet that

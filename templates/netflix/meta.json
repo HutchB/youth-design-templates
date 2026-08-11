@@ -3,7 +3,7 @@
 	"kind": "design-system",
 	"slug": "netflix",
 	"name": "Netflix",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"order": 120,
 	"category": "media",
 	"vibe": "dark",

@@ -13,8 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      # 条目目录是事实源，清单与 demo 都是生成物：这里只校验同步，不在 CI 里回写。
-      - run: node scripts/build-demos.mjs --check
+      # 条目目录是事实源，清单是生成物：这里只校验同步，不在 CI 里回写。
       - run: node scripts/build-catalog.mjs --check
 
   purge:
