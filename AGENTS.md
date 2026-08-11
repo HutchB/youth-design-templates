@@ -107,6 +107,20 @@ scripts/build-catalog.mjs
 统一追加 `--color-surface-raised`、`--color-border`，以及 radius / shadow 刻度。
 体系特有的 token 可以增，但不能减少上面这些 —— 客户端和已有画框都按这套名字取色。
 
+## 更新多久到用户手上
+
+客户端首选 jsDelivr（快、国内可达性好），它的 CDN 缓存是 12 小时；raw 兜底 5 分钟新鲜。
+合进 `main` 后 CI 会自动 purge jsDelivr，所以正常情况下几分钟内就能拿到。
+
+客户端自己还有 6 小时的本地 TTL：**用户在「设计」页点一下「刷新」会强制跳过它**。
+所以验证「新条目上线了没」的正确姿势是：合并 → 等 CI 绿 → 在设计页点刷新。
+
+手动 purge（CI 挂了时）：
+
+```bash
+curl -sS "https://purge.jsdelivr.net/gh/openvetta/vetta-design-templates@main/.vetta/design-templates.json"
+```
+
 ## 提交前检查清单
 
 - [ ] `node scripts/build-catalog.mjs` 跑过，清单一起提交了

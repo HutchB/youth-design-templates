@@ -15,3 +15,21 @@ jobs:
           node-version: "22"
       # 条目目录是事实源，清单是生成物：这里只校验两者同步，不在 CI 里回写。
       - run: node scripts/build-catalog.mjs --check
+
+  purge:
+    # 客户端首选 jsDelivr，而它的 CDN 缓存是 s-maxage=43200（12 小时）——不主动清的话，
+    # 内容合进 main 之后最多要等半天才到用户手上，看起来就像「更新没生效」。
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge jsDelivr cache
+        run: |
+          set -euo pipefail
+          URL="https://purge.jsdelivr.net/gh/openvetta/vetta-design-templates@main/.vetta/design-templates.json"
+          echo "purging $URL"
+          curl -sS --fail --max-time 60 "$URL" | tee /tmp/purge.json
+          echo
+          # purge 是尽力而为：raw 兜底仍然是最新的，所以这一步失败不该让整条流水线红。
+          grep -q '"status": *"finished"' /tmp/purge.json || echo "::warning::jsDelivr purge did not report finished"
+        continue-on-error: true
