@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geometric Bold — component reference</title>
+<style>
+	/* Mirrors theme.css. Kept as plain custom properties so this file opens
+	   standalone in a browser without a build step. */
+	:root {
+		--color-primary: #000000;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #000000;
+		--color-surface-raised: #ffffff;
+		--color-muted: #6c3b00;
+		--color-accent: #0000ff;
+		--color-danger: #ff0000;
+		--color-border: #000000;
+		--color-block-red: #ff0000;
+		--color-block-blue: #0000ff;
+		--color-block-yellow: #ffff00;
+		--color-block-earth: #6c3b00;
+		--radius-full: 9999px;
+		--border-width-base: 4px;
+		--border-width-heavy: 8px;
+		--shadow-lg: 8px 8px 0 0 #000000;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-weight: 500;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; margin: 0; }
+	::selection { background: var(--color-primary); color: var(--color-primary-foreground); }
+
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px 96px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 128px; } }
+
+	/* ── Section scaffold ─────────────────────────────────────────── */
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 96px; } }
+	.section-label {
+		font-family: ui-monospace, "SF Mono", Menlo, monospace;
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 12px;
+		color: var(--color-muted);
+		border-bottom: var(--border-width-base) solid var(--color-border);
+		padding-bottom: 8px;
+		margin-bottom: 32px;
+	}
+
+	/* ── Hero: asymmetric, full-bleed blocks touching with no gutter ── */
+	.hero { display: grid; grid-template-columns: 1fr; border-bottom: var(--border-width-heavy) solid var(--color-border); }
+	@media (min-width: 768px) { .hero { grid-template-columns: 7fr 3fr; } }
+	.hero-main { background: var(--color-primary); color: var(--color-primary-foreground); padding: 32px; }
+	@media (min-width: 768px) { .hero-main { padding: 64px 48px; } }
+	.hero-title { font-size: 60px; line-height: 0.88; }
+	@media (min-width: 768px) { .hero-title { font-size: 96px; } }
+	@media (min-width: 1024px) { .hero-title { font-size: 160px; } }
+	.hero-sub {
+		font-family: ui-monospace, "SF Mono", Menlo, monospace;
+		text-transform: uppercase; letter-spacing: 0.2em; font-size: 12px;
+		margin-top: 24px;
+	}
+	.hero-side { display: grid; grid-template-rows: 1fr 1fr; border-left: var(--border-width-base) solid var(--color-border); }
+	.hero-side > div { display: grid; place-items: center; padding: 32px; }
+	.hero-side > div + div { border-top: var(--border-width-base) solid var(--color-border); }
+
+	/* ── Shape vocabulary ─────────────────────────────────────────── */
+	.shape-circle { border-radius: var(--radius-full); width: 96px; height: 96px; }
+	.shape-square { border-radius: 0; width: 96px; height: 96px; }
+	.shape-triangle {
+		width: 0; height: 0;
+		border-left: 48px solid transparent;
+		border-right: 48px solid transparent;
+		border-bottom: 96px solid var(--color-block-yellow);
+	}
+	.shapes { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+
+	/* ── Buttons ──────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-weight: 700;
+		text-transform: uppercase; letter-spacing: 0.15em; font-size: 13px;
+		padding: 14px 28px;
+		border: var(--border-width-base) solid var(--color-border);
+		border-radius: 0;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer;
+		box-shadow: none;
+		transition: color 200ms, background-color 200ms, transform 200ms;
+	}
+	.btn:hover { background: var(--color-surface); color: var(--color-surface-foreground); transform: scale(1.05); }
+	.btn:active { transform: scale(0.95); }
+	.btn:focus-visible { outline: none; background: var(--color-block-yellow); color: var(--color-primary); }
+	.btn-outline { background: var(--color-surface); color: var(--color-surface-foreground); }
+	.btn-outline:hover { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-danger { background: var(--color-danger); border-color: var(--color-border); color: #fff; }
+	.btn-danger:hover { background: var(--color-surface); color: var(--color-danger); }
+	.btn-round { border-radius: var(--radius-full); }
+	/* Disabled is expressed with hatching, never with opacity. */
+	.btn[disabled] {
+		cursor: not-allowed; transform: none; color: var(--color-primary);
+		background: repeating-linear-gradient(45deg, #fff 0 12px, #000 12px 14px);
+		text-decoration: line-through;
+	}
+	.row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+
+	/* ── Cards ────────────────────────────────────────────────────── */
+	.cards { display: grid; grid-template-columns: 1fr; gap: 0; border: var(--border-width-base) solid var(--color-border); }
+	@media (min-width: 768px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+	.card { background: var(--color-surface-raised); padding: 24px; }
+	@media (min-width: 768px) { .card { padding: 32px; } .card + .card { border-left: var(--border-width-base) solid var(--color-border); } }
+	@media (max-width: 767px) { .card + .card { border-top: var(--border-width-base) solid var(--color-border); } }
+	.card-tag {
+		display: inline-block; padding: 4px 10px; margin-bottom: 16px;
+		font-family: ui-monospace, "SF Mono", Menlo, monospace;
+		font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+	}
+	.card h3 { font-size: 20px; margin-bottom: 12px; }
+	@media (min-width: 768px) { .card h3 { font-size: 24px; } }
+	.card p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
+
+	/* ── Form ─────────────────────────────────────────────────────── */
+	.field { display: block; max-width: 420px; }
+	.field + .field { margin-top: 24px; }
+	.label {
+		display: block; margin-bottom: 8px;
+		font-family: ui-monospace, "SF Mono", Menlo, monospace;
+		font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+	}
+	.input {
+		width: 100%; font: inherit; font-weight: 500; padding: 14px 16px;
+		border: var(--border-width-base) solid var(--color-border); border-radius: 0;
+		background: var(--color-surface); color: var(--color-surface-foreground);
+		transition: background-color 200ms, color 200ms;
+	}
+	.input:focus { outline: none; background: var(--color-block-yellow); }
+	.input-error { border-color: var(--color-danger); }
+	.msg { margin-top: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+	.msg-error { color: var(--color-danger); }
+
+	/* ── Palette swatches ─────────────────────────────────────────── */
+	.palette { display: grid; grid-template-columns: repeat(2, 1fr); border: var(--border-width-base) solid var(--color-border); }
+	@media (min-width: 640px) { .palette { grid-template-columns: repeat(3, 1fr); } }
+	.swatch {
+		padding: 24px; min-height: 120px;
+		display: flex; flex-direction: column; justify-content: flex-end;
+		font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+		text-transform: uppercase; letter-spacing: 0.12em;
+		border-top: var(--border-width-base) solid var(--color-border);
+		border-left: var(--border-width-base) solid var(--color-border);
+	}
+	.swatch b { font-size: 13px; letter-spacing: 0.16em; }
+
+	/* ── Dialog: the only depth cue — hard 8px offset, zero blur ───── */
+	.dialog {
+		max-width: 420px; background: var(--color-surface);
+		border: var(--border-width-base) solid var(--color-border);
+		box-shadow: var(--shadow-lg); padding: 32px;
+	}
+
+	/* ── Table ────────────────────────────────────────────────────── */
+	table { width: 100%; border-collapse: collapse; border: var(--border-width-base) solid var(--color-border); }
+	th, td { text-align: left; padding: 12px 16px; font-size: 14px; }
+	th {
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		font-family: ui-monospace, "SF Mono", Menlo, monospace;
+		font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+	}
+	td { border-top: 2px solid var(--color-border); }
+	.dot { display: inline-block; width: 12px; height: 12px; border-radius: var(--radius-full); vertical-align: middle; margin-right: 8px; }
+
+	.note {
+		margin-top: 16px; font-size: 13px; color: var(--color-muted);
+		font-family: ui-monospace, "SF Mono", Menlo, monospace; line-height: 1.6;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.btn:hover, .btn:active { transform: none; }
+	}
+</style>
+</head>
+<body>
+
+<!-- HERO — asymmetric 7/3 split, blocks butt against each other, no gutter. -->
+<header class="hero">
+	<div class="hero-main">
+		<h1 class="hero-title">Geometric<br>Bold</h1>
+		<p class="hero-sub">Bauhaus blocks / hard edges / no shadows</p>
+	</div>
+	<div class="hero-side">
+		<div style="background: var(--color-block-red);">
+			<div class="shape-circle" style="background: var(--color-surface);"></div>
+		</div>
+		<div style="background: var(--color-block-yellow);">
+			<div class="shape-square" style="background: var(--color-primary);"></div>
+		</div>
+	</div>
+</header>
+
+<div class="wrap">
+
+	<!-- PALETTE -->
+	<section class="section">
+		<p class="section-label">01 — Color roles</p>
+		<div class="palette">
+			<div class="swatch" style="background:#000; color:#fff;"><b>primary</b><span>#000000 · text, borders, inverted blocks</span></div>
+			<div class="swatch" style="background:#fff; color:#000;"><b>surface</b><span>#ffffff · page &amp; panels</span></div>
+			<div class="swatch" style="background:#6c3b00; color:#fff;"><b>muted</b><span>#6c3b00 · secondary text only</span></div>
+			<div class="swatch" style="background:#0000ff; color:#fff;"><b>accent</b><span>#0000ff · links, selection</span></div>
+			<div class="swatch" style="background:#ff0000; color:#fff;"><b>danger</b><span>#ff0000 · errors, one hero block</span></div>
+			<div class="swatch" style="background:#ffff00; color:#000;"><b>block-yellow</b><span>#ffff00 · focus fill, shapes</span></div>
+		</div>
+		<p class="note">Three inks max per screen, plus black and white. There is no gray in this system.</p>
+	</section>
+
+	<!-- SHAPES -->
+	<section class="section">
+		<p class="section-label">02 — Shape vocabulary</p>
+		<div class="shapes">
+			<div class="shape-circle" style="background: var(--color-block-red);"></div>
+			<div class="shape-square" style="background: var(--color-block-blue);"></div>
+			<div class="shape-triangle"></div>
+			<div class="shape-circle" style="background: var(--color-surface); border: var(--border-width-heavy) solid var(--color-primary);"></div>
+			<div class="shape-square" style="background: var(--color-block-earth);"></div>
+		</div>
+		<p class="note">Radius is 0 or a full circle — nothing in between. Shapes may overlap and crop off the margin.</p>
+	</section>
+
+	<!-- BUTTONS -->
+	<section class="section">
+		<p class="section-label">03 — Buttons &amp; states</p>
+		<div class="row">
+			<button class="btn">Primary</button>
+			<button class="btn btn-outline">Outline</button>
+			<button class="btn btn-danger">Danger</button>
+			<button class="btn btn-round">Round</button>
+			<button class="btn" disabled>Disabled</button>
+		</div>
+		<p class="note">Hover swaps fill and text outright (200ms, colors only) and scales to 105%; active presses to 95%.<br>Tab to a button to see the yellow focus fill. Disabled is hatched, never dimmed with opacity.</p>
+	</section>
+
+	<!-- CARDS -->
+	<section class="section">
+		<p class="section-label">04 — Cards</p>
+		<div class="cards">
+			<div class="card">
+				<span class="card-tag" style="background: var(--color-block-red); color:#fff;">Exhibit</span>
+				<h3>Flat by rule</h3>
+				<p>Cards are white with a 4px black border. Separation comes from the rule, never from elevation or a tinted fill.</p>
+			</div>
+			<div class="card">
+				<span class="card-tag" style="background: var(--color-block-blue); color:#fff;">Studio</span>
+				<h3>Shared edges</h3>
+				<p>Cards butt together and share their 4px rules. Gutters between blocks are the exception, not the default.</p>
+			</div>
+			<div class="card">
+				<span class="card-tag" style="background: var(--color-block-yellow); color:#000;">Archive</span>
+				<h3>Rank by ink</h3>
+				<p>Hierarchy is carried by size and by which ink the tag uses — not by shadow, opacity, or a rounded corner.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- FORM -->
+	<section class="section">
+		<p class="section-label">05 — Inputs</p>
+		<label class="field">
+			<span class="label">Name</span>
+			<input class="input" type="text" placeholder="Click or tab in →">
+		</label>
+		<label class="field">
+			<span class="label">Email</span>
+			<input class="input input-error" type="email" value="not-an-email">
+			<span class="msg msg-error">Enter a valid address</span>
+		</label>
+		<p class="note">Focus removes the outline and floods the field with yellow — the loudest available signal, and the reason yellow is reserved for it.</p>
+	</section>
+
+	<!-- OVERLAY -->
+	<section class="section">
+		<p class="section-label">06 — Overlay</p>
+		<div class="dialog">
+			<h3 style="font-size:24px; margin-bottom:12px;">Delete exhibit?</h3>
+			<p style="margin:0 0 24px; font-size:14px; line-height:1.5; color: var(--color-muted);">This removes the piece and every print derived from it.</p>
+			<div class="row">
+				<button class="btn btn-danger">Delete</button>
+				<button class="btn btn-outline">Cancel</button>
+			</div>
+		</div>
+		<p class="note">The 8px black offset has zero blur. It is the only depth cue this system permits — shadow-sm and shadow-md are none.</p>
+	</section>
+
+	<!-- TABLE -->
+	<section class="section">
+		<p class="section-label">07 — Data</p>
+		<table>
+			<thead>
+				<tr><th>Piece</th><th>Room</th><th>Status</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>Composition VII</td><td>A—01</td><td><span class="dot" style="background: var(--color-block-blue);"></span>Hung</td></tr>
+				<tr><td>Red Square Study</td><td>A—04</td><td><span class="dot" style="background: var(--color-danger);"></span>Damaged</td></tr>
+				<tr><td>Yellow Triangle</td><td>B—02</td><td><span class="dot" style="background: var(--color-block-earth);"></span>In transit</td></tr>
+			</tbody>
+		</table>
+		<p class="note">Dense rules drop to 2px; everything structural stays black.</p>
+	</section>
+
+	<!-- DON'T -->
+	<section class="section">
+		<p class="section-label">08 — Off-style, for contrast</p>
+		<div class="row" style="align-items: stretch;">
+			<div style="flex:1; min-width:220px; padding:24px; border-radius:16px; background:linear-gradient(135deg,#f3f4f6,#e5e7eb); box-shadow:0 10px 30px rgba(0,0,0,.15); color:#9ca3af; font-weight:300;">
+				Soft card · gradient · blur shadow · 16px radius · gray 300 text · font-weight 300
+			</div>
+			<div style="flex:1; min-width:220px; padding:24px; border:var(--border-width-base) solid var(--color-primary); background:var(--color-surface); font-weight:700;">
+				Same content, on-style: flat white, 4px rule, square corners, weight 700, black text
+			</div>
+		</div>
+		<p class="note">Left is everything this system forbids: gradients, blurred shadows, mid radii, opacity dimming, light weights, gray fills.</p>
+	</section>
+
+</div>
+</body>
+</html>
