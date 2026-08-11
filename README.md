@@ -10,14 +10,20 @@ their design project as reference material for the agent.
 ```text
 .vetta/design-templates.json     # generated catalog — do not hand-edit
 templates/<slug>/
-  meta.json                      # source of truth for one entry
+  meta.json                      # source of truth for one entry (never a resource)
   DESIGN.md                      # the spec the agent reads
   theme.css                      # design tokens (required for design-system)
-  preview.webp                   # optional, shown to the user
-  markup.html                    # optional, distilled structure
-  design.vetdz                   # optional, remixable package
+  reference.html                 # optional — any reference material
+  screenshots/home.webp          # optional — subdirectories are preserved
+  ...                            # every file here ships as a resource
 scripts/build-catalog.mjs        # aggregate + validate
 ```
+
+Every file in an entry directory except `meta.json` is a resource: it is copied
+verbatim into `design-resources/<slug>/` inside the user's project for the agent
+to consult. Text files (≤256KB) are inlined into the catalog; everything else is
+fetched on demand when the user picks that entry. `assets` only labels **roles**
+(which file is the spec, which is the theme).
 
 ## Entry kinds
 

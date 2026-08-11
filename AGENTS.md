@@ -27,14 +27,22 @@
 ```text
 .vetta/design-templates.json     ← 生成物，不要手编
 templates/<slug>/
-  meta.json                      ← 条目事实源
+  meta.json                      ← 条目事实源（唯一不算资源的文件）
   DESIGN.md                      ← 给 Agent 的规范正文
   theme.css                      ← 设计体系的 token（design-system 必需）
-  preview.webp                   ← 可选，给用户挑选时看的
-  markup.html                    ← 可选，提炼过的结构骨架
-  design.vetdz                   ← 可选，可 remix 的成品包
+  reference.html                 ← 可选，任意参考素材
+  screenshots/home.webp          ← 可选，子目录会被保留
+  ...                            ← 目录下**任何**文件都会自动进 resources
 scripts/build-catalog.mjs
 ```
+
+条目目录里除 `meta.json` 外的所有文件都是这套风格的资源，会被原样复制到用户项目的
+`design-resources/<slug>/` 供 Agent 参考——不需要在 `meta.json` 里逐个声明。`assets`
+只用来标注**角色**（哪个是规范、哪个是主题），让客户端认路。
+
+文本（`.md` `.css` `.html` `.txt` `.json` `.svg` `.ts(x)` `.js(x)`，单个 ≤256KB）直接
+内联进清单，客户端一次请求拿到全部内容；其余按二进制处理，只在清单里留地址，等用户真的
+选中这套风格再下载。所以截图放心加，但别放几十 MB 的东西。
 
 ## 添加一个条目
 
@@ -62,7 +70,7 @@ scripts/build-catalog.mjs
 | `license` | 必填 |
 | `origin` | `{ type, upstream?, sourceUrl?, note? }`，`type` 为 `curated` 或 `collected` |
 | `collectedAt` | `YYYY-MM-DD` |
-| `assets` | 相对本目录的路径，键只能是 `spec` / `theme` / `preview` / `markup` / `package` |
+| `assets` | **角色**声明，键只能是 `spec` / `theme` / `preview` / `package`；值是本目录内的相对路径。其余文件不必声明 |
 
 各 kind 的必需资产：
 

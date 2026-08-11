@@ -33,8 +33,17 @@ const REQUIRED_TOKENS = [
 	"--color-danger",
 ];
 
-/** 条目里可以出现的资产键 → 是否必须存在（按 kind 判定见 validateEntry）。 */
-const ASSET_KEYS = ["spec", "theme", "preview", "markup", "package"];
+/**
+ * meta.json 里可以声明的**角色**。角色只是给客户端认路用的（哪个是规范、哪个是主题），
+ * 条目目录里的其它文件不需要声明——截图、参考 HTML、字体样例都会被自动收进 resources。
+ */
+const ASSET_ROLES = ["spec", "theme", "preview", "package"];
+
+/** 这些扩展名当文本内联进清单；其余只给路径，由客户端按需下载。 */
+const TEXT_EXTENSIONS = new Set(["md", "css", "html", "htm", "txt", "json", "svg", "jsx", "tsx", "ts", "js"]);
+
+/** 单个文本资源的内联上限：超过就退化成按需下载，别把清单撑爆。 */
+const MAX_INLINE_BYTES = 256 * 1024;
 
 const errors = [];
 const fail = (slug, message) => errors.push(`${slug}: ${message}`);
@@ -70,8 +79,8 @@ function validateAssets(slug, meta) {
 	}
 	const resolved = {};
 	for (const [key, value] of Object.entries(assets)) {
-		if (!ASSET_KEYS.includes(key)) {
-			fail(slug, `assets 出现未知键 "${key}"（允许：${ASSET_KEYS.join(" / ")}）`);
+		if (!ASSET_ROLES.includes(key)) {
+			fail(slug, `assets 出现未知角色 "${key}"（允许：${ASSET_ROLES.join(" / ")}）`);
 			continue;
 		}
 		if (value === null) continue;
@@ -79,7 +88,7 @@ function validateAssets(slug, meta) {
 			fail(slug, `assets.${key} 必须是非空字符串或 null`);
 			continue;
 		}
-		if (value.startsWith("/") || value.includes("..") || value.includes("\\")) {
+		if (!isSafeRelativePath(value)) {
 			fail(slug, `assets.${key} 必须是目录内的相对路径`);
 			continue;
 		}
@@ -88,28 +97,64 @@ function validateAssets(slug, meta) {
 			fail(slug, `assets.${key} 指向的文件不存在：${value}`);
 			continue;
 		}
-		resolved[key] = `templates/${slug}/${value}`;
+		resolved[key] = value;
 	}
 	return resolved;
 }
 
-/**
- * 文本资产直接内联进清单：全部条目加起来才几十 KB，客户端一次请求就能拿到完整内容，
- * 省掉「先拉索引再逐条拉正文」的第二轮请求和一半的来源校验。
- * 二进制资产（package/preview）永远只给路径。
- */
-const INLINE_ASSET_KEYS = ["spec", "theme", "markup"];
+/** 路径必须落在条目目录内：清单会被客户端拿去拼落盘路径，穿越必须在源头挡掉。 */
+function isSafeRelativePath(value) {
+	if (value.startsWith("/") || value.includes("\\")) return false;
+	return !value.split("/").some((segment) => segment === "" || segment === "." || segment === "..");
+}
 
-function inlineContent(slug, meta) {
-	const content = {};
-	for (const key of INLINE_ASSET_KEYS) {
-		const rel = meta.assets?.[key];
-		if (typeof rel !== "string") continue;
-		const filePath = join(TEMPLATES_DIR, slug, rel);
-		if (!existsSync(filePath)) continue;
-		content[key] = readFileSync(filePath, "utf8");
+/** 递归列出条目目录下的资源文件（相对条目目录，正斜杠）。meta.json 自身不是资源。 */
+function listResourceFiles(slug, subDir = "") {
+	const dir = join(TEMPLATES_DIR, slug, subDir);
+	const out = [];
+	for (const entry of readdirSync(dir, { withFileTypes: true })) {
+		if (entry.name.startsWith(".")) continue;
+		const rel = subDir ? `${subDir}/${entry.name}` : entry.name;
+		if (entry.isDirectory()) {
+			out.push(...listResourceFiles(slug, rel));
+			continue;
+		}
+		if (rel === "meta.json") continue;
+		out.push(rel);
 	}
-	return content;
+	return out.sort();
+}
+
+/**
+ * 一个条目的全部资源。
+ *
+ * 文本直接内联（全部条目加起来也才几十 KB，客户端一次请求拿到完整内容，省掉第二轮
+ * 请求）；图片、字体、分享包这类二进制只给仓库内相对路径，由客户端在用户真正选中这
+ * 个条目时按需下载——否则一张截图就能把清单撑到几 MB。
+ */
+function buildResources(slug, roles) {
+	const roleByPath = new Map(Object.entries(roles).map(([role, path]) => [path, role]));
+	const resources = [];
+	for (const rel of listResourceFiles(slug)) {
+		if (!isSafeRelativePath(rel)) {
+			fail(slug, `资源路径非法：${rel}`);
+			continue;
+		}
+		const filePath = join(TEMPLATES_DIR, slug, rel);
+		const bytes = statSync(filePath).size;
+		const extension = rel.split(".").pop()?.toLowerCase() ?? "";
+		const role = roleByPath.get(rel);
+		const inline = TEXT_EXTENSIONS.has(extension) && bytes <= MAX_INLINE_BYTES;
+		resources.push({
+			path: rel,
+			...(role ? { role } : {}),
+			bytes,
+			...(inline
+				? { encoding: "text", content: readFileSync(filePath, "utf8") }
+				: { encoding: "binary", url: `templates/${slug}/${rel}` }),
+		});
+	}
+	return resources;
 }
 
 function validateSpec(slug, meta) {
@@ -208,7 +253,7 @@ function validateEntry(slug, meta) {
 		origin: meta.origin,
 		collectedAt: meta.collectedAt,
 		assets,
-		content: inlineContent(slug, meta),
+		resources: buildResources(slug, assets),
 	};
 }
 
