@@ -20,8 +20,10 @@ scripts/build-catalog.mjs        # aggregate + validate
 ```
 
 Every file in an entry directory except `meta.json` is a resource: it is copied
-verbatim into `design-resources/<slug>/` inside the user's project for the agent
-to consult. Text files (≤256KB) are inlined into the catalog; everything else is
+into `design-resources/<slug>/` inside the user's project for the agent
+to consult. Inlined text uses LF line endings so Windows and Unix checkouts
+produce the same catalog; binary downloads retain their original bytes.
+Text files (≤256KB after UTF-8 encoding and LF normalization) are inlined into the catalog; everything else is
 fetched on demand when the user picks that entry. `assets` only labels **roles**
 (which file is the spec, which is the theme).
 
@@ -47,6 +49,8 @@ The short version:
 2. Write `meta.json`.
 3. Run `node scripts/build-catalog.mjs` and commit the regenerated catalog.
 4. Open a PR. CI runs `node scripts/build-catalog.mjs --check`.
+
+Generator regression tests: `node --test scripts/build-catalog.test.mjs`.
 
 ## Two rules that are easy to miss
 

@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - run: node --test scripts/build-catalog.test.mjs
       # 条目目录是事实源，清单是生成物：这里只校验同步，不在 CI 里回写。
       - run: node scripts/build-catalog.mjs --check
 
