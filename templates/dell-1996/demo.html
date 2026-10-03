@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dell 1996 — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #e91d2a;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #000000;
+		--color-surface-raised: #ebebeb;
+		--color-muted: #444444;
+		--color-accent: #fcc20f;
+		--color-danger: #cc0000;
+		--color-border: #000000;
+		--color-link: #0000ee;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 0px;
+		--radius-xl: 0px;
+		--radius-2xl: 0px;
+
+		--shadow-sm: 1px 1px 0 rgb(0 0 0 / 0.9);
+		--shadow-md: 2px 2px 0 rgb(0 0 0 / 0.9);
+		--shadow-lg: 3px 3px 0 rgb(0 0 0 / 0.9);
+
+		/* Ribbon tint family — page-level vocabulary, one tint per product line.
+		   (Values verified against the upstream palette; order shuffled.) */
+		--tint-salmon: #d77a7a;
+		--tint-sage: #b3bd95;
+		--tint-olive: #8e8a25;
+		--tint-periwinkle: #8c9ae0;
+		--tint-sky: #9ab6c8;
+		--tint-peach: #e6915d;
+		--tint-steel: #a5b8c0;
+		--tint-lime: #c0d4a7;
+		--rule-green: #3a7d3a;
+
+		--black: "Arial Black", Arial, sans-serif;
+		--helv: Helvetica, Arial, "Segoe UI", sans-serif;
+		--times: "Times New Roman", Times, Georgia, serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: #ffffff;
+		color: var(--color-surface-foreground);
+		font-family: var(--times);
+		font-size: 14px;
+		line-height: 1.4;
+		padding: 16px 10px 48px;
+	}
+	/* Headings are stencil caps in Arial Black, or Helvetica bold caps. */
+	h1, h2, h3 { margin: 0; font-weight: 900; line-height: 1.05; }
+	p { margin: 0; }
+	a { color: var(--color-link); text-decoration: underline; }
+	::selection { background: var(--color-primary); color: #fff; }
+	.spacer { flex: 1; }
+	.helv { font-family: var(--helv); }
+
+	/* ── The black page frame is the brand's container chrome ─────── */
+	.frame {
+		max-width: 776px;
+		margin: 0 auto 28px;
+		border: 8px solid var(--color-border);
+		background: var(--color-surface);
+	}
+	.frame.slim { border-width: 4px; }
+
+	/* ── Top banner: black strip, sticker right, red phone callout ── */
+	.banner {
+		display: flex; align-items: center; gap: 10px;
+		background: var(--color-border); color: #fff;
+		padding: 12px 16px; flex-wrap: wrap;
+	}
+	.banner .headline { font-family: var(--helv); font-weight: 700; font-size: 16px; letter-spacing: 0; }
+	.banner .tagline { font-size: 12px; color: #cfcfcf; }
+	.buytab {
+		font-family: var(--helv); font-weight: 700; font-size: 12px;
+		background: var(--color-accent); color: #000;
+		border: 1px solid #000; padding: 4px 8px; white-space: nowrap;
+	}
+	.buytab small { color: #6a26a4; font-weight: 700; }
+	.phone {
+		font-family: var(--helv); font-weight: 700; font-size: 16px;
+		color: var(--color-primary); white-space: nowrap;
+	}
+
+	/* ── Two-column table-era body ────────────────────────────────── */
+	.body { display: grid; grid-template-columns: 200px 1fr; }
+	@media (max-width: 640px) { .body { grid-template-columns: 1fr; } }
+	.rail { border-right: 1px solid var(--color-border); padding: 10px; }
+	.feed { padding: 10px 12px 16px; }
+
+	/* ── Left rail: icon grid, red CTA panel, seal, counter ───────── */
+	.icongrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 6px; }
+	.iconnav { text-align: center; padding: 6px 2px; }
+	.iconnav .sq {
+		width: 26px; height: 22px; margin: 0 auto 4px; background: var(--color-surface-raised);
+		border-top: 2px solid #fff; border-left: 2px solid #fff;
+		border-bottom: 2px solid #6f6f6f; border-right: 2px solid #6f6f6f;
+		font-family: var(--helv); font-weight: 700; font-size: 11px; line-height: 18px;
+	}
+	.iconnav b { display: block; font-family: var(--helv); font-weight: 700; font-size: 10px; letter-spacing: 0; }
+	.iconnav a { text-decoration: none; }
+	.iconnav a:hover b { color: var(--color-link); text-decoration: underline; }
+	.cta-red {
+		margin-top: 12px; background: var(--color-primary); color: var(--color-primary-foreground);
+		border: 1px solid #000; padding: 12px; font-size: 14px;
+	}
+	.cta-red b { font-family: var(--helv); font-size: 13px; }
+	.seal {
+		width: 64px; height: 64px; margin: 14px auto 0; border-radius: 9999px;
+		background: var(--color-primary); color: #fff; display: grid; place-items: center;
+		text-align: center; font-family: var(--helv); font-weight: 700; font-size: 8px;
+		line-height: 1.3; border: 2px solid #000; box-shadow: inset 0 0 0 2px #fff;
+	}
+	.counter { margin-top: 14px; text-align: center; font-size: 12px; }
+	.counter .digits {
+		display: inline-block; background: #000; color: #7dff7d; padding: 3px 8px;
+		font-family: "Courier New", monospace; font-size: 14px; letter-spacing: 2px;
+		border: 1px solid #000; margin-top: 3px;
+	}
+
+	/* ── Section eyebrow: tint block + stencil caps ───────────────── */
+	.eyebrow {
+		background: var(--tint-olive); padding: 16px;
+		font-family: var(--black); font-weight: 900; font-size: 30px; line-height: 1;
+	}
+	.eyebrow.salmon { background: var(--tint-salmon); }
+
+	/* ── Ribbon card: white title bar + tinted body + photo notch ─── */
+	.ribbon { border: 1px solid #000; border-top: 0; margin-bottom: 22px; position: relative; }
+	.ribbon-title {
+		display: flex; align-items: center; gap: 8px;
+		background: #fff; border-bottom: 1px solid #000; padding: 6px 12px;
+		font-family: var(--helv); font-weight: 700; font-size: 14px;
+	}
+	.ribbon-body { display: grid; grid-template-columns: 1fr 132px; gap: 10px; padding: 12px 16px; }
+	.ribbon-body.tint-sage { background: var(--tint-sage); }
+	.ribbon-body.tint-sky { background: var(--tint-sky); }
+	.ribbon-body.tint-periwinkle { background: var(--tint-periwinkle); }
+	.ribbon-body.tint-peach { background: var(--tint-peach); }
+	.ribbon-body .pitch { font-size: 14px; }
+	.ribbon-body .price { font-family: var(--helv); font-weight: 700; font-size: 13px; margin-top: 8px; }
+	.ribbon-body .price b { color: var(--color-primary); }
+	@media (max-width: 560px) { .ribbon-body { grid-template-columns: 1fr; } }
+
+	/* Product photo: a CRT monitor drawn with bevels and a hard 2px shadow. */
+	.crt {
+		width: 128px; height: 112px; margin: -20px 0 -6px auto; background: var(--color-surface-raised);
+		border-top: 2px solid #fff; border-left: 2px solid #fff;
+		border-bottom: 2px solid #6f6f6f; border-right: 2px solid #6f6f6f;
+		padding: 8px; box-shadow: 2px 2px 0 #000; position: relative;
+	}
+	.crt .screen {
+		height: 66px; background: linear-gradient(160deg, #0b3f66, #6db6d8 82%);
+		border: 2px solid #333; display: grid; place-items: center;
+		color: #dff3ff; font-family: var(--helv); font-weight: 700; font-size: 9px;
+	}
+	.crt .slot { height: 5px; margin-top: 7px; background: #b5b5b5; border-bottom: 1px solid #7c7c7c; }
+	.crt .base { width: 64px; height: 9px; margin: 4px auto 0; background: #d9d9d9; border: 1px solid #6f6f6f; }
+	.crt .badge {
+		position: absolute; right: -6px; bottom: -8px; background: var(--color-accent);
+		border: 1px solid #000; font-family: var(--helv); font-weight: 700; font-size: 9px; padding: 1px 4px;
+	}
+
+	/* NEW! burst — a rotated sticker with a period GIF blink. */
+	.burst {
+		position: absolute; top: -16px; right: 14px; z-index: 2;
+		width: 64px; height: 64px; display: grid; place-items: center;
+		background: var(--color-accent); color: #000;
+		font-family: var(--helv); font-weight: 700; font-size: 13px;
+		transform: rotate(-12deg);
+		clip-path: polygon(50% 0%, 59% 12%, 72% 5%, 75% 20%, 90% 18%, 86% 32%, 100% 35%, 90% 46%, 98% 58%, 84% 62%, 86% 77%, 72% 74%, 68% 88%, 56% 80%, 50% 94%, 44% 80%, 32% 88%, 28% 74%, 14% 77%, 16% 62%, 2% 58%, 10% 46%, 0% 35%, 14% 32%, 10% 18%, 25% 20%, 28% 5%, 41% 12%);
+		animation: blink 1.1s steps(1) infinite;
+	}
+	@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0.25; } }
+
+	/* ── Price table: black rules, raised header ──────────────────── */
+	.pricelist { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+	.pricelist th {
+		text-align: left; font-family: var(--helv); font-weight: 700; font-size: 12px;
+		background: var(--color-surface-raised); border: 1px solid #000; padding: 4px 8px;
+	}
+	.pricelist td { border: 1px solid #000; padding: 4px 8px; }
+	.pricelist .num { text-align: right; font-family: var(--helv); font-weight: 700; }
+	@media (max-width: 620px) { .pricelist .hide-sm { display: none; } }
+
+	/* ── Footer: icon-label nav, green rule, blue legal links ─────── */
+	.footrule { height: 2px; background: var(--rule-green); margin: 16px 0 12px; }
+	.footnav { display: flex; justify-content: space-around; gap: 8px; text-align: center; }
+	.footnav .iconnav .sq { width: 30px; }
+	.legal { margin-top: 12px; font-size: 11px; line-height: 1.5; }
+	.legal .fine { color: var(--color-muted); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 776px; margin: 0 auto; }
+	.pagehead {
+		background: var(--color-border); color: #fff; padding: 10px 16px;
+		font-family: var(--helv); font-weight: 700; font-size: 14px;
+	}
+	.panel { border: 8px solid var(--color-border); border-top: 0; background: #fff; padding: 14px 16px 20px; }
+	.panel h2 { font-size: 20px; margin-bottom: 6px; }
+	.lede { max-width: 74ch; }
+	.note { margin-top: 12px; font-size: 13px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+
+	.btn {
+		font-family: var(--helv); font-weight: 700; font-size: 12px;
+		background: var(--color-border); color: #fff; border: 1px solid #000;
+		padding: 6px 16px; border-radius: 0; cursor: pointer;
+	}
+	.btn.secondary { background: #fff; color: #000; }
+	.input {
+		font-family: var(--times); font-size: 14px; padding: 4px 6px; width: 200px; max-width: 100%;
+		background: #fff; color: #000; border: 1px solid #000; border-radius: 0;
+	}
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 40px; border: 1px solid #000; }
+	.sw b { display: block; font-family: var(--helv); font-size: 12px; margin-top: 5px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile: the frame shrinks, the columns stack ─────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 12px; align-items: start; }
+	@media (min-width: 840px) { .mobile { grid-template-columns: 272px 1fr; gap: 26px; } }
+	.phoneframe {
+		width: 272px; max-width: 100%; margin: 0 auto; background: #d8d8d8; padding: 8px;
+	}
+	.phoneframe .viewport { border: 2px solid #000; background: #fff; }
+	.pf-banner { background: #000; color: #fff; padding: 8px; }
+	.pf-banner .headline { font-family: var(--helv); font-weight: 700; font-size: 12px; }
+	.pf-banner .sub { display: flex; gap: 6px; align-items: center; margin-top: 5px; }
+	.pf-banner .tagline { font-size: 10px; color: #cfcfcf; flex: 1; }
+	.pf-rail { border-bottom: 1px solid #000; padding: 8px; }
+	.pf-ribbon-title { border-top: 1px solid #000; }
+	.pf-eyebrow { font-family: var(--black); font-weight: 900; font-size: 18px; padding: 8px 10px; background: var(--tint-olive); }
+	.pf-body { padding: 8px 10px; font-size: 12px; }
+	.pf-foot { display: flex; justify-content: space-around; border-top: 2px solid var(--rule-green); padding: 8px 4px; }
+	.pf-foot .iconnav { padding: 2px; }
+	.pf-foot .iconnav .sq { width: 24px; height: 18px; font-size: 9px; line-height: 14px; margin-bottom: 2px; }
+	.pf-foot .iconnav b { font-size: 8px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 7px 0; border-bottom: 1px solid var(--color-surface-raised); }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { display: block; font-family: var(--helv); font-size: 13px; }
+	.rules span { font-size: 13px; color: var(--color-muted); }
+
+	/* ── Off-style: a modern soft card versus the catalog answer ──── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 16px; border-radius: 12px; background: linear-gradient(150deg, #fdfdfd, #e8eef5);
+		box-shadow: 0 10px 26px rgb(15 23 42 / 0.16); color: #3f4c5e; font-size: 13px;
+		font-family: var(--helv);
+	}
+	.cmp-off small { display: block; margin-top: 8px; color: #64748b; }
+	.cmp-on { padding: 16px; border: 1px solid #000; background: var(--tint-sage); font-size: 13px; }
+	.cmp-on small { display: block; margin-top: 8px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — a 1996 catalog page: black frame, black banner with sticker and
+     red phone, tinted ribbon cards, blue underlined links, table rules. -->
+<div class="frame">
+	<div class="banner">
+		<div style="flex:1;min-width:200px">
+			<div class="headline">BUILD YOUR OWN SYSTEM. ONLINE.</div>
+			<div class="tagline">Configure it, price it, order it — right from this page.</div>
+		</div>
+		<span class="buytab">BUY <small>a</small> VETTA</span>
+		<span class="phone">1-800-213-DESK</span>
+	</div>
+
+	<div class="body">
+		<div class="rail">
+			<div class="icongrid">
+				<div class="iconnav"><a href="#store"><span class="sq">▤</span><b>ONLINE STORE</b></a></div>
+				<div class="iconnav"><a href="#support"><span class="sq">⚑</span><b>SUPPORT</b></a></div>
+				<div class="iconnav"><a href="#why"><span class="sq">?</span><b>WHY VETTA</b></a></div>
+				<div class="iconnav"><a href="#gov"><span class="sq">★</span><b>GOVERNMENT</b></a></div>
+				<div class="iconnav"><a href="#world"><span class="sq">◍</span><b>WORLDWIDE</b></a></div>
+				<div class="iconnav"><a href="#status"><span class="sq">☑</span><b>ORDER STATUS</b></a></div>
+				<div class="iconnav"><a href="#about"><span class="sq">⌂</span><b>ABOUT US</b></a></div>
+				<div class="iconnav"><a href="#jobs"><span class="sq">✎</span><b>CAREERS</b></a></div>
+			</div>
+
+			<div class="cta-red">
+				<b>Let us help you find the right system.</b>
+				<p style="margin-top:6px">Tell us what you need and we will configure, price and ship it — usually within a week.</p>
+				<p style="margin-top:8px"><a href="#configure" style="color:#fff">Start configuring ›</a></p>
+			</div>
+
+			<div class="seal">PC WEEK<br>READERS'<br>CHOICE</div>
+
+			<div class="counter">
+				You are visitor number
+				<div class="digits">0 0 1 3 3 4 7</div>
+			</div>
+		</div>
+
+		<div class="feed">
+			<div class="eyebrow">DIMENSION DESKTOPS</div>
+			<div class="ribbon">
+				<span class="burst">NEW!</span>
+				<div class="ribbon-title">DIMENSION XPS P133v</div>
+				<div class="ribbon-body tint-sage">
+					<div class="pitch">
+						Our fastest multimedia tower, now standard with a 133MHz Pentium processor,
+						8MB of memory and a quad-speed CD-ROM. Ready for Windows 95 out of the box.
+						<div class="price">From <b>$2,499</b> · <a href="#config">Configure &amp; Buy</a></div>
+					</div>
+					<div class="crt">
+						<div class="screen">15" SVGA</div>
+						<div class="slot"></div>
+						<div class="base"></div>
+						<span class="badge">MMX</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="eyebrow salmon">OPTIPLEX DESKTOPS</div>
+			<div class="ribbon">
+				<div class="ribbon-title">OPTIPLEX GX PRO</div>
+				<div class="ribbon-body tint-salmon">
+					<div class="pitch">
+						Built for networked offices that never power down. Tool-less chassis,
+						three-year on-site service and a motherboard your IT crew will thank you for.
+						<div class="price">From <b>$1,899</b> · <a href="#config">Configure &amp; Buy</a></div>
+					</div>
+					<div class="crt">
+						<div class="screen">14" SVGA</div>
+						<div class="slot"></div>
+						<div class="base"></div>
+					</div>
+				</div>
+			</div>
+
+			<table class="pricelist">
+				<thead>
+					<tr><th>Model</th><th class="hide-sm">Processor</th><th class="hide-sm">Memory</th><th>Price</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>Dimension XPS P133v</td><td class="hide-sm">Pentium 133</td><td class="hide-sm">8 MB</td><td class="num">$2,499</td></tr>
+					<tr><td>Dimension P90</td><td class="hide-sm">Pentium 90</td><td class="hide-sm">8 MB</td><td class="num">$1,799</td></tr>
+					<tr><td>OptiPlex GX Pro</td><td class="hide-sm">Pentium Pro 180</td><td class="hide-sm">16 MB</td><td class="num">$2,199</td></tr>
+					<tr><td>OptiPlex Gs+</td><td class="hide-sm">Pentium 100</td><td class="hide-sm">8 MB</td><td class="num">$1,499</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div style="padding:0 12px 16px">
+		<div class="footrule"></div>
+		<div class="footnav">
+			<div class="iconnav"><a href="#find"><span class="sq">⌕</span><b>FIND</b></a></div>
+			<div class="iconnav"><a href="#home"><span class="sq">⌂</span><b>HOME</b></a></div>
+			<div class="iconnav"><a href="#store"><span class="sq">▤</span><b>ONLINE STORE</b></a></div>
+			<div class="iconnav"><a href="#service"><span class="sq">⚒</span><b>SERVICE &amp; SUPPORT</b></a></div>
+		</div>
+		<div class="legal">
+			<a href="#copyright">Copyright</a> 1996 Vetta Computer Corporation · <a href="#terms">(Terms of Use)</a><br>
+			<span class="fine">This site is best viewed with browser versions 3.0 and higher, at 800 × 600 resolution.</span>
+		</div>
+	</div>
+</div>
+
+<div class="ref">
+
+<!-- 01 -->
+<div class="frame">
+	<div class="pagehead">01 — Frame, tints &amp; bevels</div>
+	<div class="panel">
+		<h2>Hard edges do all the work</h2>
+		<p class="lede">One black frame wraps the page, one ink draws every hairline, and depth comes
+			from hand-style bevels instead of shadows. The tint family gives each product line its own
+			block of color; nothing ever blends, fades or rounds.</p>
+		<div class="row">
+			<button class="btn">SEARCH</button>
+			<button class="btn secondary">MORE INFO</button>
+			<input class="input" placeholder="Search this catalog">
+			<span class="helv" style="font-size:12px"><a href="#help">Ordering help</a> · <a href="#faq">FAQ</a></span>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#e91d2a · CTA + phone only</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#fcc20f · sticker layer</span></div>
+			<div class="sw"><div class="fill" style="background: var(--tint-sage)"></div><b>ribbon tints</b><span>one per product line</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-link)"></div><b>link</b><span>#0000ee · underlined</span></div>
+		</div>
+		<p class="note">Radii are zero and shadows never blur. A "shadow" is a hard 2px offset; a
+			"highlight" is a 1px white edge. If it could not be cut from a GIF, it does not ship.</p>
+	</div>
+</div>
+
+<!-- 02 MOBILE -->
+<div class="frame">
+	<div class="pagehead">02 — Mobile</div>
+	<div class="panel">
+		<h2>The frame thins, the stack begins</h2>
+		<p class="lede">A table-era page on a phone keeps every rule and changes only the arithmetic:
+			the 8px frame becomes 2px, the two columns collapse into one, and the icon grid reflows
+			from two-up to a single row that scrolls. Nothing gains radius; nothing gains a blur.</p>
+		<div class="mobile">
+			<div class="phoneframe">
+				<div class="viewport">
+					<div class="pf-banner">
+						<div class="headline">BUILD YOUR SYSTEM. ONLINE.</div>
+						<div class="sub">
+							<span class="tagline">1-800-213-DESK</span>
+							<span class="buytab" style="font-size:10px">BUY <small>a</small> VETTA</span>
+						</div>
+					</div>
+					<div class="pf-rail">
+						<div class="icongrid" style="grid-template-columns:repeat(4,1fr);gap:6px 2px">
+							<div class="iconnav"><a href="#store"><span class="sq">▤</span><b>STORE</b></a></div>
+							<div class="iconnav"><a href="#support"><span class="sq">⚑</span><b>SUPPORT</b></a></div>
+							<div class="iconnav"><a href="#find"><span class="sq">⌕</span><b>FIND</b></a></div>
+							<div class="iconnav"><a href="#status"><span class="sq">☑</span><b>STATUS</b></a></div>
+						</div>
+					</div>
+					<div class="pf-eyebrow">DIMENSION</div>
+					<div class="pf-ribbon-title" style="font-family:var(--helv);font-weight:700;font-size:12px;padding:5px 10px">XPS P133v — NEW!</div>
+					<div class="pf-body" style="background:var(--tint-sage)">
+						133MHz Pentium · 8MB RAM · quad-speed CD-ROM<br>
+						<b class="helv" style="color:var(--color-primary)">From $2,499</b> · <a href="#config">Configure &amp; Buy</a>
+					</div>
+					<div class="pf-eyebrow" style="background:var(--tint-salmon)">OPTIPLEX</div>
+					<div class="pf-ribbon-title" style="font-family:var(--helv);font-weight:700;font-size:12px;padding:5px 10px">GX PRO</div>
+					<div class="pf-body" style="background:var(--tint-salmon)">
+						Network-ready tower · 3-year on-site service<br>
+						<b class="helv" style="color:var(--color-primary)">From $1,899</b> · <a href="#config">Configure &amp; Buy</a>
+					</div>
+					<div class="pf-foot">
+						<div class="iconnav"><span class="sq">⌕</span><b>FIND</b></div>
+						<div class="iconnav"><span class="sq">⌂</span><b>HOME</b></div>
+						<div class="iconnav"><span class="sq">▤</span><b>STORE</b></div>
+						<div class="iconnav"><span class="sq">⚒</span><b>SERVICE</b></div>
+					</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Frame 8px → 2px</b><span>The border survives at every width because it is the brand. It thins; it never disappears.</span></li>
+				<li><b>Columns stack</b><span>The 28% rail collapses above the product feed: icon grid first, then the red CTA panel, then ribbons at full width.</span></li>
+				<li><b>Photo notch becomes a top image</b><span>The CRT graphic stops hanging off the right edge and sits above the pitch, still square with its hard shadow.</span></li>
+				<li><b>Banner wraps, sticker stays</b><span>The headline drops one tier, the phone number wraps under, and the yellow BUY tab keeps its black border.</span></li>
+				<li><b>Targets grow</b><span>Icon squares reach 44px tap height through padding; labels stay uppercase Helvetica at the same size.</span></li>
+				<li><b>Type floor holds</b><span>Body stays Times 12–14px and small print 11px. Density is the period look — do not inflate it.</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- 03 DON'T -->
+<div class="frame">
+	<div class="pagehead">03 — Off-style, for contrast</div>
+	<div class="panel">
+		<h2>What breaks the catalog</h2>
+		<div class="compare">
+			<div class="cmp-off">Modern soft product card
+				<small>12px radius · gradient wash · blurred drop shadow · sans body copy. Any one of
+					these turns the page into a costume of itself.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>1px black border · flat sage tint · Times body · hard rectangle photo with a 2px
+					offset shadow. The frame, the tints and the serif carry the period.</small></div>
+		</div>
+		<p class="note">Also out: new hues beyond the tint family, a second red panel on one page, soft
+			shadows, rounded buttons, and sticker art flattened into backgrounds.</p>
+	</div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "pixel",
+	"name": "Pixel 8-bit",
+	"version": "1.0.0",
+	"order": 55,
+	"category": "playful",
+	"vibe": "light",
+	"tags": [
+		"playful",
+		"light"
+	],
+	"blurb": "8-bit game cartridge energy: stepped pixel borders, flat NES palette, chunky type and zero anti-aliasing charm.",
+	"tagline": {
+		"en": "Press start to design",
+		"zh": "像素阶梯，按下开始"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/nostalgic-css/NES.css",
+		"note": "Original spec written for this collection; palette and border conventions checked against NES.css (MIT). No upstream code included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

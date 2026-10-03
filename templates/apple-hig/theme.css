@@ -1,0 +1,22 @@
+/* Apple HIG — iOS system palette (light column) and grouped-list chrome, from Apple's public Human Interface Guidelines. Factual values, original descriptions. Not affiliated with or endorsed by Apple Inc. */
+@theme {
+	--color-primary: #007aff; /* systemBlue — the tint: links, selected controls, one filled action */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #f2f2f7; /* systemGroupedBackground — the page behind the groups */
+	--color-surface-foreground: #000000; /* label */
+	--color-surface-raised: #ffffff; /* secondarySystemGroupedBackground — grouped card fill */
+	--color-muted: rgb(60 60 67 / 0.6); /* secondaryLabel */
+	--color-accent: #5856d6; /* systemIndigo — second tint, used as sparingly as primary */
+	--color-danger: #ff3b30; /* systemRed — destructive only */
+	--color-border: #c6c6c8; /* opaqueSeparator */
+
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-xl: 20px;
+	--radius-2xl: 28px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+	--shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+	--shadow-lg: 0 12px 32px rgb(0 0 0 / 0.12);
+}

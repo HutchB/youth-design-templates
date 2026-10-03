@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "warp",
+	"name": "Warp",
+	"version": "1.0.0",
+	"order": 87,
+	"category": "dev",
+	"vibe": "dark",
+	"tags": [
+		"dev",
+		"dark"
+	],
+	"blurb": "The terminal reimagined: warm ink surfaces, command blocks and AI palettes over raw text grids.",
+	"tagline": {
+		"en": "A terminal with real UI",
+		"zh": "带界面感的现代终端"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memphis — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #ff6b6b;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #17171c;
+		--color-surface-raised: #fff9f0;
+		--color-muted: #7a7a85;
+		--color-accent: #00c2c7;
+		--color-danger: #e5484d;
+		--color-border: #17171c;
+		--color-mustard: #ffce4f;
+		--color-violet-pop: #9b5de5;
+
+		--radius-sm: 0px;
+		--radius-md: 6px;
+		--radius-lg: 10px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+
+		--shadow-sm: 3px 3px 0 #17171c;
+		--shadow-md: 5px 5px 0 #17171c;
+		--shadow-lg: 8px 8px 0 #17171c;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		font-size: 16px;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 900; line-height: 1.05; }
+	p { margin: 0; }
+	::selection { background: rgb(0 194 199 / 0.35); }
+	.spacer { flex: 1; }
+
+	/* ── Hero: white stage + geometric confetti ───────────────────── */
+	.hero { position: relative; overflow: hidden; padding: 64px 24px 72px; max-width: 1120px; margin: 0 auto; }
+	.conf { position: absolute; }
+	.poster { position: relative; }
+	.poster .blk, .blk {
+		display: block; width: max-content; padding: 4px 22px 12px; border-radius: var(--radius-sm);
+		font-weight: 900; font-size: clamp(46px, 9vw, 98px); line-height: 1.04; text-transform: uppercase; letter-spacing: -0.01em;
+	}
+	.blk-coral { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.blk-teal { background: var(--color-accent); color: var(--color-surface-foreground); transform: rotate(-2deg); margin-top: 10px; }
+	.blk-teal em { font-style: normal; color: var(--color-primary-foreground); }
+	.chip-date {
+		display: inline-block; margin-top: 26px; padding: 10px 18px; border-radius: var(--radius-sm);
+		background: var(--color-mustard); color: var(--color-surface-foreground);
+		font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em;
+		transform: rotate(-2deg); box-shadow: var(--shadow-sm);
+	}
+	.hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 30px; align-items: center; position: relative; }
+
+	/* Buttons: hard blocks with ink outline and sticker press. */
+	.btn {
+		font-family: inherit; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+		height: 48px; padding: 0 26px; border: 2px solid var(--color-border); border-radius: var(--radius-md);
+		background: var(--color-accent); color: var(--color-surface-foreground); cursor: pointer;
+		box-shadow: var(--shadow-sm); transition: transform 100ms ease, box-shadow 100ms ease, background-color 100ms ease;
+	}
+	.btn:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--color-border); }
+	.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--color-border); }
+	.btn:focus-visible { outline: 3px solid var(--color-violet-pop); outline-offset: 2px; }
+	.btn-coral { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-plain { background: var(--color-surface); }
+
+	/* ── Polka band ───────────────────────────────────────────────── */
+	.polka {
+		background-color: var(--color-mustard);
+		background-image: radial-gradient(#17171c 2.5px, transparent 3px);
+		background-size: 18px 18px;
+		padding: 18px 0; overflow: hidden; white-space: nowrap;
+		font-weight: 900; text-transform: uppercase; font-size: 15px; letter-spacing: 0.06em;
+	}
+	.polka span { margin-right: 34px; }
+	.polka .hollow { color: var(--color-mustard); -webkit-text-stroke: 1.5px #17171c; }
+
+	/* ── Zigzag divider ───────────────────────────────────────────── */
+	.zz { display: block; width: 100%; height: 24px; }
+
+	/* ── Lineup: flat day blocks ──────────────────────────────────── */
+	.lineup { max-width: 1120px; margin: 0 auto; padding: 56px 24px; }
+	.lineup-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+	@media (min-width: 780px) { .lineup-grid { grid-template-columns: repeat(3, 1fr); } }
+	.day { padding: 26px 24px 30px; border-radius: var(--radius-sm); }
+	.day h3 { font-size: 30px; text-transform: uppercase; }
+	.day .tag { display: inline-block; margin-top: 10px; padding: 4px 12px; background: var(--color-surface); color: var(--color-surface-foreground); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+	.day ul { margin: 18px 0 0; padding: 0; list-style: none; font-weight: 700; font-size: 17px; }
+	.day li { padding: 7px 0; border-bottom: 2px dotted rgb(23 23 28 / 0.25); }
+	.day li:last-child { border-bottom: 0; }
+	.day-coral { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.day-teal { background: var(--color-accent); color: var(--color-surface-foreground); }
+	.day-mustard { background: var(--color-mustard); color: var(--color-surface-foreground); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 820px; margin: 0 auto; padding: 0 24px 96px; }
+	.section { border-top: 3px solid var(--color-border); margin-top: 64px; padding-top: 40px; }
+	.section-label { display: inline-block; padding: 4px 12px; background: var(--color-violet-pop); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: var(--radius-sm); }
+	.section h2 { font-size: 34px; margin: 16px 0 12px; }
+	.lede { color: var(--color-muted); font-size: 15.5px; max-width: 62ch; }
+
+	.geo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 26px; }
+	@media (min-width: 640px) { .geo { grid-template-columns: repeat(3, 1fr); } }
+	.geo .cell { border: 2px solid var(--color-border); border-radius: var(--radius-lg); height: 104px; display: grid; place-items: center; background: var(--color-surface); }
+	.geo .cell.dots { background-color: var(--color-surface); background-image: radial-gradient(#17171c 2.5px, transparent 3px); background-size: 16px 16px; }
+	.geo .cell small { display: block; text-align: center; margin-top: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--color-muted); }
+	.geo figure { margin: 0; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 26px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 64px; border: 2px solid var(--color-border); border-radius: var(--radius-sm); }
+	.sw b { display: block; font-size: 13px; font-weight: 800; margin-top: 8px; text-transform: uppercase; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	.ticket {
+		margin-top: 26px; background: var(--color-surface); border: 2px solid var(--color-border);
+		border-radius: var(--radius-xl); box-shadow: var(--shadow-md); padding: 22px 24px 24px;
+		position: relative; overflow: hidden; max-width: 460px;
+	}
+	.ticket .corner { position: absolute; top: -8px; right: -8px; }
+	.ticket h3 { font-size: 24px; text-transform: uppercase; }
+	.ticket .price { font-size: 34px; font-weight: 900; }
+	.row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+	.tagchip { display: inline-block; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 800; text-transform: uppercase; }
+	.input {
+		font-family: inherit; font-size: 15px; font-weight: 500; width: 100%; max-width: 300px; height: 48px; padding: 0 14px;
+		background: var(--color-surface); border: 2px solid var(--color-border); border-radius: var(--radius-md);
+		color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: var(--color-muted); font-weight: 600; }
+	.input:focus { outline: none; box-shadow: var(--shadow-sm); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 40px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto; position: relative; overflow: hidden;
+		border: 2px solid var(--color-border); border-radius: 22px; background: var(--color-surface);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 8px 18px 2px; font-size: 10px; color: var(--color-muted); }
+	.phone-poster { padding: 18px 16px 20px; position: relative; }
+	.phone-poster .blk { margin: 0; padding: 2px 10px 6px; font-size: 23px; }
+	.phone-poster .chip-date { margin-top: 12px; padding: 5px 10px; font-size: 10px; }
+	.phone-poster .btn { height: 40px; padding: 0 18px; font-size: 12px; }
+	.phone-polka { background-color: var(--color-mustard); background-image: radial-gradient(#17171c 2px, transparent 2.5px); background-size: 14px 14px; padding: 10px 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+	.phone-days { padding: 14px 16px 18px; display: grid; gap: 10px; }
+	.phone-days .day { padding: 14px 14px 16px; }
+	.phone-days h3 { font-size: 17px; }
+	.phone-days ul { font-size: 12.5px; margin-top: 8px; }
+	.phone-days li { padding: 4px 0; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 14px 0; border-bottom: 1px solid rgb(23 23 28 / 0.15); font-size: 15px; color: var(--color-muted); line-height: 1.55; }
+	.rules b { display: block; font-size: 16px; font-weight: 800; color: var(--color-surface-foreground); margin-bottom: 3px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		position: relative; padding: 30px 26px; border-radius: 24px; overflow: hidden;
+		background: linear-gradient(150deg, #fce7f3, #ede9fe 55%, #dbeafe);
+		box-shadow: 0 18px 44px rgb(139 92 246 / 0.25);
+		color: #7c3aed; font-weight: 800; font-size: 22px; text-align: center;
+	}
+	.cmp-off::before { content: ""; position: absolute; inset: -30% -10% auto auto; width: 200px; height: 200px; border-radius: 50%; background: rgb(251 207 232 / 0.8); filter: blur(30px); }
+	.cmp-off small { display: block; margin-top: 12px; font-weight: 500; font-size: 13px; color: #8b5cf6; line-height: 1.6; }
+	.cmp-off .pill { display: inline-block; margin-top: 16px; padding: 10px 24px; border-radius: 9999px; background: linear-gradient(90deg, #c4b5fd, #f9a8d4); color: #fff; font-size: 12px; font-weight: 700; }
+	.cmp-on { position: relative; overflow: hidden; padding: 30px 26px; border-radius: var(--radius-sm); background: var(--color-violet-pop); color: #fff; font-weight: 900; font-size: 22px; text-transform: uppercase; }
+	.cmp-on small { display: block; margin-top: 12px; font-weight: 600; font-size: 13px; color: rgb(255 255 255 / 0.92); line-height: 1.6; text-transform: none; }
+	.cmp-on .pill { display: inline-block; margin-top: 16px; padding: 10px 22px; border-radius: var(--radius-sm); background: var(--color-mustard); color: var(--color-surface-foreground); border: 2px solid var(--color-border); font-size: 12px; font-weight: 800; text-transform: uppercase; box-shadow: var(--shadow-sm); }
+	.note-plain { margin-top: 22px; font-size: 14px; color: var(--color-muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the festival poster as a page: clashing headline blocks, confetti
+     geometry, one tilted chip, sticker-press buttons. -->
+<header class="hero">
+	<!-- confetti scatter -->
+	<svg class="conf" style="top:34px;left:6%" width="64" height="26" viewBox="0 0 64 26" aria-hidden="true"><path d="M3 20 L13 6 L23 20 L33 6 L43 20 L53 6" fill="none" style="stroke:var(--color-accent);stroke-width:6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+	<svg class="conf" style="top:18px;right:10%" width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" style="fill:var(--color-violet-pop)"/></svg>
+	<svg class="conf" style="top:52%;left:2%" width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M6 40 L23 6 L40 40 Z" style="fill:var(--color-mustard)"/></svg>
+	<svg class="conf" style="top:24%;right:3%" width="70" height="24" viewBox="0 0 70 24" aria-hidden="true"><path d="M4 12 C 10 2, 18 2, 24 12 S 38 22, 44 12 S 58 2, 66 12" fill="none" style="stroke:var(--color-primary);stroke-width:5" stroke-linecap="round"/></svg>
+	<svg class="conf" style="bottom:70px;left:12%" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><path d="M18 4 V32 M4 18 H32" style="stroke:var(--color-accent);stroke-width:7" stroke-linecap="round"/></svg>
+	<svg class="conf" style="bottom:34px;right:8%" width="52" height="26" viewBox="0 0 52 26" aria-hidden="true"><path d="M2 26 A 24 24 0 0 1 50 26 Z" style="fill:var(--color-primary)"/></svg>
+
+	<div class="poster">
+		<p style="font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:0.1em;color:var(--color-muted)">Warehouse 9 · All-night arts &amp; noise</p>
+		<h1 class="poster" style="margin-top:14px">
+			<span class="blk blk-coral">Squiggle</span>
+			<span class="blk blk-teal">Fest <em>’26</em></span>
+		</h1>
+		<p class="chip-date">21–23 Aug · Three stages · One very loud warehouse</p>
+		<div class="hero-actions">
+			<button class="btn btn-coral">Get tickets</button>
+			<button class="btn btn-plain">See the lineup</button>
+		</div>
+	</div>
+</header>
+
+<!-- Polka band: one per screen, texture only. -->
+<div class="polka" aria-hidden="true">
+	<span>Squiggle Fest</span><span class="hollow">21–23 Aug</span><span>Warehouse 9</span><span class="hollow">Loud since 1981</span><span>Squiggle Fest</span><span class="hollow">21–23 Aug</span>
+</div>
+
+<!-- Lineup: three flat day blocks, one hue each. -->
+<section class="lineup">
+	<div class="lineup-grid">
+		<div class="day day-coral">
+			<h3>Fri 21</h3>
+			<span class="tag">Main stage</span>
+			<ul><li>The Wobbly Telescopes</li><li>Neon Marmalade</li><li>Paper Plane Crash</li><li>DJ Right Angle</li></ul>
+		</div>
+		<div class="day day-teal">
+			<h3>Sat 22</h3>
+			<span class="tag">Main stage</span>
+			<ul><li>Terrazzo Youth</li><li>The Zigzag Theory</li><li>Molded Plastic</li><li>Semisphere Sound</li></ul>
+		</div>
+		<div class="day day-mustard">
+			<h3>Sun 23</h3>
+			<span class="tag">All stages</span>
+			<ul><li>Confetti Cannon</li><li>Dot Matrix Dancers</li><li>The Primary Colors</li><li>Encore: Everyone</li></ul>
+		</div>
+	</div>
+</section>
+
+<svg class="zz" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 L25 5 L50 20 L75 5 L100 20 L125 5 L150 20 L175 5 L200 20 L225 5 L250 20 L275 5 L300 20 L325 5 L350 20 L375 5 L400 20 L425 5 L450 20 L475 5 L500 20 L525 5 L550 20 L575 5 L600 20 L625 5 L650 20 L675 5 L700 20 L725 5 L750 20 L775 5 L800 20 L825 5 L850 20 L875 5 L900 20 L925 5 L950 20 L975 5 L1000 20 L1025 5 L1050 20 L1075 5 L1100 20 L1125 5 L1150 20 L1175 5 L1200 20" fill="none" style="stroke:var(--color-border);stroke-width:6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+<div class="ref">
+	<!-- 01 -->
+	<section class="section" style="border-top:0;margin-top:0;padding-top:0">
+		<p class="section-label">01 — Geometry</p>
+		<h2>The confetti set</h2>
+		<p class="lede">Six shapes, all drawn sharp as inline SVG: zigzag, squiggle, polka
+			dots, triangle, semicircle, cross. Four to eight per screen, one polka band at
+			most — confetti is air, never wallpaper.</p>
+		<div class="geo">
+			<figure class="cell"><svg width="64" height="26" viewBox="0 0 64 26" aria-hidden="true"><path d="M3 20 L13 6 L23 20 L33 6 L43 20 L53 6" fill="none" style="stroke:var(--color-border);stroke-width:6" stroke-linecap="round" stroke-linejoin="round"/></svg><figcaption><small>Zigzag</small></figcaption></figure>
+			<figure class="cell"><svg width="70" height="24" viewBox="0 0 70 24" aria-hidden="true"><path d="M4 12 C 10 2, 18 2, 24 12 S 38 22, 44 12 S 58 2, 66 12" fill="none" style="stroke:var(--color-primary);stroke-width:5" stroke-linecap="round"/></svg><figcaption><small>Squiggle</small></figcaption></figure>
+			<figure class="cell dots"><figcaption><small>Polka 3px / 16</small></figcaption></figure>
+			<figure class="cell"><svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M6 40 L23 6 L40 40 Z" style="fill:var(--color-mustard)"/></svg><figcaption><small>Triangle</small></figcaption></figure>
+			<figure class="cell"><svg width="52" height="26" viewBox="0 0 52 26" aria-hidden="true"><path d="M2 26 A 24 24 0 0 1 50 26 Z" style="fill:var(--color-accent)"/></svg><figcaption><small>Semicircle</small></figcaption></figure>
+			<figure class="cell"><svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><path d="M18 4 V32 M4 18 H32" style="stroke:var(--color-violet-pop);stroke-width:7" stroke-linecap="round"/></svg><figcaption><small>Cross</small></figcaption></figure>
+		</div>
+		<p class="note-plain">Every line is crisp and constructed — the wobbly hand-drawn
+			crayon line belongs to Doodle Pop, not here.</p>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Colour</p>
+		<h2>Four hues that argue politely</h2>
+		<p class="lede">Coral, teal, mustard and violet may meet two at a time; one hue
+			dominates each view. White or ink does the labeling — never a fifth color.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><b>Coral</b><span>primary · the loudest block</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><b>Teal</b><span>accent · the clash partner</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-mustard)"></div><b>Mustard</b><span>warm blocks &amp; polka bands</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-violet-pop)"></div><b>Violet</b><span>the wild card, used last</span></div>
+		</div>
+		<p class="note-plain">Small text on coral or teal is ink; white on those fills is
+			reserved for large bold display type. Mustard always takes ink.</p>
+	</section>
+
+	<!-- 03 -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>Stickers with physics</h2>
+		<p class="lede">Interactive pieces get the 2px ink outline and the hard flat
+			offset; hover pulls the piece into its shadow, active flattens it. Static
+			blocks stay flat — the floor is flat.</p>
+		<div class="row" style="margin-top:24px">
+			<button class="btn btn-coral">Get tickets</button>
+			<button class="btn btn-plain">Lineup</button>
+			<span class="tagchip" style="background:var(--color-mustard)">21–23 Aug</span>
+			<span class="tagchip" style="background:var(--color-accent)">3 stages</span>
+		</div>
+		<div class="ticket">
+			<svg class="corner" width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><path d="M0 4 L60 4 L4 60 Z" style="fill:var(--color-mustard);transform:rotate(0deg)"/></svg>
+			<h3>Weekend pass</h3>
+			<p class="price">£68</p>
+			<p style="color:var(--color-muted);font-size:14px;margin-top:6px">All three days, all stages, one paper wristband.</p>
+			<div class="row" style="margin-top:16px"><button class="btn">Add to cart</button><span class="tagchip" style="background:var(--color-surface-raised);border:2px solid var(--color-border)">42 left</span></div>
+		</div>
+		<div class="row" style="margin-top:20px">
+			<input class="input" placeholder="YOUR@EMAIL.DANCE">
+			<button class="btn btn-coral">Join in</button>
+		</div>
+	</section>
+
+	<!-- 04 -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>The poster rolls up</h2>
+		<p class="lede">Headline blocks stack tighter, confetti thins out, the day blocks
+			collapse into one column — the clash survives, the clutter does not.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-poster">
+					<svg class="conf" style="top:10px;right:10px" width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" style="fill:var(--color-violet-pop)"/></svg>
+					<svg class="conf" style="bottom:8px;left:8px" width="42" height="18" viewBox="0 0 64 26" aria-hidden="true"><path d="M3 20 L13 6 L23 20 L33 6 L43 20 L53 6" fill="none" style="stroke:var(--color-accent);stroke-width:6" stroke-linecap="round"/></svg>
+					<p style="font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:0.08em;color:var(--color-muted)">Warehouse 9 · All-night</p>
+					<h6 class="blk blk-coral" style="margin:10px 0 0">Squiggle</h6>
+					<h6 class="blk blk-teal" style="margin-top:8px">Fest <em>’26</em></h6>
+					<p class="chip-date">21–23 Aug</p>
+					<div class="row" style="margin-top:14px"><button class="btn btn-coral">Get tickets</button></div>
+				</div>
+				<div class="phone-polka">Squiggle Fest · 21–23 Aug · Warehouse 9</div>
+				<div class="phone-days">
+					<div class="day day-coral"><h3>Fri 21</h3><ul><li>The Wobbly Telescopes</li><li>Neon Marmalade</li></ul></div>
+					<div class="day day-teal"><h3>Sat 22</h3><ul><li>Terrazzo Youth</li><li>The Zigzag Theory</li></ul></div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Blocks stack, keep hard edges</b><span>Headline blocks stay full-bleed rectangles at 22–24px type; the rotated block keeps its −2deg tilt so the poster energy survives.</span></li>
+				<li><b>Confetti halves</b><span>Two or three shapes per screen replace the six-shape scatter; shapes shrink with the stage and never cover the headline.</span></li>
+				<li><b>Day blocks become cards</b><span>The three-column lineup stacks one hue per card; artist rows keep the dotted separators and 44px touch height.</span></li>
+				<li><b>The polka band compresses</b><span>Dot size drops to 2px on a 14px tile and the band keeps scrolling text — one band, still the only one.</span></li>
+				<li><b>Buttons stay chunky</b><span>40–48px tall with the 2px ink outline; the press physics translate on touch, where hover never happens.</span></li>
+				<li><b>One hue per screenful</b><span>Coral owns the top, teal the middle; violet stays a garnish dot. Four equal hues at 375px is visual noise.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>Soft gradients need not apply</h2>
+		<div class="compare">
+			<div class="cmp-off">Pastel dream gradient
+				<small>Blurred blob shadows · pill button · muted violet-on-lavender ·
+					every corner at 24px. Gentle, tasteful, and completely wrong for
+					this floor.</small>
+				<span class="pill">Dream on</span>
+			</div>
+			<div class="cmp-on">Hard block headline
+				<small>Flat violet block · ink outline · mustard chip · hard offset ·
+					zero blur. The clash is the design.</small>
+				<span class="pill">Get tickets</span>
+			</div>
+		</div>
+		<p class="note-plain">Also out: soft shadows, wobbly hand-drawn lines, outlines on
+			every element, small white text on coral, polka wallpaper, and anything
+			pastel.</p>
+	</section>
+</div>
+
+</body>
+</html>

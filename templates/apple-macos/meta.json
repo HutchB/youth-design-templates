@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "apple-macos",
+	"name": "Apple macOS",
+	"version": "1.0.0",
+	"order": 33,
+	"category": "native",
+	"vibe": "light",
+	"tags": [
+		"native",
+		"light"
+	],
+	"blurb": "Mac desktop poise: translucent menu bar, vibrant sidebar, traffic-light windows and calm gray chrome over soft shadows.",
+	"tagline": {
+		"en": "The Mac desktop, translated to the web",
+		"zh": "Mac 桌面的从容与秩序"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://developer.apple.com/design/human-interface-guidelines/",
+		"note": "Factual macOS platform conventions with community-sampled color values; all descriptions are original. Not affiliated with or endorsed by Apple Inc. No Apple artwork, screenshots, icons or font binaries included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

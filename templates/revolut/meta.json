@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "revolut",
+	"name": "Revolut",
+	"version": "1.0.0",
+	"order": 158,
+	"category": "fintech",
+	"vibe": "dark",
+	"tags": [
+		"fintech",
+		"dark"
+	],
+	"blurb": "Fintech night mode: true-black surfaces with a cobalt brand stamp, luminous raised cards and precise white numerals.",
+	"tagline": {
+		"en": "Black card, vivid edge",
+		"zh": "黑卡与鲜亮的边"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

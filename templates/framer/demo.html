@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framer — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0099ff;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #090909;
+		--color-surface-foreground: #ffffff;
+		--color-surface-raised: #141414;
+		--color-muted: #999999;
+		--color-accent: #6a4cf5;
+		--color-danger: #ff5577;
+		--color-border: #262626;
+
+		--radius-sm: 4px;
+		--radius-md: 10px;
+		--radius-lg: 15px;
+		--radius-xl: 20px;
+		--radius-2xl: 30px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+		--shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 10px 30px rgb(0 0 0 / 0.25);
+		--shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 64px rgb(0 0 0 / 0.5);
+
+		--sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--display: "GT Walsheim", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+		--mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.03em; line-height: 1.2; }
+	p { margin: 0; }
+	::selection { background: rgb(0 153 255 / 0.35); }
+	.spacer { flex: 1; }
+
+	/* ── Builder shell: monochrome chrome split by hairlines ──────── */
+	.shell { border-bottom: 1px solid var(--color-border); }
+	.top {
+		display: flex; align-items: center; gap: 14px;
+		height: 44px; padding: 0 14px;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.mark { display: flex; flex-direction: column; gap: 2px; }
+	.mark i { width: 11px; height: 3px; background: var(--color-surface-foreground); border-radius: 1px; display: block; }
+	.mark i:nth-child(2) { width: 7px; }
+	.mark i:nth-child(3) { width: 11px; }
+	.brand { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; }
+	.proj { font-size: 12px; color: var(--color-muted); }
+	.divider { width: 1px; height: 18px; background: var(--color-border); }
+	.chip {
+		display: inline-flex; align-items: center; gap: 6px;
+		height: 26px; padding: 0 10px;
+		border: 1px solid var(--color-border); border-radius: 9999px;
+		font-size: 11.5px; color: var(--color-muted);
+	}
+	.bp { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--color-border); border-radius: 9999px; }
+	.bp span {
+		height: 22px; padding: 0 10px; border-radius: 9999px;
+		display: inline-flex; align-items: center; gap: 6px;
+		font-size: 11px; color: var(--color-muted);
+	}
+	.bp span b { font-family: var(--mono); font-weight: 400; font-size: 10px; }
+	.bp .is-active { background: var(--color-surface-raised); border: 1px solid var(--color-border); color: var(--color-surface-foreground); box-shadow: var(--shadow-sm); }
+	.avatar { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--color-border); display: block; }
+	.avatar + .avatar { margin-left: -6px; }
+	.publish {
+		height: 26px; padding: 0 13px; border-radius: 9999px;
+		background: var(--color-surface-foreground); color: var(--color-surface);
+		font-size: 11.5px; font-weight: 500;
+		display: inline-flex; align-items: center;
+	}
+
+	.body { display: grid; grid-template-columns: minmax(0, 1fr); }
+	@media (min-width: 1020px) { .body { grid-template-columns: 208px minmax(0, 1fr) 268px; } }
+
+	/* ── Layer tree ───────────────────────────────────────────────── */
+	.layers { display: none; border-right: 1px solid var(--color-border); padding: 10px 8px; }
+	@media (min-width: 1020px) { .layers { display: block; } }
+	.pane-label {
+		font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+		text-transform: uppercase; color: var(--color-muted); padding: 2px 8px 8px;
+		display: flex; align-items: center; gap: 8px;
+	}
+	.pane-label .add { margin-left: auto; color: var(--color-muted); font-size: 12px; }
+	.lrow {
+		display: flex; align-items: center; gap: 7px;
+		height: 26px; padding: 0 8px; border-radius: var(--radius-sm);
+		font-size: 12px; color: var(--color-muted);
+	}
+	.lrow .tw { width: 10px; text-align: center; font-size: 8px; opacity: 0.7; }
+	.lrow .ic { width: 12px; text-align: center; font-size: 10px; opacity: 0.75; font-family: var(--mono); }
+	.lrow .eye { margin-left: auto; font-size: 9px; opacity: 0.5; }
+	.lrow.lv2 { padding-left: 24px; }
+	.lrow.lv3 { padding-left: 40px; }
+	.lrow.is-active {
+		background: rgb(0 153 255 / 0.18);
+		color: var(--color-surface-foreground);
+		box-shadow: inset 2px 0 0 var(--color-primary);
+	}
+
+	/* ── Canvas: dot grid, artboard, selection hardware ───────────── */
+	.canvas {
+		min-width: 0; padding: 34px 24px 44px;
+		background-image: radial-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+		background-size: 22px 22px;
+		overflow: hidden;
+	}
+	.frame-tag {
+		width: 660px; max-width: 100%; margin: 0 auto 8px;
+		font-family: var(--mono); font-size: 10px; color: var(--color-muted);
+		display: flex; gap: 10px;
+	}
+	.frame-tag .sel { color: var(--color-primary); }
+	.artboard {
+		width: 660px; max-width: 100%; margin: 0 auto;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 2px;
+		box-shadow: var(--shadow-md);
+		padding: 30px 34px 34px;
+	}
+	.ab-nav { display: flex; align-items: center; gap: 16px; }
+	.ab-nav .ab-brand { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; }
+	.ab-nav .ab-links { display: flex; gap: 14px; font-size: 11.5px; color: var(--color-muted); }
+	.ab-pill-s { height: 24px; padding: 0 12px; border-radius: 9999px; background: var(--color-surface-foreground); color: var(--color-surface); font-size: 10.5px; font-weight: 500; display: inline-flex; align-items: center; }
+
+	.ab-hero { margin-top: 42px; }
+	.ab-kicker { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); }
+	.ab-h1 {
+		margin-top: 12px;
+		font-family: var(--display); font-weight: 500;
+		font-size: 38px; letter-spacing: -0.045em; line-height: 1.04;
+	}
+	.ab-sub { margin-top: 12px; font-size: 13px; color: var(--color-muted); max-width: 46ch; }
+	.ab-cta { margin-top: 24px; display: flex; align-items: center; gap: 12px; }
+	.ab-pill {
+		height: 40px; padding: 0 18px; border-radius: 9999px;
+		display: inline-flex; align-items: center;
+		font-size: 13px; font-weight: 500;
+	}
+	.ab-pill-white { background: var(--color-surface-foreground); color: var(--color-surface); }
+	.ab-pill-char { background: rgb(255 255 255 / 0.08); color: var(--color-surface-foreground); border: 1px solid var(--color-border); }
+
+	/* selection hardware: blue outline, handles, live size tag */
+	.fr-sel { position: relative; outline: 1.5px solid var(--color-primary); outline-offset: 2px; }
+	.fr-sel .hd { position: absolute; width: 7px; height: 7px; background: #fff; border: 1.5px solid var(--color-primary); border-radius: 1px; }
+	.hd-tl { top: -6px; left: -6px; }
+	.hd-tr { top: -6px; right: -6px; }
+	.hd-bl { bottom: -6px; left: -6px; }
+	.hd-br { bottom: -6px; right: -6px; }
+	.fr-size {
+		position: absolute; top: -23px; left: 50%; transform: translateX(-50%);
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.03em;
+		padding: 3px 6px; border-radius: 3px; white-space: nowrap;
+	}
+
+	/* gap measurement between CTA row and the card row */
+	.fr-gap { position: relative; height: 26px; margin-left: 2px; }
+	.fr-gap::before {
+		content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 5px;
+		border-left: 1px solid var(--color-primary);
+		border-top: 1px solid var(--color-primary);
+		border-bottom: 1px solid var(--color-primary);
+		opacity: 0.8;
+	}
+	.fr-gap span {
+		position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+		font-family: var(--mono); font-size: 9px; color: var(--color-primary);
+	}
+
+	.ab-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+	.ab-tile {
+		border-radius: var(--radius-2xl); padding: 20px; min-height: 148px;
+		background: linear-gradient(135deg, #6a4cf5, #d44df0);
+		display: flex; flex-direction: column;
+	}
+	.ab-tile .t-chip {
+		align-self: flex-start; font-size: 9px; font-weight: 500; letter-spacing: 0.1em;
+		text-transform: uppercase; padding: 3px 8px; border-radius: 9999px;
+		background: rgb(255 255 255 / 0.16); color: #fff;
+	}
+	.ab-tile h3 { margin-top: auto; font-family: var(--display); font-weight: 500; font-size: 17px; letter-spacing: -0.02em; color: #fff; }
+	.ab-tile p { margin-top: 4px; font-size: 11px; color: rgb(255 255 255 / 0.75); }
+	.ab-card {
+		border-radius: var(--radius-xl); padding: 20px; min-height: 148px;
+		background: var(--color-surface-raised); border: 1px solid var(--color-border);
+		box-shadow: var(--shadow-sm);
+		display: flex; flex-direction: column; gap: 8px;
+	}
+	.ab-card i { display: block; height: 8px; border-radius: 4px; background: rgb(255 255 255 / 0.07); }
+	.ab-card i:nth-child(1) { width: 62%; }
+	.ab-card i:nth-child(2) { width: 84%; }
+	.ab-card i:nth-child(3) { width: 48%; }
+	.ab-card p { margin-top: auto; font-size: 11px; color: var(--color-muted); }
+	.ab-card p b { color: var(--color-surface-foreground); font-weight: 500; }
+
+	/* ── Inspector ────────────────────────────────────────────────── */
+	.insp { display: none; border-left: 1px solid var(--color-border); padding: 10px 12px; }
+	@media (min-width: 1020px) { .insp { display: block; } }
+	.insp-tabs { display: flex; gap: 4px; padding: 0 0 10px; }
+	.insp-tabs span { font-size: 11px; color: var(--color-muted); padding: 4px 9px; border-radius: var(--radius-sm); }
+	.insp-tabs .is-active { background: var(--color-surface-raised); border: 1px solid var(--color-border); color: var(--color-surface-foreground); }
+	.sec-label {
+		font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+		color: var(--color-muted); padding: 12px 2px 6px;
+		border-top: 1px solid var(--color-border);
+	}
+	.sec-label:first-of-type { border-top: 0; }
+	.irow { display: flex; align-items: center; gap: 8px; min-height: 28px; padding: 0 2px; font-size: 11.5px; color: var(--color-muted); }
+	.irow .val {
+		font-family: var(--mono); font-size: 10.5px; color: var(--color-surface-foreground);
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: rgb(255 255 255 / 0.02);
+		padding: 3px 7px; min-width: 52px; text-align: right;
+	}
+	.irow .val + .val { margin-left: -1px; }
+	.irow .grow { flex: 1; }
+	.irow .sw { width: 14px; height: 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); display: inline-block; }
+	.irow .eye { margin-left: auto; font-size: 9px; opacity: 0.5; }
+
+	/* ── Status bar ───────────────────────────────────────────────── */
+	.statusbar {
+		display: flex; align-items: center; gap: 14px;
+		height: 24px; padding: 0 14px; border-top: 1px solid var(--color-border);
+		font-family: var(--mono); font-size: 10px; color: var(--color-muted);
+	}
+
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 112px; } }
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 72px; } }
+	.section-label {
+		font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+		text-transform: uppercase; color: var(--color-primary); margin-bottom: 10px;
+	}
+	.section h2 { font-size: 22px; font-weight: 600; }
+	@media (min-width: 768px) { .section h2 { font-size: 26px; } }
+	.lede { color: var(--color-muted); max-width: 64ch; margin-top: 8px; font-size: 13.5px; }
+	.note { margin-top: 16px; font-size: 12px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+	/* ── Demo controls ────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 13px; font-weight: 500;
+		height: 40px; padding: 0 18px; border: 0; cursor: pointer;
+		border-radius: 9999px;
+	}
+	.btn-white { background: var(--color-surface-foreground); color: var(--color-surface); }
+	.btn-white:hover { background: rgb(255 255 255 / 0.92); }
+	.btn-char { background: rgb(255 255 255 / 0.08); color: var(--color-surface-foreground); border: 1px solid var(--color-border); }
+	.btn-char:hover { background: rgb(255 255 255 / 0.12); }
+	.btn-trans { background: rgb(255 255 255 / 0.06); color: var(--color-surface-foreground); border: 1px solid rgb(255 255 255 / 0.12); backdrop-filter: blur(8px); }
+	.btn-pressed { transform: scale(0.96); }
+	.btn[disabled] { cursor: not-allowed; color: rgb(255 255 255 / 0.35); background: rgb(255 255 255 / 0.04); border: 1px solid var(--color-border); }
+	.iconbtn {
+		width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--color-border);
+		background: transparent; color: var(--color-surface-foreground);
+		display: inline-flex; align-items: center; justify-content: center;
+		font-size: 14px; cursor: pointer;
+	}
+	.iconbtn:hover { background: var(--color-surface-raised); }
+	.input {
+		font: inherit; font-size: 13px; width: 100%; max-width: 340px;
+		height: 40px; padding: 0 14px;
+		border-radius: 9999px;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-raised); color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: rgb(255 255 255 / 0.3); }
+	.input:focus { outline: none; border-color: rgb(0 153 255 / 0.6); box-shadow: 0 0 0 3px rgb(0 153 255 / 0.18); }
+	.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--color-border); border-radius: 9999px; }
+	.seg span { height: 30px; padding: 0 14px; border-radius: 9999px; display: inline-flex; align-items: center; font-size: 12px; color: var(--color-muted); }
+	.seg .is-active { background: var(--color-surface-raised); border: 1px solid var(--color-border); color: var(--color-surface-foreground); box-shadow: var(--shadow-sm); }
+
+	/* ── Swatches ─────────────────────────────────────────────────── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 10px; background: var(--color-surface-raised); }
+	.sw b { font-family: var(--mono); font-size: 11px; font-weight: 500; display: block; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+	.grads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+	@media (min-width: 720px) { .grads { grid-template-columns: repeat(4, 1fr); } }
+	.gd { height: 64px; border-radius: var(--radius-xl); border: 1px solid var(--color-border); position: relative; }
+	.gd b { position: absolute; left: 8px; bottom: 8px; font-family: var(--mono); font-size: 10px; font-weight: 500; color: rgb(255 255 255 / 0.9); }
+
+	/* ── Type specimen ────────────────────────────────────────────── */
+	.spec { border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-surface-raised); padding: 24px; margin-top: 20px; }
+	.spec .d1 { font-family: var(--display); font-weight: 500; font-size: 46px; letter-spacing: -0.045em; line-height: 1.02; }
+	@media (min-width: 720px) { .spec .d1 { font-size: 56px; } }
+	.spec .d2 { margin-top: 18px; font-family: var(--display); font-weight: 500; font-size: 28px; letter-spacing: -0.045em; }
+	.spec .body { margin-top: 14px; font-size: 15px; color: var(--color-surface-foreground); max-width: 58ch; }
+	.spec .body .mut { color: var(--color-muted); }
+	.tiers { margin-top: 18px; border-top: 1px solid var(--color-border); }
+	.tiers div {
+		display: flex; gap: 16px; padding: 9px 2px; border-bottom: 1px solid var(--color-border);
+		font-family: var(--mono); font-size: 11.5px; color: var(--color-muted);
+	}
+	.tiers b { color: var(--color-surface-foreground); font-weight: 500; width: 130px; flex: none; }
+
+	.panels { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 768px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+	.panel { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+	.panel h3 { font-size: 13px; }
+	.panel p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 22px; letter-spacing: -0.02em; }
+
+	/* ── Mobile breakpoint preview ────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		border-radius: 28px;
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.phone-tag { font-family: var(--mono); font-size: 10px; color: var(--color-muted); text-align: center; padding: 0 0 8px; }
+	.phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.phone-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; }
+	.phone-nav b { font-size: 12.5px; font-weight: 600; }
+	.phone-nav span { font-size: 13px; color: var(--color-muted); }
+	.m-hero { padding: 18px 16px 22px; }
+	.m-kicker { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); }
+	.m-h1 { margin-top: 10px; font-family: var(--display); font-weight: 500; font-size: 24px; letter-spacing: -0.045em; line-height: 1.06; }
+	.m-sub { margin-top: 8px; font-size: 11.5px; color: var(--color-muted); }
+	.m-cta { margin-top: 16px; }
+	.m-cta .btn-white { width: 100%; height: 44px; justify-content: center; display: flex; align-items: center; }
+	.m-link { display: block; text-align: center; margin-top: 10px; font-size: 11.5px; color: var(--color-muted); }
+	.m-tile { margin: 0 16px 18px; border-radius: var(--radius-2xl); padding: 16px; min-height: 110px; background: linear-gradient(135deg, #6a4cf5, #d44df0); display: flex; flex-direction: column; }
+	.m-tile .t-chip { align-self: flex-start; font-size: 8.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 9999px; background: rgb(255 255 255 / 0.16); color: #fff; }
+	.m-tile h3 { margin-top: auto; font-family: var(--display); font-weight: 500; font-size: 14px; letter-spacing: -0.02em; color: #fff; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 116px; font-size: 12px; font-family: var(--mono); }
+	@media (max-width: 520px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── Off-style comparison ─────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 26px; border-radius: 8px;
+		background: linear-gradient(135deg, #6a4cf5, #ff5577);
+		color: #fff;
+	}
+	.cmp-off b { display: block; font-size: 22px; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; }
+	.cmp-off p { margin-top: 10px; font-size: 12px; color: rgb(255 255 255 / 0.7); }
+	.cmp-off .cta {
+		display: inline-block; margin-top: 14px; padding: 10px 15px;
+		background: var(--color-primary); color: #fff;
+		font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+		border-radius: 2px;
+	}
+	.cmp-off small { display: block; font-size: 11px; opacity: 0.8; margin-top: 16px; line-height: 1.5; }
+	.cmp-on {
+		padding: 20px; border-radius: var(--radius-xl);
+		background: var(--color-surface-raised); border: 1px solid var(--color-border);
+		display: flex; gap: 16px; align-items: center;
+	}
+	.cmp-on .txt b { display: block; font-family: var(--display); font-size: 19px; font-weight: 500; letter-spacing: -0.045em; }
+	.cmp-on .txt p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.cmp-on .txt .cta { display: inline-flex; margin-top: 12px; height: 34px; padding: 0 14px; border-radius: 9999px; background: var(--color-surface-foreground); color: var(--color-surface); font-size: 12px; font-weight: 500; align-items: center; }
+	.cmp-on .mini { flex: none; width: 64px; height: 64px; border-radius: var(--radius-xl); background: linear-gradient(135deg, #6a4cf5, #d44df0); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the builder itself: layer tree, canvas with a selected pill and live
+     size tag, breakpoint switcher, inspector. Blue appears only as selection
+     hardware; the artboard carries the poster typography. -->
+<div class="shell">
+	<div class="top">
+		<span class="mark"><i></i><i></i><i></i></span>
+		<span class="brand">Framer</span>
+		<span class="proj">Landing · Nudge</span>
+		<span class="divider"></span>
+		<span class="chip">+ Insert</span>
+		<span class="spacer"></span>
+		<span class="bp">
+			<span class="is-active">Desktop <b>1200</b></span>
+			<span>Tablet <b>810</b></span>
+			<span>Phone <b>390</b></span>
+		</span>
+		<span class="chip">100%</span>
+		<span class="avatar" style="background: linear-gradient(135deg, #6a4cf5, #d44df0);"></span>
+		<span class="avatar" style="background: var(--color-surface-raised);"></span>
+		<span class="publish">Publish</span>
+	</div>
+	<div class="body">
+		<aside class="layers">
+			<div class="pane-label">Layers<span class="add">+</span></div>
+			<div class="lrow"><span class="tw">⌄</span><span class="ic">▢</span>Desktop<span class="eye">◉</span></div>
+			<div class="lrow lv2"><span class="tw">⌄</span><span class="ic">≡</span>Nav</div>
+			<div class="lrow lv2"><span class="tw">⌄</span><span class="ic">≡</span>Hero</div>
+			<div class="lrow lv3"><span class="tw"></span><span class="ic">T</span>Headline</div>
+			<div class="lrow lv3"><span class="tw"></span><span class="ic">T</span>Subcopy</div>
+			<div class="lrow lv3"><span class="tw">⌄</span><span class="ic">≡</span>Actions</div>
+			<div class="lrow lv3 is-active"><span class="tw"></span><span class="ic">▭</span>Start for free</div>
+			<div class="lrow lv3"><span class="tw"></span><span class="ic">▭</span>Book a demo</div>
+			<div class="lrow lv2"><span class="tw"></span><span class="ic">◆</span>Spotlight tile<span class="eye">◉</span></div>
+			<div class="lrow lv2"><span class="tw"></span><span class="ic">▦</span>Logos</div>
+		</aside>
+		<main class="canvas">
+			<div class="frame-tag"><span class="sel">Desktop</span><span>1200 × 720</span></div>
+			<div class="artboard">
+				<div class="ab-nav">
+					<span class="ab-brand">Nudge</span>
+					<span class="ab-links"><span>Features</span><span>Pricing</span><span>Docs</span></span>
+					<span class="spacer"></span>
+					<span class="ab-pill-s">Start free</span>
+				</div>
+				<div class="ab-hero">
+					<p class="ab-kicker">Now in public beta</p>
+					<h1 class="ab-h1">Ship sites at the speed of thought</h1>
+					<p class="ab-sub">Design on the canvas, publish to the edge. No handoff, no rebuild — what you draw is what ships.</p>
+					<div class="ab-cta">
+						<span class="ab-pill ab-pill-white fr-sel">Start for free<i class="hd hd-tl"></i><i class="hd hd-tr"></i><i class="hd hd-bl"></i><i class="hd hd-br"></i><b class="fr-size">148 × 40</b></span>
+						<span class="ab-pill ab-pill-char">Book a demo</span>
+					</div>
+					<div class="fr-gap"><span>24</span></div>
+					<div class="ab-cards">
+						<div class="ab-tile">
+							<span class="t-chip">AI</span>
+							<h3>Copy that sounds like you</h3>
+							<p>Trained on your own pages.</p>
+						</div>
+						<div class="ab-card">
+							<i></i><i></i><i></i>
+							<p><b>Analytics, built in.</b> Every frame reports back.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<aside class="insp">
+			<div class="insp-tabs"><span class="is-active">Design</span><span>CMS</span><span>Code</span></div>
+			<div class="sec-label">Layout</div>
+			<div class="irow"><span>Type</span><span class="grow"></span><span class="val">Stack</span></div>
+			<div class="irow"><span>Direction</span><span class="grow"></span><span class="val">Horizontal</span></div>
+			<div class="irow"><span>Gap</span><span class="grow"></span><span class="val">12</span></div>
+			<div class="irow"><span>Padding</span><span class="grow"></span><span class="val">10</span><span class="val">18</span></div>
+			<div class="sec-label">Size</div>
+			<div class="irow"><span>Width</span><span class="grow"></span><span class="val">148</span></div>
+			<div class="irow"><span>Height</span><span class="grow"></span><span class="val">40</span></div>
+			<div class="sec-label">Fill</div>
+			<div class="irow"><span class="sw" style="background: var(--color-surface-foreground);"></span><span class="grow"></span><span class="val">100%</span><span class="eye">+</span></div>
+			<div class="sec-label">Radius</div>
+			<div class="irow"><span>◎ linked</span><span class="grow"></span><span class="val">100</span></div>
+			<div class="sec-label">Text</div>
+			<div class="irow"><span>Font</span><span class="grow"></span><span class="val">Inter · 13</span></div>
+			<div class="irow"><span>Weight</span><span class="grow"></span><span class="val">500</span></div>
+			<div class="irow"><span class="sw" style="background: var(--color-surface);"></span><span>Ink on pill</span><span class="grow"></span><span class="val">100%</span></div>
+		</aside>
+	</div>
+	<div class="statusbar">
+		<span>Desktop · 1200 × 720</span>
+		<span>3 breakpoints</span>
+		<span class="spacer"></span>
+		<span>1 layer selected</span>
+		<span>100%</span>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 CANVAS & CHROME -->
+	<section class="section">
+		<p class="section-label">01 — Canvas &amp; chrome</p>
+		<h2>Monochrome panels, hairline edges, blue only when something is selected</h2>
+		<p class="lede">The workspace is measurable: a 44px toolbar, 26px layer rows, 28px
+			inspector rows and a 24px mono status bar. Panes are flat fills split by 1px
+			hairlines over a dot grid — the chrome stays monochrome so the single blue
+			signal always means selection.</p>
+		<div class="panels">
+			<div class="panel"><div class="metric">44 / 26 / 24px</div><p>Toolbar, layer row and status bar. Fixed heights, never improvised.</p></div>
+			<div class="panel"><div class="metric">1px</div><p>Every pane divider, over a faint dot grid on the canvas. No inner shadows between columns.</p></div>
+			<div class="panel"><div class="metric">blue = selected</div><p>Layer rows, frames and handles tint in primary at low alpha. Blue does nothing else here.</p></div>
+		</div>
+	</section>
+
+	<!-- 02 COLOR ROLES -->
+	<section class="section">
+		<p class="section-label">02 — Color roles</p>
+		<h2>Two anchors, one signal, four gradient anchors</h2>
+		<p class="lede">White and near-black carry the whole page. Blue is a signal, never a
+			surface — it marks selection, focus and links. The violet gradient family does the
+			atmospheric work, but only from inside tiles; chrome never picks it up.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><div class="meta"><b>primary</b><span>#0099ff · selection, links</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><div class="meta"><b>accent</b><span>#6a4cf5 · gradient lead</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><div class="meta"><b>raised</b><span>#141414 · cards, panels</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-danger)"></div><div class="meta"><b>danger</b><span>#ff5577 · coral anchor</span></div></div>
+		</div>
+		<div class="grads">
+			<div class="gd" style="background: linear-gradient(135deg, #6a4cf5, #d44df0);"><b>violet → magenta</b></div>
+			<div class="gd" style="background: linear-gradient(135deg, #d44df0, #ff5577);"><b>magenta → coral</b></div>
+			<div class="gd" style="background: linear-gradient(135deg, #ff7a3d, #ff5577);"><b>orange → coral</b></div>
+			<div class="gd" style="background: linear-gradient(135deg, #6a4cf5, #0099ff);"><b>violet → blue</b></div>
+		</div>
+		<p class="note">Gradient anchors (#d44df0 / #6a4cf5 / #ff7a3d / #ff5577) are inline values on tiles, not tokens — chrome is built from theme.css tokens alone.</p>
+	</section>
+
+	<!-- 03 TYPOGRAPHY -->
+	<section class="section">
+		<p class="section-label">03 — Poster typography</p>
+		<h2>Size and tracking carry the hierarchy, not weight</h2>
+		<p class="lede">Display type is a geometric grotesk at medium weight with a fixed −5%
+			tracking — the confidence comes from scale, not from going bold. Body is Inter at
+			15px with its character variants; data and coordinates switch to mono.</p>
+		<div class="spec">
+			<p class="d1">Sites at the speed of thought</p>
+			<p class="d2">Publish to the edge</p>
+			<p class="body">Inter carries the reading layer at 15px / 1.3. <span class="mut">Secondary lines
+				drop to muted gray — there is no third tone between ink and muted.</span></p>
+			<div class="tiers">
+				<div><b>Display 110 / 85</b><span>hero statements · tracking −5% fixed</span></div>
+				<div><b>Display 62 / 32</b><span>section heads · same tracking ratio</span></div>
+				<div><b>Body 15 / 12</b><span>paragraphs, captions · OpenType cv01 cv05 cv09 cv11 ss03 ss07</span></div>
+				<div><b>Mono 10–11</b><span>coordinates, sizes, tokens, status bar</span></div>
+			</div>
+		</div>
+		<p class="note">When a headline outgrows its box, step the size down — the tracking percentage never shrinks.</p>
+	</section>
+
+	<!-- 04 CONTROLS -->
+	<section class="section">
+		<p class="section-label">04 — Pills, lift &amp; selection</p>
+		<h2>CTAs are pills; selection is a surface lift or a blue ring</h2>
+		<div class="row" style="margin-top: 20px;">
+			<button class="btn btn-white">Start for free</button>
+			<button class="btn btn-char">Book a demo</button>
+			<button class="btn btn-trans">Watch the film</button>
+			<button class="btn btn-white btn-pressed">Pressed = scale</button>
+			<button class="btn" disabled>Unpublished</button>
+		</div>
+		<div class="row" style="margin-top: 16px;">
+			<span class="iconbtn">✦</span>
+			<span class="iconbtn">▶</span>
+			<span class="iconbtn">⌘</span>
+			<input class="input" placeholder="Search templates…">
+			<span class="seg"><span>Monthly</span><span class="is-active">Yearly</span></span>
+		</div>
+		<p class="note">Pressed feedback is a slight scale-down, never a darker fill. Tabs and
+			toggles show their active state with a raised lift and hairline edge — never with
+			color. Inputs take a blue-tinted focus ring on dark raised fill.</p>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>The Phone breakpoint folds, it does not redesign</h2>
+		<p class="lede">At 810px the grids collapse; below that the nav folds into a menu and
+			every grid goes single-column. Display type steps down through the tiers while
+			keeping its tracking ratio, and the tiles keep their 30px radius.</p>
+		<div class="mobile">
+			<div>
+				<p class="phone-tag">Phone · 390</p>
+				<div class="phone">
+					<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+					<div class="phone-nav"><b>Nudge</b><span>☰</span></div>
+					<div class="m-hero">
+						<p class="m-kicker">Now in public beta</p>
+						<h3 class="m-h1">Ship sites at the speed of thought</h3>
+						<p class="m-sub">Design on the canvas, publish to the edge.</p>
+						<div class="m-cta"><span class="btn btn-white">Start for free</span></div>
+						<span class="m-link">Book a demo →</span>
+					</div>
+					<div class="m-tile">
+						<span class="t-chip">AI</span>
+						<h3>Copy that sounds like you</h3>
+					</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>&lt; 1199px</b><span>Content grids collapse from three columns to two; the 56px nav keeps its bar.</span></li>
+				<li><b>&lt; 810px</b><span>Nav folds into a menu; comparison tables become per-tier accordions; grids go single column.</span></li>
+				<li><b>Type</b><span>Display steps 110 → 85 → 44 → 32 keeping the −5% tracking; body drops 15 → 14, never smaller than 12 for captions.</span></li>
+				<li><b>Touch</b><span>Pills and rows grow to 44px targets; icon circles keep a 40px core with a larger tap area.</span></li>
+				<li><b>Hover → tap</b><span>Hover lifts become pressed scale; translucent pills keep their blur over imagery.</span></li>
+				<li><b>Tiles</b><span>Gradient spotlights stack one-up and keep the 30px radius — they never bleed full-width as section backgrounds.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the artboard</h2>
+		<div class="compare">
+			<div class="cmp-off">
+				<b>Join the future</b>
+				<p>Everything you have ever wanted, plus a few things you have not thought of yet.</p>
+				<span class="cta">GET STARTED →</span>
+				<small>Gradient as a section background, blue-filled squared CTA, heavy uppercase
+					headline with no tracking, washed-out body copy. Every rule broken at once.</small>
+			</div>
+			<div class="cmp-on">
+				<span class="mini"></span>
+				<span class="txt">
+					<b>Ready when you are</b>
+					<p>Same message, on-style: white pill, tight tracking, and the gradient confined to one 30px-radius tile.</p>
+					<span class="cta">Start for free</span>
+				</span>
+			</div>
+		</div>
+		<p class="note">Also out: light mode, mid-tone grays beyond muted, a second chromatic
+			accent, and any CTA that is not a pill.</p>
+	</section>
+
+</div>
+</body>
+</html>

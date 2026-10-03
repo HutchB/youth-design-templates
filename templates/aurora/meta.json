@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "aurora",
+	"name": "Aurora",
+	"version": "1.0.0",
+	"order": 152,
+	"category": "premium",
+	"vibe": "dark",
+	"tags": [
+		"premium",
+		"dark"
+	],
+	"blurb": "Slow drifting light on deep navy: aurora gradient blobs, glass cards with soft glow and generous dark space.",
+	"tagline": {
+		"en": "Northern lights, quiet and vast",
+		"zh": "深空里的流动极光"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://magicui.design/",
+		"note": "Original spec written for this collection; aurora-background conventions checked against Magic UI (MIT). No upstream code included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

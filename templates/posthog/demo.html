@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PostHog — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #f7a501;
+		--color-primary-foreground: #23251d;
+		--color-surface: #eeefe9;
+		--color-surface-foreground: #23251d;
+		--color-surface-raised: #ffffff;
+		--color-muted: #6c6e63;
+		--color-accent: #1d4ed8;
+		--color-danger: #cd4239;
+		--color-border: #bfc1b7;
+
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 8px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+
+		--shadow-sm: 0 1px 2px rgb(35 37 29 / 0.06);
+		--shadow-md: 0 6px 16px rgb(35 37 29 / 0.08);
+		--shadow-lg: 0 16px 40px rgb(35 37 29 / 0.12);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 15px;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 700; line-height: 1.25; }
+	p { margin: 0; }
+	code, .mono { font-family: var(--mono); font-size: 13px; }
+	::selection { background: rgb(247 165 1 / 0.30); }
+	.spacer { flex: 1; }
+	.num { font-variant-numeric: tabular-nums; }
+
+	.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 768px) { .wrap { padding: 0 28px; } }
+
+	/* ── Product chrome: cream nav, white tabs, one yellow action ── */
+	.topbar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; min-height: 60px; }
+	.brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+	.mark { width: 24px; height: 24px; border-radius: var(--radius-md); background: var(--color-surface-foreground); position: relative; flex: none; }
+	.mark::after { content: ""; position: absolute; left: 7px; top: 10px; width: 10px; height: 4px; background: var(--color-primary); border-radius: 2px; }
+	.project { font-size: 13px; font-weight: 600; color: var(--color-muted); border: 1px solid var(--color-border); border-radius: 9999px; padding: 3px 11px; background: var(--color-surface-raised); }
+	.topnav { display: none; gap: 18px; font-size: 14px; font-weight: 600; color: var(--color-muted); }
+	@media (min-width: 860px) { .topnav { display: flex; } }
+	.topnav .is-active { color: var(--color-surface-foreground); }
+
+	/* ── Page head ────────────────────────────────────────────────── */
+	.pagehead { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; padding: 26px 0 18px; }
+	.pagehead h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+	.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 5px; }
+	.ranges { display: flex; gap: 7px; margin-left: auto; flex-wrap: wrap; }
+	.range { border: 1px solid var(--color-border); border-radius: 9999px; padding: 4px 13px; font-size: 13px; font-weight: 600; color: var(--color-muted); background: transparent; }
+	.range.is-active { background: var(--color-surface-foreground); border-color: var(--color-surface-foreground); color: #fff; }
+
+	/* ── KPI cards ────────────────────────────────────────────────── */
+	.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+	@media (max-width: 700px) { .kpis { grid-template-columns: 1fr; } }
+	.card { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px; min-width: 0; }
+	.kpi .label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); }
+	.kpi .value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-top: 6px; }
+	.kpi .delta { font-size: 13px; font-weight: 600; margin-top: 3px; color: var(--color-accent); }
+	.kpi .delta.down { color: var(--color-danger); }
+
+	/* ── Trend chart: ink + blue bars, hairline grid ──────────────── */
+	.chartcard { margin-top: 14px; }
+	.chart-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+	.chart-head h2 { font-size: 16px; font-weight: 700; }
+	.legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--color-muted); margin-left: auto; }
+	.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+	.plot { display: flex; align-items: flex-end; gap: 10px; height: 150px; margin-top: 18px; padding-top: 10px; border-top: 1px solid var(--color-border); }
+	.plot .pair { flex: 1; display: flex; align-items: flex-end; justify-content: center; gap: 4px; min-width: 0; }
+	.plot .b { width: 12px; border-radius: 3px 3px 0 0; background: var(--color-surface-foreground); }
+	.plot .b.alt { background: var(--color-accent); opacity: 0.85; }
+	.plot-x { display: flex; gap: 10px; margin-top: 8px; }
+	.plot-x span { flex: 1; text-align: center; font-size: 11px; color: var(--color-muted); font-family: var(--mono); }
+
+	/* ── Funnel + flags ───────────────────────────────────────────── */
+	.duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+	@media (min-width: 900px) { .duo { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+	.card h2 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+	.sub { font-size: 13px; color: var(--color-muted); margin-bottom: 14px; }
+	.fstep { padding: 9px 0; border-bottom: 1px solid var(--color-border); }
+	.fstep:last-child { border-bottom: 0; }
+	.fstep .t { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 600; }
+	.fstep .t .drop { color: var(--color-danger); font-weight: 600; }
+	.track { height: 8px; border-radius: 4px; background: var(--color-surface); margin-top: 7px; overflow: hidden; }
+	.fillb { height: 100%; border-radius: 4px; background: var(--color-accent); }
+
+	.flag { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--color-border); }
+	.flag:last-child { border-bottom: 0; }
+	.flag code { font-size: 12.5px; }
+	.pct { margin-left: auto; font-size: 12.5px; color: var(--color-muted); }
+	.switch { width: 34px; height: 20px; border-radius: 9999px; background: var(--color-border); position: relative; flex: none; }
+	.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+	.switch.on { background: var(--color-surface-foreground); }
+	.switch.on::after { left: auto; right: 3px; }
+
+	/* ── Event stream ─────────────────────────────────────────────── */
+	.stream { margin-top: 14px; }
+	.evt { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; }
+	.evt:last-child { border-bottom: 0; }
+	.dot { width: 7px; height: 7px; border-radius: 50%; background: #2c8c66; flex: none; }
+	.evt .who { color: var(--color-muted); font-family: var(--mono); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+	.evt time { margin-left: auto; color: var(--color-muted); font-size: 12px; flex: none; }
+
+	/* ── Buttons ──────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 14px; font-weight: 700; height: 40px; padding: 0 16px;
+		border: 0; border-radius: var(--radius-md);
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: background-color 140ms ease;
+	}
+	.btn:hover { background: #dd9001; }
+	.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(29 78 216 / 0.35); }
+	.btn-soft { background: #e5e7e0; color: var(--color-surface-foreground); font-weight: 600; }
+	.btn-soft:hover { background: #dcdfd2; }
+	.btn-ghost { background: transparent; color: var(--color-surface-foreground); font-weight: 600; padding: 0 12px; }
+	.btn-auto { width: auto; }
+	.btn-sm { height: 34px; padding: 0 13px; font-size: 13px; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section { padding: 46px 0; border-top: 1px solid var(--color-border); }
+	@media (min-width: 768px) { .section { padding: 60px 0; } }
+	.section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 10px; }
+	.section h2 { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; }
+	.lede { color: var(--color-muted); margin-top: 10px; max-width: 64ch; font-size: 15px; }
+	.note { margin-top: 16px; font-size: 13.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 58px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 700; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 26px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 44px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 26px;
+		overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 11px 18px 4px; font-size: 10px; color: var(--color-muted); }
+	.phone-body { padding: 8px 14px 4px; }
+	.p-head { display: flex; align-items: center; gap: 8px; padding: 6px 0 10px; }
+	.p-head .mark { width: 20px; height: 20px; border-radius: 5px; }
+	.p-head b { font-size: 13.5px; font-weight: 800; }
+	.p-head .btn-sm { margin-left: auto; height: 28px; padding: 0 10px; font-size: 12px; }
+	.p-kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+	.p-kpi .card { padding: 11px 12px; border-radius: var(--radius-md); }
+	.p-kpi .label { font-size: 10px; }
+	.p-kpi .value { font-size: 17px; margin-top: 2px; }
+	.p-kpi .delta { font-size: 11px; }
+	.p-bars { display: flex; align-items: flex-end; gap: 6px; height: 74px; padding: 10px 2px 0; border-top: 1px solid var(--color-border); margin-top: 12px; }
+	.p-bars i { flex: 1; border-radius: 2px 2px 0 0; background: var(--color-surface-foreground); }
+	.p-sec { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); margin: 14px 0 4px; }
+	.p-flag { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--color-border); font-size: 12px; }
+	.p-flag .switch { width: 30px; height: 18px; }
+	.p-flag .switch::after { width: 12px; height: 12px; }
+	.p-tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 12px; }
+	.p-tabbar div { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 9px 0 12px; }
+	.p-tabbar .is-active { color: var(--color-surface-foreground); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off { padding: 22px; border-radius: var(--radius-xl); background: linear-gradient(135deg, #ffffff, rgb(247 165 1 / 0.25)); border: 0; box-shadow: 0 18px 40px rgb(35 37 29 / 0.22); font-size: 16px; font-weight: 700; }
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-radius: var(--radius-lg); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: 16px; font-weight: 700; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+
+	footer { border-top: 1px solid var(--color-border); padding: 30px 0 52px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the analytics dashboard. Cream paper, white insight cards, ink and
+     blue data marks, and exactly one yellow action in the room. -->
+<div class="wrap">
+	<div class="topbar">
+		<span class="brand"><span class="mark"></span>Vetta</span>
+		<span class="project">production · web</span>
+		<nav class="topnav"><span class="is-active">Dashboards</span><span>Funnels</span><span>Feature flags</span><span>Events</span><span>Experiments</span></nav>
+		<span class="spacer"></span>
+		<button class="btn btn-sm">New insight</button>
+	</div>
+
+	<div class="pagehead">
+		<div>
+			<div class="eyebrow">Dashboard</div>
+			<h1>Growth overview</h1>
+		</div>
+		<div class="ranges">
+			<span class="range">24h</span><span class="range">7d</span><span class="range is-active">30d</span><span class="range">90d</span>
+		</div>
+	</div>
+
+	<div class="kpis">
+		<div class="card kpi">
+			<div class="label">Active users</div>
+			<div class="value num">48,210</div>
+			<div class="delta num">▲ 12.4% vs last period</div>
+		</div>
+		<div class="card kpi">
+			<div class="label">Events captured</div>
+			<div class="value num">1.28M</div>
+			<div class="delta num">▲ 6.1% vs last period</div>
+		</div>
+		<div class="card kpi">
+			<div class="label">Median session</div>
+			<div class="value num">4m 32s</div>
+			<div class="delta down num">▼ 0.8% vs last period</div>
+		</div>
+	</div>
+
+	<div class="card chartcard">
+		<div class="chart-head">
+			<h2>Signups vs activations</h2>
+			<div class="legend"><span><i style="background:var(--color-surface-foreground)"></i>Signups</span><span><i style="background:var(--color-accent)"></i>Activations</span></div>
+		</div>
+		<div class="plot">
+			<div class="pair"><i class="b" style="height:38px"></i><i class="b alt" style="height:22px"></i></div>
+			<div class="pair"><i class="b" style="height:52px"></i><i class="b alt" style="height:30px"></i></div>
+			<div class="pair"><i class="b" style="height:44px"></i><i class="b alt" style="height:34px"></i></div>
+			<div class="pair"><i class="b" style="height:66px"></i><i class="b alt" style="height:41px"></i></div>
+			<div class="pair"><i class="b" style="height:58px"></i><i class="b alt" style="height:47px"></i></div>
+			<div class="pair"><i class="b" style="height:80px"></i><i class="b alt" style="height:52px"></i></div>
+			<div class="pair"><i class="b" style="height:74px"></i><i class="b alt" style="height:63px"></i></div>
+			<div class="pair"><i class="b" style="height:96px"></i><i class="b alt" style="height:70px"></i></div>
+			<div class="pair"><i class="b" style="height:88px"></i><i class="b alt" style="height:78px"></i></div>
+			<div class="pair"><i class="b" style="height:110px"></i><i class="b alt" style="height:84px"></i></div>
+			<div class="pair"><i class="b" style="height:102px"></i><i class="b alt" style="height:95px"></i></div>
+			<div class="pair"><i class="b" style="height:122px"></i><i class="b alt" style="height:101px"></i></div>
+		</div>
+		<div class="plot-x"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span></div>
+	</div>
+
+	<div class="duo">
+		<div class="card">
+			<h2>Signup funnel</h2>
+			<p class="sub">Last 30 days · 48,210 entered the funnel</p>
+			<div class="fstep">
+				<div class="t"><span>Visited pricing</span><span class="num">48,210 · 100%</span></div>
+				<div class="track"><div class="fillb" style="width:100%"></div></div>
+			</div>
+			<div class="fstep">
+				<div class="t"><span>Started trial</span><span class="num">12,940 · 26.9%</span><span class="drop num">−73.1%</span></div>
+				<div class="track"><div class="fillb" style="width:27%"></div></div>
+			</div>
+			<div class="fstep">
+				<div class="t"><span>Created first insight</span><span class="num">7,180 · 55.5%</span><span class="drop num">−44.5%</span></div>
+				<div class="track"><div class="fillb" style="width:15%"></div></div>
+			</div>
+			<div class="fstep">
+				<div class="t"><span>Converted to paid</span><span class="num">3,204 · 44.6%</span><span class="drop num">−55.4%</span></div>
+				<div class="track"><div class="fillb" style="width:7%"></div></div>
+			</div>
+		</div>
+
+		<div class="card">
+			<h2>Feature flags</h2>
+			<p class="sub">3 of 17 flags shown</p>
+			<div class="flag"><span class="switch on"></span><code>new-onboarding-flow</code><span class="pct num">50% rollout</span></div>
+			<div class="flag"><span class="switch on"></span><code>ai-query-assistant</code><span class="pct num">100% rollout</span></div>
+			<div class="flag"><span class="switch"></span><code>beta-reports-v2</code><span class="pct">draft</span></div>
+			<button class="btn btn-ghost btn-sm" style="margin-top:10px">All flags →</button>
+		</div>
+	</div>
+
+	<div class="card stream">
+		<h2>Live events</h2>
+		<p class="sub">Streaming from production</p>
+		<div class="evt"><span class="dot"></span><code>$pageview</code><span class="who">usr_8f2a41 · /pricing</span><time>2s ago</time></div>
+		<div class="evt"><span class="dot"></span><code>signup_completed</code><span class="who">usr_1c9d77 · trial</span><time>9s ago</time></div>
+		<div class="evt"><span class="dot"></span><code>insight_viewed</code><span class="who">usr_44b0e2 · funnel #12</span><time>14s ago</time></div>
+		<div class="evt"><span class="dot"></span><code>flag_called</code><span class="who">usr_9a3f18 · new-onboarding-flow</span><time>21s ago</time></div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — Color</p>
+		<h2>Cream paper, one yellow action</h2>
+		<p class="lede">The page is never white — the cream canvas runs behind everything and white cards
+			float on it. Yellow-orange is spent on exactly one action per view; every selected or active state
+			falls back to ink, and blue handles links and informational marks.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><b>surface</b><span>#eeefe9 · the paper</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#f7a501 · one action only</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#1d4ed8 · links, data marks</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-foreground)"></div><b>ink</b><span>#23251d · active states</span></div>
+		</div>
+		<div class="row" style="margin-top: 24px;">
+			<button class="btn btn-auto">New insight</button>
+			<button class="btn btn-soft btn-auto">Save to dashboard</button>
+			<button class="btn btn-ghost btn-auto">See all events →</button>
+			<span class="switch on"></span><span class="note" style="margin:0">toggles and selected pills go ink, never yellow</span>
+		</div>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Reading data</p>
+		<h2>Charts behave like the rest of the page</h2>
+		<p class="lede">Bars are flat color on hairline grids — no gradients, no glow, no 3D. Series draw
+			from ink and blue; every number is tabular so columns don't jitter as values tick. Drop-off
+			between funnel steps is the only place red appears.</p>
+		<div class="row" style="margin-top: 20px; gap: 22px;">
+			<span class="num" style="font-weight:700;font-size:18px">48,210</span>
+			<span class="num" style="font-weight:700;font-size:18px;color:var(--color-muted)">1.28M</span>
+			<span class="mono" style="background:#e5e7e0;border-radius:3px;padding:2px 6px">signup_completed</span>
+			<span class="num" style="font-weight:600;color:var(--color-danger)">−73.1%</span>
+			<span class="num" style="font-weight:600;color:var(--color-accent)">▲ 12.4%</span>
+		</div>
+		<p class="note">Event names, user ids and timestamps are always monospace; percentages always carry
+			a sign. If a chart needs a third series, it takes a tint of an existing color — not a new hue.</p>
+	</section>
+
+	<!-- 03 MOBILE -->
+	<section class="section">
+		<p class="section-label">03 — Mobile</p>
+		<h2>The dashboard folds, the paper stays</h2>
+		<p class="lede">On phones the KPI row becomes a two-up grid, the chart keeps its ink-and-blue bars
+			at half height, and the funnel collapses to the two steps that matter. Cream canvas and hairline
+			cards survive every breakpoint untouched.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>5G ▮</span></div>
+				<div class="phone-body">
+					<div class="p-head"><span class="mark"></span><b>Vetta</b><button class="btn btn-sm">New</button></div>
+					<div class="p-kpi">
+						<div class="card kpi"><div class="label">Active users</div><div class="value num">48,210</div><div class="delta num">▲ 12.4%</div></div>
+						<div class="card kpi"><div class="label">Events</div><div class="value num">1.28M</div><div class="delta num">▲ 6.1%</div></div>
+					</div>
+					<div class="p-sec">Signups · 12 weeks</div>
+					<div class="p-bars">
+						<i style="height:30%"></i><i style="height:42%"></i><i style="height:36%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:66%"></i><i style="height:61%"></i><i style="height:80%"></i><i style="height:72%"></i><i style="height:90%"></i><i style="height:84%"></i><i style="height:100%"></i>
+					</div>
+					<div class="p-sec">Feature flags</div>
+					<div class="p-flag"><span class="switch on"></span><code>new-onboarding-flow</code></div>
+					<div class="p-flag"><span class="switch"></span><code>beta-reports-v2</code></div>
+				</div>
+				<div class="p-tabbar">
+					<div class="is-active">Dashboards</div><div>Funnels</div><div>Flags</div><div>Events</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>KPI grid</b>Three-up becomes two-up; the third stat joins the chart card instead of shrinking below legibility.</li>
+				<li><b>Chart</b>Bars drop to 8px wide with 6px gaps, weekly labels stay monospace, and the hairline top rule replaces the full y-axis grid.</li>
+				<li><b>Funnel</b>The step table collapses to the current and next step, with the drop-off percentage kept in red — the one number that changes decisions.</li>
+				<li><b>Flags</b>Rows keep the mono flag key and the toggle; rollout percentages move into the flag detail page.</li>
+				<li><b>Actions</b>The yellow CTA shrinks to a compact pill in the header but never disappears — there is always one yellow element per screen.</li>
+				<li><b>Navigation</b>The product tab row becomes a bottom bar; active tab is ink-bold, not filled.</li>
+				<li><b>Touch</b>Rows and pills pad out to 44px tap targets; hairline dividers thicken by 0.5px to survive small screens.</li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 04 DON'T -->
+	<section class="section">
+		<p class="section-label">04 — Off-style, for contrast</p>
+		<h2>What breaks the sketchbook</h2>
+		<div class="compare">
+			<div class="cmp-off">Floating gradient card
+				<small>White-to-yellow gradient fill · heavy drop shadow · oversized radius. Shadows and washes
+				make the page feel like a template, not a sketchbook, and a second yellow surface competes with the CTA.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Flat white card, 1px olive hairline, 8px radius, cream visible around it. Structure comes
+				from the border; the only loud thing on screen is still the button.</small></div>
+		</div>
+		<p class="note">Also out: pure-white page backgrounds, dark hero bands, glass effects, and pastel
+			callout tints used as product-card fills — those belong to long-form docs only.</p>
+	</section>
+</div>
+
+<footer><div class="wrap">Vetta design reference — posthog · cream paper, ink data, one yellow action.</div></footer>
+</body>
+</html>

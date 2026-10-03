@@ -1,0 +1,22 @@
+/* Framer — near-black artboard canvas, blue selection signal, violet gradient spotlight tiles. Palette adapted from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #0099ff;
+	--color-primary-foreground: #ffffff;
+	--color-surface: #090909;
+	--color-surface-foreground: #ffffff;
+	--color-surface-raised: #141414;
+	--color-muted: #999999;
+	--color-accent: #6a4cf5;
+	--color-danger: #ff5577;
+	--color-border: #262626;
+
+	--radius-sm: 4px;
+	--radius-md: 10px;
+	--radius-lg: 15px;
+	--radius-xl: 20px;
+	--radius-2xl: 30px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+	--shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 10px 30px rgb(0 0 0 / 0.25);
+	--shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 64px rgb(0 0 0 / 0.5);
+}

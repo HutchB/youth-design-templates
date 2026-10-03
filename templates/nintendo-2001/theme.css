@@ -1,0 +1,25 @@
+/* Nintendo 2001 — periwinkle metal plates, carbon command slabs, rationed warm signal. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #e60012;
+	--color-primary-foreground: #ffffff;
+	--color-surface: #dedede;
+	--color-surface-foreground: #21242e;
+	--color-surface-raised: #ffffff;
+	--color-muted: #60619c;
+	--color-accent: #f68d1f;
+	--color-danger: #e60012;
+	--color-border: #3d4f97;
+	--color-chrome: #7a8aba;
+	--color-carbon: #21242e;
+
+	--radius-sm: 4px;
+	--radius-md: 6px;
+	--radius-lg: 10px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	/* Hard offsets only: depth is bevel, not blur. */
+	--shadow-sm: 2px 2px 0 rgb(33 36 46 / 0.3);
+	--shadow-md: 3px 3px 0 rgb(33 36 46 / 0.35);
+	--shadow-lg: 4px 4px 0 rgb(33 36 46 / 0.4);
+}

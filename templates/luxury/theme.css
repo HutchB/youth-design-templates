@@ -1,0 +1,29 @@
+/* Luxury Serif — quiet opulence: cream and charcoal, antique-gold hairlines,
+   high-contrast Didone display, vast unhurried whitespace. Original curated spec
+   for this collection (MIT). */
+@theme {
+	--color-primary: #1a1a18; /* charcoal black — the primary action is a black button */
+	--color-primary-foreground: #faf8f3; /* cream text on charcoal, never pure white */
+	--color-surface: #faf8f3; /* cream — the unbleached ground */
+	--color-surface-foreground: #1a1a18; /* charcoal ink */
+	--color-surface-raised: #ffffff; /* brightened panels: imagery, featured objects */
+	--color-muted: #857f72; /* warm greige for secondary text */
+	--color-accent: #bfa05a; /* antique gold — jewelry, never a large fill */
+	--color-danger: #8c2f22; /* oxblood, never a loud alarm red */
+	--color-border: #e6e0d2; /* warm cream-toned hairline */
+	/* The hairline gold: finer and paler than the accent, drawn only as 1px rules
+	   and thin frames — dividers, keylines, the odd underline. */
+	--color-gold-line: #d9c9a3;
+
+	/* Corners barely exist: a 2px courtesy trim at most, 4px on large panels. */
+	--radius-sm: 0px;
+	--radius-md: 2px;
+	--radius-lg: 2px;
+	--radius-xl: 4px;
+	--radius-2xl: 4px;
+
+	/* Shadows are almost absent: a whisper at most, never a depth system. */
+	--shadow-sm: 0 1px 2px rgb(26 26 24 / 0.04);
+	--shadow-md: 0 2px 10px rgb(26 26 24 / 0.04);
+	--shadow-lg: 0 10px 30px rgb(26 26 24 / 0.05);
+}

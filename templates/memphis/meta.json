@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "memphis",
+	"name": "Memphis",
+	"version": "1.0.0",
+	"order": 23,
+	"category": "playful",
+	"vibe": "light",
+	"tags": [
+		"playful",
+		"light"
+	],
+	"blurb": "Eighties geometric rebellion: flat clashing color blocks, squiggles, polka dots and hard-edged shapes on white.",
+	"tagline": {
+		"en": "Squiggles over symmetry",
+		"zh": "八十年代的几何叛逆"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing the Memphis-design revival web aesthetic (flat geometric confetti, clashing primaries, hard edges)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "supabase",
+	"name": "Supabase",
+	"version": "1.0.0",
+	"order": 65,
+	"category": "dev",
+	"vibe": "light",
+	"tags": [
+		"dev",
+		"light"
+	],
+	"blurb": "Quietly technical open-source backend: white and near-black with one emerald green, dense tables and honest monospace.",
+	"tagline": {
+		"en": "Open-source calm in emerald",
+		"zh": "翡翠绿的开源冷静"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

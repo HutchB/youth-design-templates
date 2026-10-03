@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "terminal",
+	"name": "Terminal",
+	"version": "1.0.0",
+	"order": 5,
+	"category": "dev",
+	"vibe": "dark",
+	"tags": [
+		"dev",
+		"dark"
+	],
+	"blurb": "Phosphor console: near-black screen, single green foreground, everything monospace, zero radius, scanline glow.",
+	"tagline": {
+		"en": "One phosphor green on black",
+		"zh": "黑底磷光绿，一切皆等宽"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/Gioni06/terminal.css",
+		"note": "Original spec written for this collection; conventions checked against terminal.css (MIT). No upstream code included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

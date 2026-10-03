@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "playstation",
+	"name": "PlayStation",
+	"version": "1.0.0",
+	"order": 195,
+	"category": "gaming",
+	"vibe": "dark",
+	"tags": [
+		"gaming",
+		"dark"
+	],
+	"blurb": "Console-night immersion: pure black chapters, PlayStation Blue pill CTAs, light-weight display type and 16:9 game tile rails.",
+	"tagline": {
+		"en": "Night-blue console immersion",
+		"zh": "深蓝主机夜"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

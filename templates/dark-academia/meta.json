@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "dark-academia",
+	"name": "Dark Academia",
+	"version": "1.0.0",
+	"order": 115,
+	"category": "editorial",
+	"vibe": "light",
+	"tags": [
+		"editorial",
+		"light"
+	],
+	"blurb": "Old-library scholarship: parchment surfaces, oxblood and antique gold accents, high-contrast serif typography and quiet hairline rules.",
+	"tagline": {
+		"en": "Parchment, oxblood, old libraries",
+		"zh": "羊皮纸与旧图书馆"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing the dark-academia web aesthetic (parchment palettes, scholarly serif typography, antique metallic accents)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

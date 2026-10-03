@@ -1,0 +1,22 @@
+/* Material 3 — adapted from Material Design 3 baseline tokens (Apache-2.0, m3.material.io). Original descriptions. Not affiliated with or endorsed by Google. */
+@theme {
+	--color-primary: #6750a4; /* primary — baseline purple, fills and FAB accents */
+	--color-primary-foreground: #ffffff; /* on-primary */
+	--color-surface: #fef7ff; /* surface — the faintly violet page */
+	--color-surface-foreground: #1d1b20; /* on-surface */
+	--color-surface-raised: #e8def8; /* secondary-container — tonal card fill */
+	--color-muted: #49454f; /* on-surface-variant — secondary text and icons */
+	--color-accent: #7d5260; /* tertiary — the third hue, used sparingly */
+	--color-danger: #b3261e; /* error */
+	--color-border: #cac4d0; /* outline-variant — the quiet line */
+
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-xl: 28px;
+	--radius-2xl: 28px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+	--shadow-md: 0 1px 3px rgb(0 0 0 / 0.15);
+	--shadow-lg: 0 4px 8px rgb(0 0 0 / 0.15);
+}

@@ -1,0 +1,22 @@
+/* PostHog — cream sketchbook canvas, one yellow-orange action. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #f7a501;
+	--color-primary-foreground: #23251d;
+	--color-surface: #eeefe9;
+	--color-surface-foreground: #23251d;
+	--color-surface-raised: #ffffff;
+	--color-muted: #6c6e63;
+	--color-accent: #1d4ed8;
+	--color-danger: #cd4239;
+	--color-border: #bfc1b7;
+
+	--radius-sm: 4px;
+	--radius-md: 6px;
+	--radius-lg: 8px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	--shadow-sm: 0 1px 2px rgb(35 37 29 / 0.06);
+	--shadow-md: 0 6px 16px rgb(35 37 29 / 0.08);
+	--shadow-lg: 0 16px 40px rgb(35 37 29 / 0.12);
+}

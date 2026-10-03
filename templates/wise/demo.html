@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wise — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #9fe870;
+		--color-primary-foreground: #0e0f0c;
+		--color-surface: #e8ebe6;
+		--color-surface-foreground: #0e0f0c;
+		--color-surface-raised: #ffffff;
+		--color-muted: #454745;
+		--color-accent: #ffeb69;
+		--color-danger: #d03238;
+		--color-border: #e0e3dd;
+
+		--radius-sm: 8px;
+		--radius-md: 12px;
+		--radius-lg: 16px;
+		--radius-xl: 24px;
+		--radius-2xl: 32px;
+
+		--shadow-sm: 0 1px 2px rgb(14 15 12 / 0.05);
+		--shadow-md: 0 6px 16px rgb(14 15 12 / 0.07);
+		--shadow-lg: 0 16px 40px rgb(14 15 12 / 0.12);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 15px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+	p { margin: 0; }
+	::selection { background: rgb(159 232 112 / 0.45); }
+	.spacer { flex: 1; }
+	.num { font-variant-numeric: tabular-nums; }
+
+	.wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 768px) { .wrap { padding: 0 28px; } }
+
+	/* ── Chrome: white nav on sage ────────────────────────────────── */
+	.nav { display: flex; align-items: center; gap: 22px; min-height: 68px; }
+	.brand { display: flex; align-items: center; gap: 9px; font-weight: 900; font-size: 19px; letter-spacing: -0.03em; }
+	.mark { width: 26px; height: 26px; border-radius: 8px 8px 8px 2px; background: var(--color-primary); border: 2px solid var(--color-surface-foreground); flex: none; position: relative; }
+	.mark::after { content: ""; position: absolute; right: -6px; top: 8px; border-left: 5px solid var(--color-surface-foreground); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+	.navlinks { display: none; gap: 20px; font-size: 14px; font-weight: 600; }
+	@media (min-width: 860px) { .navlinks { display: flex; } }
+	.navlinks .is-active { box-shadow: inset 0 -2px 0 var(--color-surface-foreground); padding-bottom: 3px; }
+
+	/* ── Hero split: loud type + converter ────────────────────────── */
+	.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 26px 0 46px; align-items: start; }
+	@media (min-width: 960px) { .hero { grid-template-columns: minmax(0, 1fr) 430px; gap: 52px; padding: 44px 0 56px; } }
+	.hero h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 900; letter-spacing: -0.035em; line-height: 1.02; }
+	.hero .sub { margin-top: 16px; font-size: 17px; color: var(--color-muted); max-width: 44ch; }
+	.heropill { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: var(--color-accent); border-radius: 9999px; padding: 6px 14px 6px 8px; font-size: 13.5px; font-weight: 600; }
+	.heropill .star { width: 22px; height: 22px; border-radius: 50%; background: var(--color-surface-foreground); color: var(--color-accent); display: grid; place-items: center; font-size: 12px; font-weight: 900; }
+
+	/* ── Converter card: white on sage, ink border ────────────────── */
+	.converter { background: var(--color-surface-raised); border: 1px solid var(--color-surface-foreground); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-md); }
+	.steps { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--color-muted); margin-bottom: 16px; }
+	.steps .st { display: flex; align-items: center; gap: 7px; }
+	.steps .n { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--color-border); display: grid; place-items: center; font-size: 11px; }
+	.steps .done .n { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.steps .now .n { border-color: var(--color-surface-foreground); color: var(--color-surface-foreground); }
+	.steps .line { flex: 1; height: 2px; background: var(--color-border); border-radius: 1px; }
+
+	.amount-row { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--color-surface-foreground); border-radius: var(--radius-md); padding: 12px 14px; background: var(--color-surface-raised); }
+	.amount-row .big { font-size: clamp(26px, 5vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+	.chip { margin-left: auto; display: flex; align-items: center; gap: 8px; border: 1px solid var(--color-border); background: var(--color-surface); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 14px; font-weight: 600; flex: none; }
+	.chip .flag { width: 18px; height: 18px; border-radius: 4px; flex: none; }
+	.rate-line { display: flex; align-items: center; gap: 10px; padding: 10px 6px; font-size: 13px; color: var(--color-muted); }
+	.rate-line b { color: var(--color-surface-foreground); font-weight: 600; }
+	.swap { width: 30px; height: 30px; border-radius: 50%; background: var(--color-surface); border: 1px solid var(--color-border); display: grid; place-items: center; font-size: 14px; flex: none; }
+	.guarantee { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #1d5c31; background: #e2f6d5; border-radius: 9999px; padding: 3px 10px; }
+	.fees { margin-top: 6px; border-top: 1px solid var(--color-border); }
+	.frow { display: flex; justify-content: space-between; padding: 10px 2px; border-bottom: 1px solid var(--color-border); font-size: 14px; }
+	.frow:last-child { border-bottom: 0; }
+	.frow .k { color: var(--color-muted); }
+	.frow .v { font-weight: 700; }
+	.frow .v.total { font-size: 15px; }
+
+	/* ── Buttons: 48px, 24px radius ───────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 16px; font-weight: 600; height: 48px; padding: 0 24px;
+		border: 0; border-radius: var(--radius-xl);
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: filter 140ms ease;
+	}
+	.btn:hover { filter: brightness(1.05); }
+	.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(14 15 12 / 0.25); }
+	.btn-sage { background: var(--color-surface); }
+	.btn-outline { background: var(--color-surface-raised); border: 1px solid var(--color-surface-foreground); }
+	.btn-auto { width: auto; }
+	.btn-sm { height: 40px; padding: 0 18px; font-size: 14px; }
+
+	/* ── Side cards ───────────────────────────────────────────────── */
+	.sides { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+	.card { background: var(--color-surface-raised); border-radius: var(--radius-xl); padding: 20px 22px; min-width: 0; }
+	.card h2 { font-size: 17px; font-weight: 600; }
+	.card .sub { font-size: 13px; color: var(--color-muted); margin-top: 3px; }
+	.route { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; }
+	.route:last-child { border-bottom: 0; }
+	.route .cur { display: flex; gap: 6px; }
+	.route .cur .flag { width: 16px; height: 16px; border-radius: 4px; }
+	.route .amount { margin-left: auto; font-weight: 700; }
+	.route .pill { font-size: 11px; font-weight: 700; border-radius: 9999px; padding: 2px 9px; background: var(--color-accent); }
+	.route .pill.soft { background: var(--color-surface); font-weight: 600; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section { padding: 48px 0; }
+	@media (min-width: 768px) { .section { padding: 62px 0; } }
+	.section-label { font-size: 13px; font-weight: 700; color: var(--color-muted); margin-bottom: 12px; }
+	.section h2 { font-size: clamp(24px, 4vw, 34px); font-weight: 900; letter-spacing: -0.03em; }
+	.lede { color: var(--color-muted); margin-top: 12px; max-width: 60ch; font-size: 15.5px; }
+	.note { margin-top: 16px; font-size: 13.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 58px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 600; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 26px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 44px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 30px;
+		overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 11px 18px 4px; font-size: 10px; color: var(--color-muted); }
+	.phone-body { padding: 10px 14px 4px; }
+	.p-head { display: flex; align-items: center; gap: 8px; padding: 4px 0 12px; }
+	.p-head .mark { width: 20px; height: 20px; border-radius: 6px 6px 6px 2px; }
+	.p-head b { font-size: 15px; font-weight: 900; letter-spacing: -0.02em; }
+	.p-conv { background: var(--color-surface-raised); border: 1.5px solid var(--color-surface-foreground); border-radius: var(--radius-lg); padding: 12px; }
+	.p-conv .lbl { font-size: 10.5px; font-weight: 600; color: var(--color-muted); }
+	.p-conv .amt { display: flex; align-items: center; gap: 8px; padding: 4px 0 8px; }
+	.p-conv .big { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+	.p-conv .chip { font-size: 12px; padding: 5px 9px; border-radius: 7px; }
+	.p-conv .chip .flag { width: 14px; height: 14px; }
+	.p-rate { font-size: 11.5px; color: var(--color-muted); padding: 8px 2px; }
+	.p-rate b { color: var(--color-surface-foreground); }
+	.p-cta { padding: 10px 0 4px; }
+	.p-tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 12px; }
+	.p-tabbar div { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 9px 0 12px; }
+	.p-tabbar .is-active { color: var(--color-surface-foreground); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off { padding: 22px; border-radius: 6px; background: #163300; color: var(--color-primary); font-size: 16px; font-weight: 700; }
+	.cmp-off .fake-btn { display: inline-block; margin-top: 12px; background: #2ea52f; color: #fff; border-radius: 2px; padding: 8px 16px; font-size: 13px; font-weight: 700; }
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: rgb(255 255 255 / 0.65); margin-top: 10px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-radius: var(--radius-xl); background: var(--color-surface-raised); font-size: 16px; font-weight: 700; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 10px; line-height: 1.6; }
+
+	footer { border-top: 1px solid var(--color-border); padding: 32px 0 56px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the cross-border transfer. Sage canvas, one white converter card
+     with confident ink borders, money set loud, one lime button. -->
+<div class="wrap">
+	<div class="nav">
+		<span class="brand"><span class="mark"></span>vetta</span>
+		<nav class="navlinks"><span class="is-active">Send money</span><span>Account</span><span>Convert</span><span>Business</span><span>Help</span></nav>
+		<span class="spacer"></span>
+		<button class="btn btn-sage btn-sm btn-auto">Sign in</button>
+	</div>
+
+	<div class="hero">
+		<div>
+			<h1>Send money<br>like it's local</h1>
+			<p class="sub">One account, 160 countries, the real mid-market rate.
+				What you see is what your recipient gets.</p>
+			<div class="heropill"><span class="star">★</span>Rate alert: USD→EUR is at a 90-day high</div>
+		</div>
+
+		<div>
+			<div class="converter">
+				<div class="steps">
+					<span class="st done"><span class="n">✓</span>Amount</span>
+					<span class="line"></span>
+					<span class="st now"><span class="n">2</span>Recipient</span>
+					<span class="line"></span>
+					<span class="st"><span class="n">3</span>Pay</span>
+				</div>
+
+				<div class="amount-row">
+					<span>
+						<span class="lbl" style="display:block;font-size:11.5px;font-weight:600;color:var(--color-muted)">You send</span>
+						<span class="big num">1,000.00</span>
+					</span>
+					<span class="chip"><span class="flag" style="background:#3c3b6e"></span>USD</span>
+				</div>
+
+				<div class="rate-line"><span class="swap">⇅</span><span>1 USD = <b class="num">0.8642 EUR</b> · mid-market rate</span></div>
+
+				<div class="amount-row">
+					<span>
+						<span class="lbl" style="display:block;font-size:11.5px;font-weight:600;color:var(--color-muted)">Recipient gets</span>
+						<span class="big num">862.56</span>
+					</span>
+					<span class="chip"><span class="flag" style="background:#0055a4"></span>EUR</span>
+				</div>
+
+				<div style="margin-top:12px"><span class="guarantee num">✓ Rate guaranteed for 40 hours</span></div>
+
+				<div class="fees">
+					<div class="frow"><span class="k">Fee</span><span class="v num">4.14 USD</span></div>
+					<div class="frow"><span class="k">Guaranteed rate</span><span class="v num">0.8642</span></div>
+					<div class="frow"><span class="k">Should arrive</span><span class="v">in 23 minutes</span></div>
+					<div class="frow"><span class="k">Total cost</span><span class="v total num">0.48%</span></div>
+				</div>
+
+				<button class="btn" style="width:100%; margin-top:14px">Continue</button>
+			</div>
+
+			<div class="sides">
+				<div class="card">
+					<h2>Popular routes</h2>
+					<p class="sub">Updated live, fee included</p>
+					<div class="route">
+						<span class="cur"><span class="flag" style="background:#3c3b6e"></span><span class="flag" style="background:#0055a4"></span></span>
+						USD → EUR <span class="pill">fastest</span>
+						<span class="amount num">0.8642</span>
+					</div>
+					<div class="route">
+						<span class="cur"><span class="flag" style="background:#3c3b6e"></span><span class="flag" style="background:#c8102e"></span></span>
+						USD → GBP <span class="pill soft">in 1 min</span>
+						<span class="amount num">0.7831</span>
+					</div>
+					<div class="route">
+						<span class="cur"><span class="flag" style="background:#3c3b6e"></span><span class="flag" style="background:#046a38"></span></span>
+						USD → INR <span class="pill soft">in 5 min</span>
+						<span class="amount num">83.4102</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — Type & numbers</p>
+		<h2>Money speaks at weight 900</h2>
+		<p class="lede">Headlines run at the heaviest weight the system has, tight and unapologetic. Amounts
+			are equally loud but always tabular, so a ticking rate never shuffles the fee rows below. Every
+			money figure pairs with a currency chip, never a bare number.</p>
+		<div class="row" style="margin-top: 20px; gap: 26px;">
+			<span class="num" style="font-size:34px;font-weight:700;letter-spacing:-0.02em">862.56</span>
+			<span class="num" style="font-size:22px;font-weight:700;color:var(--color-muted)">1,000.00</span>
+			<span class="num" style="font-weight:600">0.8642</span>
+			<span class="note" style="margin:0">codes chip the figure: USD · EUR · GBP</span>
+		</div>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Color</p>
+		<h2>Lime on neutral, ink for structure</h2>
+		<p class="lede">The sage canvas and white cards carry the mood; the lime button is the only saturated
+			action on screen and always sits on sage or white, never on green. Inputs and the converter draw
+			confidence from full-strength ink borders — pale gray borders read as broken here.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><b>surface</b><span>#e8ebe6 · sage canvas</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#9fe870 · the action</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#ffeb69 · confetti moments</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-foreground)"></div><b>ink</b><span>#0e0f0c · borders + type</span></div>
+		</div>
+		<div class="row" style="margin-top: 24px;">
+			<button class="btn btn-auto">Continue</button>
+			<button class="btn btn-sage btn-auto">Save route</button>
+			<button class="btn btn-outline btn-auto">Add recipient</button>
+			<span class="guarantee num">✓ Guaranteed for 40 hours</span>
+		</div>
+		<p class="note">Yellow is confetti — the rate-alert star, a "fastest route" tag — never a second
+			system color, and never the positive-status green.</p>
+	</section>
+
+	<!-- 03 MOBILE -->
+	<section class="section">
+		<p class="section-label">03 — Mobile</p>
+		<h2>The flow becomes one column</h2>
+		<p class="lede">Phones strip the transfer to its decision spine: two amount rows, the rate between
+			them, one fee line, one lime button. Supporting cards drop below the fold where they cost
+			nothing.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>5G ▮</span></div>
+				<div class="phone-body">
+					<div class="p-head"><span class="mark"></span><b>vetta</b></div>
+					<div class="p-conv">
+						<div class="lbl">You send</div>
+						<div class="amt"><span class="big num">1,000.00</span><span class="chip"><span class="flag" style="background:#3c3b6e"></span>USD</span></div>
+						<div class="p-rate">1 USD = <b class="num">0.8642 EUR</b> · ✓ guaranteed 40 hrs</div>
+						<div class="lbl">Recipient gets</div>
+						<div class="amt" style="padding-bottom:2px"><span class="big num">862.56</span><span class="chip"><span class="flag" style="background:#0055a4"></span>EUR</span></div>
+					</div>
+					<div class="p-cta"><button class="btn" style="width:100%">Continue</button></div>
+				</div>
+				<div class="p-tabbar">
+					<div class="is-active">Send</div><div>Account</div><div>Convert</div><div>Help</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Amount rows</b>Numerals drop from 34px to 22px — the floor for money figures — and the currency chip shrinks with them but never disappears.</li>
+				<li><b>Fee breakdown</b>Four rows compress to the total cost; the full breakdown stays one tap away in the same card, not a new page.</li>
+				<li><b>Steps</b>The numbered progress row hides; the receiver chip and guaranteed-rate pill carry the state instead.</li>
+				<li><b>Buttons</b>The lime action pins to the thumb zone at full width and keeps its 48px height — it never shrinks below it.</li>
+				<li><b>Popular routes</b>The side card falls below the converter; route rows keep flag pairs and drop the arrival pills on narrow screens.</li>
+				<li><b>Corners</b>Radius scales down one step (24px → 16px) so cards don't waste width, but nothing ever goes square.</li>
+				<li><b>Hover states</b>Touch replaces hover: rows highlight on press, and the swap button gets a generous 44px hit area.</li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 04 DON'T -->
+	<section class="section">
+		<p class="section-label">04 — Off-style, for contrast</p>
+		<h2>What kills the friendliness</h2>
+		<div class="compare">
+			<div class="cmp-off">Sharp box on dark green
+				<small>6px corners · lime CTA dropped onto a green surface · generic green button competing
+				with the brand action. Every rule here exists to protect the brand's one conversion moment.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>24px-radius white card on sage, ink-bordered fields, lime on neutral. Surface contrast
+				does the elevation; the lime button stays the only thing shouting.</small></div>
+		</div>
+		<p class="note">Also out: weight-700 hero type, gray input borders, pure-white page canvases, and a
+			second accent color — the palette is sage, white, lime, ink, and a pinch of yellow confetti.</p>
+	</section>
+</div>
+
+<footer><div class="wrap">Vetta design reference — wise · sage canvas, loud type, one lime action.</div></footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "organic",
+	"name": "Organic",
+	"version": "1.0.0",
+	"order": 68,
+	"category": "wellness",
+	"vibe": "light",
+	"tags": [
+		"wellness",
+		"light"
+	],
+	"blurb": "Grounded and grown, not manufactured: linen surfaces, sage and terracotta, extra-large radii and humanist rounded type.",
+	"tagline": {
+		"en": "Softly grown, gently made",
+		"zh": "草木色的大地呼吸"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing the organic/eco web aesthetic (earth palettes, oversized radii, humanist type)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

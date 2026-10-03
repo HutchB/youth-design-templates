@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cursor — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #f54e00;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #1e1f22;
+		--color-surface-foreground: #e8eaed;
+		--color-surface-raised: #26282c;
+		--color-muted: #9aa0a6;
+		--color-accent: #c0a8dd;
+		--color-danger: #f87171;
+		--color-border: #33363b;
+
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 8px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+		--shadow-md: 0 4px 16px rgb(0 0 0 / 0.45);
+		--shadow-lg: 0 16px 48px rgb(0 0 0 / 0.55);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
+	p { margin: 0; }
+	::selection { background: rgb(245 78 0 / 0.35); }
+	.spacer { flex: 1; }
+
+	/* ── Editor shell: flat panes split by hairlines, nothing floats ─ */
+	.shell { border-bottom: 1px solid var(--color-border); }
+	.titlebar {
+		display: flex; align-items: center; gap: 12px;
+		height: 36px; padding: 0 12px;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.wdots { display: flex; gap: 6px; }
+	.wdots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-border); display: block; }
+	.tab {
+		display: flex; align-items: center; gap: 8px;
+		height: 36px; padding: 0 12px; font-size: 12.5px; color: var(--color-muted);
+		border-right: 1px solid var(--color-border);
+		font-family: var(--mono);
+	}
+	.tab.is-active { color: var(--color-surface-foreground); background: rgb(255 255 255 / 0.03); box-shadow: inset 0 2px 0 var(--color-primary); }
+	.titlebar .hint { font-size: 11px; color: var(--color-muted); }
+
+	.body { display: grid; grid-template-columns: 1fr; }
+	@media (min-width: 1020px) { .body { grid-template-columns: 44px 204px minmax(0, 1fr) 316px; } }
+
+	.rail { display: none; border-right: 1px solid var(--color-border); padding: 10px 0; }
+	@media (min-width: 1020px) { .rail { display: flex; flex-direction: column; align-items: center; gap: 4px; } }
+	.rail .glyph {
+		width: 28px; height: 28px; border-radius: var(--radius-md);
+		display: grid; place-items: center; color: var(--color-muted); font-size: 12px;
+		border: 1px solid transparent;
+	}
+	.rail .glyph.is-active { color: var(--color-surface-foreground); border-color: var(--color-border); background: var(--color-surface-raised); }
+
+	.tree { display: none; border-right: 1px solid var(--color-border); padding: 8px 6px; }
+	@media (min-width: 1020px) { .tree { display: block; } }
+	.tree-label { font-size: 10.5px; letter-spacing: 0.1em; color: var(--color-muted); padding: 4px 8px 8px; }
+	.frow {
+		display: flex; align-items: center; gap: 6px;
+		height: 24px; padding: 0 8px; border-radius: var(--radius-sm);
+		font-size: 12.5px; color: var(--color-muted); font-family: var(--mono);
+	}
+	.frow i { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 2px; opacity: 0.6; flex: none; }
+	.frow.lv2 { padding-left: 22px; }
+	.frow.lv3 { padding-left: 36px; }
+	.frow.is-active { background: var(--color-surface-raised); color: var(--color-surface-foreground); }
+	.frow .mod { margin-left: auto; color: var(--color-accent); font-size: 10px; }
+
+	/* ── Editor: line numbers, mono code, tinted AI diff ──────────── */
+	.code { min-width: 0; overflow: hidden; }
+	.code-head {
+		display: flex; align-items: center; gap: 10px;
+		height: 32px; padding: 0 14px; border-bottom: 1px solid var(--color-border);
+		font-size: 11.5px; color: var(--color-muted);
+	}
+	.code-head .crumb { font-family: var(--mono); }
+	.lns { padding: 10px 0 14px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; }
+	.ln { display: flex; min-width: 0; }
+	.ln .no { width: 44px; flex: none; text-align: right; padding-right: 14px; color: #575c63; user-select: none; }
+	.ln .tx { white-space: pre; overflow: hidden; }
+	.ln.add { background: rgb(159 201 162 / 0.12); box-shadow: inset 2px 0 0 #9fc9a2; }
+	.ln.add .no { color: #9fc9a2; }
+	.ln.del { background: rgb(248 113 113 / 0.1); box-shadow: inset 2px 0 0 var(--color-danger); }
+	.ln.del .no { color: var(--color-danger); }
+	.ln.del .tx { opacity: 0.6; text-decoration: line-through; text-decoration-color: rgb(248 113 113 / 0.5); }
+	.kw { color: #c586c0; } .fn { color: #dcdcaa; } .st { color: #ce9178; }
+	.vr { color: #9cdcfe; } .cm { color: #6a9955; } .nu { color: #b5cea8; } .ty { color: #4ec9b0; }
+
+	/* ── AI panel: the agent lives here, lavender is its voice ────── */
+	.chat { border-top: 1px solid var(--color-border); background: rgb(255 255 255 / 0.02); }
+	@media (min-width: 1020px) { .chat { border-top: 0; border-left: 1px solid var(--color-border); } }
+	.chat-head {
+		display: flex; align-items: center; gap: 8px;
+		height: 36px; padding: 0 12px; border-bottom: 1px solid var(--color-border);
+		font-size: 12px; font-weight: 500;
+	}
+	.chip {
+		font-size: 10px; letter-spacing: 0.06em; padding: 2px 8px;
+		border: 1px solid var(--color-border); border-radius: 9999px; color: var(--color-muted);
+	}
+	.msg { padding: 12px; border-bottom: 1px solid var(--color-border); }
+	.msg-user {
+		background: var(--color-surface-raised); border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg); padding: 9px 11px; font-size: 12.5px;
+	}
+	.msg-ai { font-size: 12.5px; color: var(--color-surface-foreground); }
+	.msg-ai .sub { color: var(--color-muted); }
+
+	.stage {
+		display: inline-flex; align-items: center; gap: 6px;
+		font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+		padding: 3px 9px; border-radius: 9999px; margin: 0 6px 6px 0;
+	}
+	.stage i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: block; }
+	.stage.peach { color: #dfa88f; background: rgb(223 168 143 / 0.12); }
+	.stage.blue { color: #9fbbe0; background: rgb(159 187 224 / 0.12); }
+	.stage.lavender { color: var(--color-accent); background: rgb(192 168 221 / 0.12); }
+	.stage.gold { color: #c08532; background: rgb(192 133 50 / 0.14); }
+
+	.diffcard {
+		margin-top: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+		overflow: hidden; font-family: var(--mono); font-size: 11.5px; line-height: 1.7;
+	}
+	.diffcard .bar {
+		display: flex; align-items: center; gap: 8px;
+		padding: 5px 10px; background: var(--color-surface-raised);
+		font-size: 10.5px; color: var(--color-muted);
+	}
+	.diffcard .bar b { color: #9fc9a2; font-weight: 500; }
+	.diffcard .bar s { color: var(--color-danger); text-decoration: none; }
+	.diffcard .dl { padding: 0 10px; white-space: pre; }
+	.diffcard .dl.del { background: rgb(248 113 113 / 0.08); color: var(--color-danger); }
+	.diffcard .dl.add { background: rgb(159 201 162 / 0.1); color: #9fc9a2; }
+	.chat-actions { display: flex; align-items: center; gap: 8px; padding: 12px; }
+
+	/* ── Status bar: 22px, mono, everything readable ──────────────── */
+	.statusbar {
+		display: flex; align-items: center; gap: 14px;
+		height: 22px; padding: 0 12px; border-top: 1px solid var(--color-border);
+		font-family: var(--mono); font-size: 10.5px; color: var(--color-muted);
+	}
+	.statusbar .warn { color: #c08532; }
+
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 112px; } }
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 72px; } }
+	.section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px; }
+	.section h2 { font-size: 20px; }
+	@media (min-width: 768px) { .section h2 { font-size: 24px; } }
+	.lede { color: var(--color-muted); max-width: 62ch; margin-top: 8px; font-size: 13px; }
+	.note { margin-top: 16px; font-size: 12px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+	/* ── Controls ─────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 12.5px; font-weight: 500;
+		height: 30px; padding: 0 12px;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-border);
+		background: transparent; color: var(--color-surface-foreground);
+		cursor: pointer;
+		transition: background-color 120ms ease, border-color 120ms ease;
+	}
+	.btn:hover { background: var(--color-surface-raised); }
+	.btn:focus-visible { outline: none; border-color: var(--color-primary); }
+	.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-primary:hover { background: #ff5c14; }
+	.btn-ghost { border-color: transparent; color: var(--color-muted); }
+	.btn-ghost:hover { color: var(--color-surface-foreground); }
+	.btn[disabled] { cursor: not-allowed; color: #575c63; border-color: #2a2c30; background: transparent; }
+
+	kbd {
+		font-family: var(--mono); font-size: 11px; line-height: 18px;
+		min-width: 20px; height: 20px; padding: 0 5px; display: inline-block; text-align: center;
+		border: 1px solid var(--color-border); border-bottom-width: 2px;
+		border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); color: var(--color-muted);
+	}
+
+	.input {
+		font: inherit; font-size: 13px; width: 100%; max-width: 380px;
+		height: 30px; padding: 0 10px;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-raised); color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: #575c63; }
+	.input:focus { outline: none; border-color: var(--color-primary); }
+
+	.panels { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 768px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+	.panel { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 14px 16px; }
+	.panel h3 { font-size: 13px; }
+	.panel p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 22px; letter-spacing: -0.02em; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 10px; background: var(--color-surface-raised); }
+	.sw b { font-family: var(--mono); font-size: 11px; font-weight: 500; display: block; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Mobile: the agent takes over the screen ──────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		border-radius: 28px;
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.phone-head { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-bottom: 1px solid var(--color-border); }
+	.phone-head b { font-size: 13px; font-weight: 600; }
+	.m-msg { padding: 10px 14px 0; }
+	.m-msg .msg-user { font-size: 12px; }
+	.m-msg .msg-ai { font-size: 12px; margin-top: 10px; }
+	.m-file { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--mono); font-size: 10.5px; color: var(--color-muted); }
+	.m-dock { display: flex; align-items: center; gap: 8px; margin: 14px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface-raised); font-size: 12px; color: #575c63; }
+	.m-dock .send { margin-left: auto; width: 24px; height: 24px; border-radius: var(--radius-sm); background: var(--color-primary); color: var(--color-primary-foreground); display: grid; place-items: center; font-size: 11px; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 116px; font-size: 12px; font-family: var(--mono); }
+	@media (max-width: 520px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── Off-style comparison ─────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 24px; border-radius: 20px;
+		background: linear-gradient(140deg, #2b0a52, #7a2bd6 55%, #f54e00);
+		box-shadow: 0 18px 44px rgb(245 78 0 / 0.45);
+		color: #fff; font-size: 20px; font-weight: 700;
+	}
+	.cmp-off small { display: block; font-size: 12px; font-weight: 400; opacity: 0.78; margin-top: 8px; }
+	.cmp-on { padding: 14px 16px; border-radius: var(--radius-lg); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: 13px; }
+	.cmp-on small { display: block; font-size: 12px; color: var(--color-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the editor session itself: file tree, syntax-highlighted buffer
+     with a live AI diff, and the agent panel on the right. One orange action,
+     lavender stages, no marketing chrome anywhere. -->
+<div class="shell">
+	<div class="titlebar">
+		<span class="wdots"><i></i><i></i><i></i></span>
+		<span class="tab is-active">retry.ts</span>
+		<span class="tab">client.ts</span>
+		<span class="tab">backoff.test.ts</span>
+		<span class="spacer"></span>
+		<span class="hint">agent ready · <kbd>⌘I</kbd></span>
+	</div>
+	<div class="body">
+		<aside class="rail">
+			<span class="glyph">▤</span>
+			<span class="glyph">⌕</span>
+			<span class="glyph">⎇</span>
+			<span class="glyph is-active">◇</span>
+			<span class="spacer"></span>
+			<span class="glyph">⚙</span>
+		</aside>
+		<aside class="tree">
+			<div class="tree-label">EXPLORER</div>
+			<div class="frow"><i></i>src</div>
+			<div class="frow lv2"><i></i>lib</div>
+			<div class="frow lv3 is-active"><i></i>retry.ts<span class="mod">M</span></div>
+			<div class="frow lv3"><i></i>client.ts</div>
+			<div class="frow lv2"><i></i>backoff.test.ts</div>
+			<div class="frow"><i></i>package.json</div>
+		</aside>
+		<main class="code">
+			<div class="code-head">
+				<span class="crumb">src › lib › retry.ts</span>
+				<span class="spacer"></span>
+				<span>TypeScript · agent editing</span>
+			</div>
+			<div class="lns">
+				<div class="ln"><span class="no">12</span><span class="tx"><span class="kw">export async function</span> <span class="fn">retry</span>&lt;<span class="ty">T</span>&gt;(<span class="vr">fn</span>: () <span class="kw">=&gt;</span> <span class="ty">Promise</span>&lt;<span class="ty">T</span>&gt;, <span class="vr">attempts</span> = <span class="nu">3</span>): <span class="ty">Promise</span>&lt;<span class="ty">T</span>&gt; {</span></div>
+				<div class="ln"><span class="no">13</span><span class="tx">  <span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> = <span class="nu">0</span>; <span class="vr">i</span> &lt; <span class="vr">attempts</span>; <span class="vr">i</span>++) {</span></div>
+				<div class="ln"><span class="no">14</span><span class="tx">    <span class="kw">try</span> {</span></div>
+				<div class="ln"><span class="no">15</span><span class="tx">      <span class="kw">return await</span> <span class="fn">fn</span>();</span></div>
+				<div class="ln"><span class="no">16</span><span class="tx">    } <span class="kw">catch</span> (<span class="vr">err</span>) {</span></div>
+				<div class="ln"><span class="no">17</span><span class="tx">      <span class="kw">if</span> (<span class="vr">i</span> === <span class="vr">attempts</span> - <span class="nu">1</span>) <span class="kw">throw</span> <span class="vr">err</span>;</span></div>
+				<div class="ln del"><span class="no">18</span><span class="tx">      <span class="kw">await</span> <span class="fn">sleep</span>(<span class="nu">2</span> ** <span class="vr">i</span> * <span class="nu">100</span>);</span></div>
+				<div class="ln add"><span class="no">18</span><span class="tx">      <span class="cm">// jitter keeps thundering herds apart</span></span></div>
+				<div class="ln add"><span class="no">19</span><span class="tx">      <span class="kw">await</span> <span class="fn">sleep</span>(<span class="nu">2</span> ** <span class="vr">i</span> * <span class="nu">100</span> + <span class="ty">Math</span>.<span class="fn">random</span>() * <span class="nu">50</span>);</span></div>
+				<div class="ln"><span class="no">20</span><span class="tx">    }</span></div>
+				<div class="ln"><span class="no">21</span><span class="tx">  }</span></div>
+				<div class="ln"><span class="no">22</span><span class="tx">}</span></div>
+			</div>
+		</main>
+		<aside class="chat">
+			<div class="chat-head">Agent<span class="spacer"></span><span class="chip">auto</span></div>
+			<div class="msg">
+				<div class="msg-user">Add exponential backoff with jitter to retry()</div>
+			</div>
+			<div class="msg">
+				<div class="msg-ai">
+					<span class="stage peach"><i></i>Thinking</span><span class="stage blue"><i></i>Reading retry.ts</span><span class="stage lavender"><i></i>Editing</span><span class="stage gold"><i></i>Done</span>
+					<p>Backoff now doubles per attempt and adds up to 50ms of jitter, so simultaneous callers stop retrying in lockstep. Tests still pass with the fixed seed.</p>
+					<div class="diffcard">
+						<div class="bar">retry.ts · L18 <span class="spacer"></span><b>+1</b> <s>−1</s></div>
+						<div class="dl del">-      await sleep(2 ** i * 100);</div>
+						<div class="dl add">+      await sleep(2 ** i * 100 + Math.random() * 50);</div>
+					</div>
+				</div>
+			</div>
+			<div class="chat-actions">
+				<button class="btn btn-primary">Review changes</button>
+				<button class="btn btn-ghost">Accept all</button>
+				<span class="spacer"></span>
+				<kbd>⌘⏎</kbd>
+			</div>
+		</aside>
+	</div>
+	<div class="statusbar">
+		<span> main</span>
+		<span>✕ 0</span>
+		<span class="warn">⚠ 2</span>
+		<span class="spacer"></span>
+		<span>Ln 19, Col 42</span>
+		<span>Spaces: 2</span>
+		<span>UTF-8</span>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 EDITOR CHROME -->
+	<section class="section">
+		<p class="section-label">01 — Editor chrome</p>
+		<h2>Fixed heights, hairline panes, zero decoration</h2>
+		<p class="lede">The frame is measurable: 36px titlebar and tabs, 24px file rows, 22px mono
+			status bar. Panes are flat fills divided by 1px borders — the layout carries the
+			structure, so color is free to carry meaning.</p>
+		<div class="panels">
+			<div class="panel"><div class="metric">36 / 24 / 22px</div><p>Tab strip, file-tree row and status bar. Three heights, never four.</p></div>
+			<div class="panel"><div class="metric">1px</div><p>Every pane divider. No inner shadows, no gradients between columns.</p></div>
+			<div class="panel"><div class="metric">4 / 8 / 12 / 16</div><p>The spacing rhythm inside panes. Whitespace belongs to the diff, not the chrome.</p></div>
+		</div>
+	</section>
+
+	<!-- 02 COLOR -->
+	<section class="section">
+		<p class="section-label">02 — Color roles</p>
+		<h2>Graphite floor, orange scalpel, lavender for the agent</h2>
+		<p class="lede">Orange is the brand and it is spent carefully: the wordmark and one filled
+			action per view. Lavender means "the model did this". Everything else is graphite,
+			tinted white and muted gray.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><div class="meta"><b>primary</b><span>#f54e00 · one action</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><div class="meta"><b>accent</b><span>#c0a8dd · AI stages</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><div class="meta"><b>raised</b><span>#26282c · panels, inputs</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-danger)"></div><div class="meta"><b>danger</b><span>#f87171 · errors, deletions</span></div></div>
+		</div>
+		<p class="note">The canvas never reaches pure black and text never reaches pure white — the graphite / tinted-white pair is what makes the workspace read warm instead of hollow.</p>
+	</section>
+
+	<!-- 03 AI TIMELINE -->
+	<section class="section">
+		<p class="section-label">03 — AI timeline</p>
+		<h2>Pastels are stage markers, not decoration</h2>
+		<p class="lede">Agent progress is told in five pastel chips on one line — thinking, reading,
+			editing, done. They render as low-alpha fills behind matching text, at 10px uppercase,
+			and they appear only inside AI surfaces. Diffs use the same discipline: mint tint for
+			additions, rose tint for deletions, both at roughly a tenth of full strength.</p>
+		<div class="row" style="margin-top: 20px;">
+			<span class="stage peach"><i></i>Thinking</span>
+			<span class="stage blue"><i></i>Reading retry.ts</span>
+			<span class="stage lavender"><i></i>Editing</span>
+			<span class="stage gold"><i></i>Done</span>
+		</div>
+		<div class="diffcard" style="max-width: 460px; margin-top: 20px;">
+			<div class="bar">retry.ts · L18 <span class="spacer"></span><b>+1</b> <s>−1</s></div>
+			<div class="dl del">-      await sleep(2 ** i * 100);</div>
+			<div class="dl add">+      await sleep(2 ** i * 100 + Math.random() * 50);</div>
+		</div>
+		<p class="note">The same pastels as a background wash, a heading color, or a chart palette would break the contract — they exist to answer "what is the agent doing right now".</p>
+	</section>
+
+	<!-- 04 CONTROLS -->
+	<section class="section">
+		<p class="section-label">04 — Controls &amp; keys</p>
+		<h2>One filled button, quiet ghosts, mono keycaps</h2>
+		<div class="row" style="margin-top: 20px;">
+			<button class="btn btn-primary">Review changes</button>
+			<button class="btn">Accept</button>
+			<button class="btn btn-ghost">Reject</button>
+			<button class="btn" disabled>Reverting…</button>
+		</div>
+		<div class="row" style="margin-top: 16px;">
+			<input class="input" placeholder="Ask the agent, @ to add context…">
+			<span style="font-size:12px;color:var(--color-muted)">or press <kbd>⌘I</kbd></span>
+		</div>
+		<div class="row" style="margin-top: 20px; gap: 16px; font-size: 12px; color: var(--color-muted);">
+			<span><kbd>⌘</kbd><kbd>K</kbd> command bar</span>
+			<span><kbd>⌘</kbd><kbd>I</kbd> inline edit</span>
+			<span><kbd>⌘</kbd><kbd>⏎</kbd> accept diff</span>
+			<span><kbd>⇧</kbd><kbd>Tab</kbd> cycle model</span>
+		</div>
+		<p class="note">Inputs take the raised fill and brighten their border on focus — no colored ring, no glow. Ghost buttons stay borderless until hover.</p>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>The agent becomes the screen</h2>
+		<p class="lede">On a phone there is no three-column workspace. The conversation leads, the
+			buffer becomes a preview card you can open, and every hover affordance turns into a
+			tap. Chrome shrinks to a header and an input dock; nothing else survives.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-head"><b>Agent</b><span class="chip">auto</span><span class="spacer"></span><kbd>retry.ts</kbd></div>
+				<div class="m-msg">
+					<div class="msg-user">Add exponential backoff with jitter to retry()</div>
+					<div class="msg-ai">
+						<div style="margin-bottom: 6px;"><span class="stage lavender"><i></i>Editing</span><span class="stage gold"><i></i>Done</span></div>
+						<p>Backoff doubles per attempt with up to 50ms of jitter.</p>
+						<div class="m-file"><span class="mod" style="color:#9fc9a2">+1</span><span style="color:var(--color-danger)">−1</span><span class="spacer"></span>retry.ts · L18</div>
+					</div>
+				</div>
+				<div class="m-dock">Ask, @ to add context…<span class="send">↑</span></div>
+			</div>
+			<ul class="rules">
+				<li><b>&lt; 1020px</b><span>Rail, tree and editor collapse into a file drawer; the AI panel becomes the main surface, opened from any tab.</span></li>
+				<li><b>&lt; 640px</b><span>The chat is the whole screen. Code appears as tappable diff cards with the file and line in the header.</span></li>
+				<li><b>Type floor</b><span>12px chat and code, 10px stage chips. Mono carries paths and diffs exactly as on desktop.</span></li>
+				<li><b>Input dock</b><span>The 30px desktop input grows to a 38px dock with a 24px send square — the only filled element, so the orange rule still holds.</span></li>
+				<li><b>Hover → tap</b><span>Ghost-button hovers have no equivalent; accept/reject move into the diff card as two quiet buttons.</span></li>
+				<li><b>Status bar</b><span>Branch, warnings and caret position drop to a single mono line above the dock, or disappear when the diff card is open.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the calm</h2>
+		<div class="compare">
+			<div class="cmp-off">AI-FUTURE GRADIENT CARD
+				<small>20px radius · purple-to-orange gradient · glowing brand shadow · shouty 20px heading. The agent deserves quiet confidence, not a launch banner.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>8px radius, raised graphite fill, 1px border, 13px text, lavender reserved for the stage chip. Calm is the feature.</small></div>
+		</div>
+		<p class="note">Also out: pure black canvases, orange text or washes, pastels used as decoration, and any button taller than 32px inside the editor chrome.</p>
+	</section>
+
+</div>
+</body>
+</html>

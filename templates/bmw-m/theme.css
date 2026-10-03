@@ -1,0 +1,25 @@
+/* BMW M — near-black canvas, white uppercase type, M tri-stripe as the only ornament. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #ffffff;
+	--color-primary-foreground: #000000;
+	--color-surface: #000000;
+	--color-surface-foreground: #ffffff;
+	--color-surface-raised: #1a1a1a;
+	--color-muted: #7e7e7e;
+	--color-accent: #e22718;
+	--color-danger: #e22718;
+	--color-border: #3c3c3c;
+	--color-m-red: #e22718;
+	--color-m-blue: #0066b1;
+	--color-m-blue-dark: #1c69d4;
+
+	--radius-sm: 0px;
+	--radius-md: 2px;
+	--radius-lg: 4px;
+	--radius-xl: 6px;
+	--radius-2xl: 8px;
+
+	--shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+	--shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);
+	--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.6);
+}

@@ -1,0 +1,68 @@
+/* Cyberpunk — a synthwave night city: violet-black glass, neon pink and cyan
+   that glow instead of casting shadows, holographic sunset gradients and
+   scanline texture. Original spec for this collection, synthesizing the shared
+   conventions of the cyberpunk/synthwave web revival. */
+@theme {
+	/* Neon pink is the brand voice: active tabs, primary buttons, headings. */
+	--color-primary: #ff71ce;
+	/* Ink on neon is the violet-black glass — never white, which would bloom out. */
+	--color-primary-foreground: #12081f;
+	--color-surface: #12081f;
+	--color-surface-foreground: #f8f2ff;
+	/* Raised panels are one violet step up, like a sign lit against the sky. */
+	--color-surface-raised: #1a0b2e;
+	/* Hazy violet for secondary text; it should read as distant neon, not gray. */
+	--color-muted: #8b7bb8;
+	--color-accent: #01cdfe;
+	--color-danger: #ff2a6d;
+	/* Borders are dim violet tube-glass; structure is barely-there until lit. */
+	--color-border: #3d2b5e;
+
+	/* The rest of the sign shop: the two neons by name, plus sunset orange. */
+	--color-neon-pink: #ff71ce;
+	--color-neon-cyan: #01cdfe;
+	--color-neon-yellow: #fcee09;
+	--color-sunset-orange: #ff9e00;
+
+	/* The city has almost no curves: sm 0 / md 2 / lg 4 and nothing above 8. */
+	--radius-sm: 0px;
+	--radius-md: 2px;
+	--radius-lg: 4px;
+	--radius-xl: 6px;
+	--radius-2xl: 8px;
+
+	/* Depth is light, not shadow: zero-offset bloom in the element's own neon. */
+	--shadow-sm: 0 0 6px rgb(255 113 206 / 0.35);
+	--shadow-md: 0 0 12px rgb(255 113 206 / 0.4);
+	--shadow-lg: 0 0 24px rgb(1 205 254 / 0.45);
+	--shadow-glow-cyan: 0 0 12px rgb(1 205 254 / 0.5);
+	--shadow-glow-yellow: 0 0 12px rgb(252 238 9 / 0.5);
+	--shadow-glow-red: 0 0 12px rgb(255 42 109 / 0.55);
+
+	/* The signature surfaces: a sun setting over the grid, once per screen. */
+	--gradient-sunset: linear-gradient(
+		180deg,
+		#1a0b2e 0%,
+		#55187a 35%,
+		#b967ff 65%,
+		#ff71ce 85%,
+		#ff9e00 100%
+	);
+	/* Chrome text fill for retro-future wordmarks, clipped to the glyphs. */
+	--gradient-chrome: linear-gradient(180deg, #f8f2ff 0%, #8b7bb8 45%, #f8f2ff 55%, #01cdfe 100%);
+	/* The perspective grid floor behind hero content, fading with distance. */
+	--gradient-grid: repeating-linear-gradient(
+			90deg,
+			rgb(1 205 254 / 0.18) 0px,
+			rgb(1 205 254 / 0.18) 1px,
+			transparent 1px,
+			transparent 40px
+		),
+		repeating-linear-gradient(
+			0deg,
+			rgb(255 113 206 / 0.14) 0px,
+			rgb(255 113 206 / 0.14) 1px,
+			transparent 1px,
+			transparent 40px
+		);
+}

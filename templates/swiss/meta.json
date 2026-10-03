@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "swiss",
+	"name": "Swiss Grid",
+	"version": "1.0.0",
+	"order": 83,
+	"category": "creative",
+	"vibe": "light",
+	"tags": [
+		"creative",
+		"light"
+	],
+	"blurb": "International typographic discipline: white ground, ink text, one Swiss red, strict visible grids and zero ornament.",
+	"tagline": {
+		"en": "The grid is the design",
+		"zh": "网格即设计"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing Swiss/International Typographic Style conventions for the web."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

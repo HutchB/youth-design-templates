@@ -1,0 +1,38 @@
+/* Liquid Glass — an original spec for this collection, synthesizing Apple's
+   Liquid Glass material language (iOS 26 / macOS 26) as publicly presented:
+   tinted translucent layers, specular edge highlights, vivid fluid backdrops.
+   No Apple assets included. Not affiliated with or endorsed by Apple Inc. */
+@theme {
+	--color-primary: #0a84ff; /* systemBlue — active tiles and the primary control */
+	--color-primary-foreground: #ffffff;
+	--color-surface: rgb(16 18 26 / 0.55); /* tinted translucent glass, never opaque */
+	--color-surface-foreground: #f5f7ff; /* near-white ink on glass */
+	--color-surface-raised: rgb(32 36 48 / 0.6); /* denser glass for top-most panels */
+	--color-muted: rgb(235 240 255 / 0.62); /* secondary text on glass */
+	--color-accent: #ff375f; /* systemPink — the rare second signal */
+	--color-danger: #ff453a;
+	--color-border: rgb(255 255 255 / 0.16); /* the resting edge */
+
+	/* The specular system: edges bend light, so a bright inset stroke is mandatory. */
+	--edge-highlight: rgb(255 255 255 / 0.45);
+	--edge-ground: rgb(255 255 255 / 0.1);
+	--blur-glass: 24px;
+	--saturate-glass: 180%;
+	--color-cyan: #64d2ff; /* systemCyan — garnish, at most once per screen */
+
+	/* The backdrop owns the color: staged as large radial light fields. */
+	--gradient-backdrop-a: #2b1e66; /* violet */
+	--gradient-backdrop-b: #0e7a8a; /* teal */
+	--gradient-backdrop-c: #c2186e; /* magenta */
+
+	--radius-sm: 12px;
+	--radius-md: 16px;
+	--radius-lg: 20px;
+	--radius-xl: 28px;
+	--radius-2xl: 32px;
+
+	/* Depth plus light: the drop keeps the panel up, the inset edges bend light. */
+	--shadow-sm: 0 2px 12px rgb(0 0 0 / 0.25), inset 0 1px 0 rgb(255 255 255 / 0.28);
+	--shadow-md: 0 8px 32px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.1);
+	--shadow-lg: 0 20px 64px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.5), inset 0 -1px 0 rgb(255 255 255 / 0.12);
+}

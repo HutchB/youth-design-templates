@@ -1,0 +1,22 @@
+/* Cursor — warm-graphite AI editor dark; brand voltage is Cursor Orange. Palette adapted from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #f54e00;
+	--color-primary-foreground: #ffffff;
+	--color-surface: #1e1f22;
+	--color-surface-foreground: #e8eaed;
+	--color-surface-raised: #26282c;
+	--color-muted: #9aa0a6;
+	--color-accent: #c0a8dd;
+	--color-danger: #f87171;
+	--color-border: #33363b;
+
+	--radius-sm: 4px;
+	--radius-md: 6px;
+	--radius-lg: 8px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+	--shadow-md: 0 4px 16px rgb(0 0 0 / 0.45);
+	--shadow-lg: 0 16px 48px rgb(0 0 0 / 0.55);
+}

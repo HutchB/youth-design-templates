@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple macOS — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0a7cff;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #1d1d1f;
+		--color-surface-raised: #f0f0f2;
+		--color-muted: #6e6e73;
+		--color-accent: #28cd41;
+		--color-danger: #ff453a;
+		--color-border: #d5d5d7;
+		--color-traffic-close: #ff5f57;
+		--color-traffic-min: #febc2e;
+		--color-traffic-max: #28c840;
+		--color-menubar: rgb(246 246 248 / 0.72);
+		--color-sidebar: rgb(240 240 244 / 0.8);
+		--blur-vibrancy: 24px;
+		--radius-sm: 6px;
+		--radius-md: 8px;
+		--radius-lg: 12px;
+		--radius-xl: 16px;
+		--radius-2xl: 20px;
+		--shadow-sm: 0 1px 3px rgb(0 0 0 / 0.08);
+		--shadow-md: 0 8px 24px rgb(0 0 0 / 0.14);
+		--shadow-lg: 0 24px 64px rgb(0 0 0 / 0.22);
+		--sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body { margin: 0; background: var(--color-surface); color: var(--color-surface-foreground); font-family: var(--sans); font-size: 13px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+	h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 88px; }
+	.section { padding-top: 44px; }
+	.section-label { font-size: 12px; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
+	.section h2 { font-size: 21px; }
+	.lede { margin-top: 6px; max-width: 74ch; font-size: 13px; color: var(--color-muted); }
+	.note { margin-top: 14px; font-size: 12px; color: var(--color-muted); }
+
+	/* ── COVER: the Mac desktop — menubar, wallpaper, window, Dock ── */
+	.stage { padding: 36px 16px 8px; }
+	.desktop { position: relative; max-width: 880px; height: 640px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-lg);
+		background: radial-gradient(120% 90% at 18% 8%, #a9c9ff 0%, rgb(169 201 255 / 0) 58%), radial-gradient(100% 80% at 88% 22%, #cdbdf7 0%, rgb(205 189 247 / 0) 55%), radial-gradient(130% 110% at 62% 108%, #86dccb 0%, rgb(134 220 203 / 0) 60%), linear-gradient(180deg, #e3ecf7, #ccd7e8); }
+	.menubar { position: absolute; top: 0; left: 0; right: 0; z-index: 3; height: 26px; display: flex; align-items: center; gap: 14px; padding: 0 12px; background: var(--color-menubar); -webkit-backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); border-bottom: 1px solid rgb(0 0 0 / 0.08); }
+	.menubar .logo { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffffff, #b7bcc7 72%); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15); }
+	.menubar b { font-weight: 700; }
+	.menubar .item { color: rgb(29 29 31 / 0.85); }
+	.tray { display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgb(29 29 31 / 0.85); }
+	.batt { width: 20px; height: 10px; border: 1px solid rgb(29 29 31 / 0.6); border-radius: 3px; position: relative; }
+	.batt::before { content: ""; position: absolute; top: 1px; bottom: 1px; left: 1px; right: 6px; background: rgb(29 29 31 / 0.75); border-radius: 1.5px; }
+	.batt::after { content: ""; position: absolute; right: -3px; top: 2.5px; width: 2px; height: 5px; background: rgb(29 29 31 / 0.6); border-radius: 0 1px 1px 0; }
+
+	.window { position: absolute; left: 50%; top: 52px; transform: translateX(-50%); width: min(690px, calc(100% - 48px)); height: 480px; display: flex; flex-direction: column; border-radius: var(--radius-lg); overflow: hidden; background: rgb(255 255 255 / 0.86); -webkit-backdrop-filter: blur(var(--blur-vibrancy)) saturate(140%); backdrop-filter: blur(var(--blur-vibrancy)) saturate(140%); box-shadow: var(--shadow-md), 0 0 0 1px rgb(0 0 0 / 0.1); }
+	.titlebar { position: relative; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; flex: none; background: var(--color-sidebar); border-bottom: 1px solid var(--color-border); }
+	.lights { display: flex; gap: 8px; }
+	.lights i { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.14); }
+	.l-close { background: var(--color-traffic-close); }
+	.l-min { background: var(--color-traffic-min); }
+	.l-max { background: var(--color-traffic-max); }
+	.win-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 600; color: var(--color-muted); }
+	.winbody { flex: 1; display: grid; grid-template-columns: 190px 1fr; min-height: 0; }
+	.sidebar { background: var(--color-sidebar); -webkit-backdrop-filter: blur(var(--blur-vibrancy)); backdrop-filter: blur(var(--blur-vibrancy)); border-right: 1px solid var(--color-border); padding: 8px; overflow: hidden; }
+	.side-user { display: flex; align-items: center; gap: 8px; padding: 6px 8px 10px; }
+	.side-user .avatar { width: 30px; height: 30px; border-radius: 50%; flex: none; background: var(--color-primary); color: var(--color-primary-foreground); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+	.side-user b { display: block; font-size: 12px; }
+	.side-user small { font-size: 10px; color: var(--color-muted); }
+	.side-item { display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; border-radius: var(--radius-sm); font-size: 12px; }
+	.side-item .g { width: 16px; height: 16px; border-radius: 5px; flex: none; display: grid; place-items: center; color: #fff; font-size: 9px; }
+	.side-item.is-on { background: var(--color-primary); color: var(--color-primary-foreground); font-weight: 500; }
+	.side-h { font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 10px 8px 4px; }
+	.content { padding: 18px 20px; overflow: hidden; background: rgb(255 255 255 / 0.72); }
+	.content h3 { font-size: 17px; }
+	.card { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.05); margin-top: 12px; overflow: hidden; }
+	.crow { position: relative; display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 6px 14px; font-size: 13px; }
+	.crow + .crow::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--color-border); }
+	.crow .val { color: var(--color-muted); }
+	.chev { color: var(--color-border); margin-left: -2px; }
+	.card-h { margin: 16px 2px 0; font-size: 11px; font-weight: 600; color: var(--color-muted); }
+	.sig { color: var(--color-muted); font-size: 11px; width: 14px; text-align: center; }
+	.conn { font-size: 10px; font-weight: 600; color: var(--color-accent); }
+	/* macOS switch: smaller than iOS; on-state takes the accent (blue here). */
+	.swh { position: relative; width: 38px; height: 22px; border-radius: 999px; background: rgb(120 120 128 / 0.22); flex: none; }
+	.swh::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 0.25); }
+	.swh.is-on { background: var(--color-primary); }
+	.swh.is-on::after { left: 18px; }
+	.swh.is-green { background: var(--color-accent); }
+
+	.dock { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 8px; padding: 8px; background: rgb(255 255 255 / 0.55); -webkit-backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); border-radius: var(--radius-2xl); box-shadow: var(--shadow-md), inset 0 0 0 1px rgb(255 255 255 / 0.5); }
+	.dico { position: relative; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-size: 16px; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25), 0 1px 3px rgb(0 0 0 / 0.2); }
+	.dico.running::after { content: ""; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: rgb(29 29 31 / 0.55); }
+	.dsep { width: 1px; height: 30px; background: rgb(0 0 0 / 0.18); }
+
+	/* ── 01 color swatches ── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--color-surface); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 12px; font-weight: 600; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── 02 materials and the shadow ladder ── */
+	.glass-stage { margin-top: 20px; border-radius: var(--radius-lg); overflow: hidden; min-height: 200px; position: relative; display: flex; gap: 14px; padding: 18px;
+		background: radial-gradient(90% 90% at 15% 10%, #a9c9ff 0%, rgb(169 201 255 / 0) 60%), radial-gradient(80% 80% at 90% 80%, #cdbdf7 0%, rgb(205 189 247 / 0) 60%), linear-gradient(160deg, #dfe9f5, #ccd7e8); }
+	.menubar-sample, .sidebar-sample { border-radius: var(--radius-md); padding: 10px 14px; font-size: 12px; font-weight: 600; }
+	.menubar-sample { align-self: flex-start; background: var(--color-menubar); -webkit-backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); backdrop-filter: blur(var(--blur-vibrancy)) saturate(150%); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.sidebar-sample { align-self: stretch; flex: 1; background: var(--color-sidebar); -webkit-backdrop-filter: blur(var(--blur-vibrancy)); backdrop-filter: blur(var(--blur-vibrancy)); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.sidebar-sample small { display: block; margin-top: 6px; font-weight: 400; color: var(--color-muted); }
+	.ladder { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 20px; }
+	@media (min-width: 720px) { .ladder { grid-template-columns: repeat(3, 1fr); } }
+	.ladder .run { background: var(--color-surface-raised); border-radius: var(--radius-lg); padding: 22px 16px 16px; min-height: 110px; display: flex; flex-direction: column; justify-content: flex-end; }
+	.ladder .run b { font-size: 12px; }
+	.ladder .run span { font-size: 11px; color: var(--color-muted); }
+	.run-1 { box-shadow: var(--shadow-sm); }
+	.run-2 { box-shadow: var(--shadow-md); }
+	.run-3 { box-shadow: var(--shadow-lg); }
+
+	/* ── 03 controls ── */
+	.controls { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; margin-top: 20px; padding: 20px; background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.mbtn { font: 500 13px/1 var(--sans); border: 0; border-radius: var(--radius-sm); padding: 6px 14px; cursor: pointer; }
+	.mbtn-filled { background: var(--color-primary); color: var(--color-primary-foreground); box-shadow: var(--shadow-sm); }
+	.mbtn-gray { background: var(--color-surface); color: var(--color-surface-foreground); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.12); }
+	.popup { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.12); font-size: 12px; }
+	.popup .dchev { color: var(--color-muted); font-size: 9px; line-height: 0.8; text-align: center; }
+	.cbx { width: 14px; height: 14px; border-radius: 4px; display: inline-grid; place-items: center; background: var(--color-primary); color: #fff; font-size: 10px; font-weight: 700; }
+	.cbx.empty { background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border); }
+	.slider { position: relative; width: 200px; height: 4px; border-radius: 2px; background: rgb(0 0 0 / 0.12); }
+	.slider::before { content: ""; position: absolute; inset: 0; right: 60%; border-radius: 2px; background: var(--color-primary); }
+	.slider .knob { position: absolute; left: 40%; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgb(0 0 0 / 0.3), 0 0 0 0.5px rgb(0 0 0 / 0.15); }
+
+	/* ── 04 type ramp ── */
+	.ramp { margin-top: 20px; background: var(--color-surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.ramp .r { display: flex; align-items: baseline; gap: 14px; padding: 8px 16px; border-bottom: 1px solid var(--color-border); }
+	.ramp .r:last-child { border-bottom: 0; }
+	.ramp .sample { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.ramp .tag { flex: none; width: 130px; font-size: 10px; color: var(--color-muted); }
+
+	/* ── 05 mobile ── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.iphone { width: 320px; max-width: 100%; margin: 0 auto; border-radius: 40px; border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-lg); overflow: hidden; }
+	.statusrow { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px 2px; font-size: 14px; font-weight: 600; }
+	.island { width: 84px; height: 24px; border-radius: 999px; background: #000; }
+	.nav-title { font-size: 28px; font-weight: 700; padding: 16px 18px 8px; letter-spacing: -0.02em; }
+	.nav-bar { display: flex; align-items: center; padding: 8px 14px; border-bottom: 1px solid var(--color-border); background: var(--color-surface-raised); font-size: 15px; font-weight: 600; }
+	.nav-bar .back { color: var(--color-primary); font-weight: 400; }
+	.mrow { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 8px 16px; font-size: 15px; }
+	.mrow + .mrow::before { content: ""; position: absolute; top: 0; left: 46px; right: 0; height: 1px; background: var(--color-border); }
+	.mrow .g { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; color: #fff; font-size: 12px; flex: none; }
+	.mrow .val { color: var(--color-muted); font-size: 14px; }
+	.chev2 { color: var(--color-border); font-size: 16px; }
+	.homebar { width: 120px; height: 5px; border-radius: 999px; background: #000; margin: 6px auto 10px; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 14px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 128px; font-size: 13px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 06 off-style ── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { border-radius: var(--radius-lg); padding: 16px; font-size: 13px; }
+	.cmp small { display: block; margin-top: 10px; font-size: 12px; color: var(--color-muted); line-height: 1.5; }
+	.ios-off { background: #f2f2f7; border-radius: var(--radius-md); padding: 14px; }
+	.ios-group { background: #fff; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+	.ios-row { position: relative; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; font-size: 17px; }
+	.ios-row + .ios-row::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: rgb(60 60 67 / 0.29); }
+	.mac-on { background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md); }
+	.mac-on .t { position: relative; display: flex; align-items: center; height: 26px; padding: 0 10px; background: var(--color-sidebar); border-bottom: 1px solid var(--color-border); }
+	.mac-on .t i { width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+	.mac-on .t span { position: absolute; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: var(--color-muted); }
+	.mac-on .b { display: grid; grid-template-columns: 110px 1fr; background: var(--color-surface); }
+	.mac-on .s { padding: 6px; border-right: 1px solid var(--color-border); }
+	.mac-on .s i { display: flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; font-size: 11px; font-style: normal; }
+	.mac-on .s i.on { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.mac-on .c { padding: 6px 10px; }
+	.mac-on .c i { display: flex; align-items: center; justify-content: space-between; height: 24px; font-size: 12px; font-style: normal; border-bottom: 1px solid var(--color-border); }
+	.mac-on .c i:last-child { border-bottom: 0; }
+	.mac-on .c i em { color: var(--color-muted); font-style: normal; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the Mac desktop itself: translucent menu bar over a wallpaper,
+     a System Settings window with traffic lights and a vibrant sidebar, and
+     the Dock. No hero, no marketing chrome: the first screen IS the platform. -->
+<div class="stage">
+	<div class="desktop">
+		<div class="menubar">
+			<span class="logo"></span>
+			<b>Settings</b>
+			<span class="item">File</span><span class="item">Edit</span><span class="item">View</span><span class="item">Window</span><span class="item">Help</span>
+			<span class="spacer"></span>
+			<span class="tray">⌇ <span class="batt"></span> Mon 9:41</span>
+		</div>
+
+		<div class="window">
+			<div class="titlebar">
+				<span class="lights"><i class="l-close"></i><i class="l-min"></i><i class="l-max"></i></span>
+				<span class="win-title">System Settings</span>
+			</div>
+			<div class="winbody">
+				<aside class="sidebar">
+					<div class="side-user">
+						<span class="avatar">KM</span>
+						<span><b>Kai Meyer</b><small>Apple Account</small></span>
+					</div>
+					<div class="side-item is-on"><span class="g" style="background:var(--color-primary)">⌇</span>Wi-Fi</div>
+					<div class="side-item"><span class="g" style="background:var(--color-primary)">ᛒ</span>Bluetooth</div>
+					<div class="side-item"><span class="g" style="background:var(--color-accent)">▤</span>Network</div>
+					<div class="side-h">Sound &amp; focus</div>
+					<div class="side-item"><span class="g" style="background:#ff2d55">♪</span>Sounds</div>
+					<div class="side-item"><span class="g" style="background:var(--color-accent)">☾</span>Focus</div>
+					<div class="side-item"><span class="g" style="background:var(--color-danger)">◉</span>Notifications</div>
+					<div class="side-h">General</div>
+					<div class="side-item"><span class="g" style="background:#8e8e93">⌘</span>General</div>
+				</aside>
+				<main class="content">
+					<h3>Wi-Fi</h3>
+					<div class="card">
+						<div class="crow">Wi-Fi <span class="spacer"></span><span class="swh is-on"></span></div>
+						<div class="crow">Ask to join hotspots <span class="spacer"></span><span class="val">Notify</span><span class="chev">⌄</span></div>
+						<div class="crow">Known networks <span class="spacer"></span><span class="val">4</span><span class="chev">⌄</span></div>
+					</div>
+					<p class="card-h">PREFERRED NETWORKS</p>
+					<div class="card">
+						<div class="crow"><span class="sig">▮▮▮</span>Vetta-5G <span class="conn">Connected</span><span class="spacer"></span><span class="val">This network</span><span class="chev">›</span></div>
+						<div class="crow"><span class="sig">▮▮</span>Studio Loft <span class="spacer"></span><span class="val">Auto-join</span><span class="chev">›</span></div>
+					</div>
+					<div class="card">
+						<div class="crow">Battery wellness <span class="spacer"></span><span class="val">Normal</span><span class="chev">›</span></div>
+						<div class="crow">Optimize charging <span class="spacer"></span><span class="swh is-on is-green"></span></div>
+					</div>
+				</main>
+			</div>
+		</div>
+
+		<div class="dock">
+			<span class="dico running" style="background:linear-gradient(180deg,#4facfe,#0a7cff)">⌘</span>
+			<span class="dico" style="background:linear-gradient(180deg,#a8b0bd,#6e7787)">◐</span>
+			<span class="dico" style="background:linear-gradient(180deg,#ff7eb3,#ff2d55)">♪</span>
+			<span class="dico" style="background:linear-gradient(180deg,#5fd7a5,#28cd41)">✉</span>
+			<span class="dico" style="background:linear-gradient(180deg,#b39ddb,#7c5cd6)">✎</span>
+			<span class="dsep"></span>
+			<span class="dico" style="background:linear-gradient(180deg,#aab2bf,#7d8593)">⌫</span>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 COLOR -->
+	<section class="section">
+		<p class="section-label">01 — Color roles</p>
+		<h2>Calm gray chrome, one accent, a Mac green</h2>
+		<p class="lede">Windows are white, chrome is a single warm gray, and one blue does the pointing.
+			The green is macOS systemGreen — a slightly different value from the iPhone's, one of the visible
+			seams between the platforms. The accent follows the user's system setting, so every hex here is
+			a community-sampled default, not a brand law.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>accent blue · selection</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>macOS systemGreen #28CD41</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-surface-raised)"></div><div class="meta"><b>surface-raised</b><span>sidebar &amp; toolbar gray</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>destructive only</span></div></div>
+		</div>
+		<p class="note">Traffic lights — #FF5F57 / #FEBC2E / #28C840 — belong to window chrome alone;
+			in dark mode every role shifts values together. This theme pins the light column.</p>
+	</section>
+
+	<!-- 02 MATERIALS -->
+	<section class="section">
+		<p class="section-label">02 — Shape &amp; depth</p>
+		<h2>Vibrancy for chrome, a shadow ladder for surfaces</h2>
+		<p class="lede">Two materials do all the work. Chrome (menu bar, sidebar) is translucent gray plus a
+			24px backdrop blur — vibrancy, letting the wallpaper glow through. Surfaces float on a shadow
+			ladder: hovered controls take shadow-sm, popovers and the Dock shadow-md, the window itself a
+			large diffuse shadow-lg. iOS depth is background steps; Mac depth is real elevation.</p>
+		<div class="glass-stage">
+			<div class="menubar-sample">Menu bar — rgb(246 246 248 / 0.72) + blur(24px)</div>
+			<div class="sidebar-sample">Vibrancy sidebar — rgb(240 240 244 / 0.8) + blur(24px)
+				<small>The wallpaper glows through; the tint stays gray, never colored.</small>
+			</div>
+		</div>
+		<div class="ladder">
+			<div class="run run-1"><b>shadow-sm</b><span>0 1px 3px · hovered control</span></div>
+			<div class="run run-2"><b>shadow-md</b><span>0 8px 24px · popover, Dock</span></div>
+			<div class="run run-3"><b>shadow-lg</b><span>0 24px 64px · the window</span></div>
+		</div>
+	</section>
+
+	<!-- 03 CONTROLS -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>Small, precise, pointer-first</h2>
+		<p class="lede">Controls run at Mac sizes: 6px corners, 13px labels, compact metrics. The switch is
+			smaller than the iOS one and takes the accent when on — with a green accent it goes green. One
+			filled button per view; everything else is white with a hairline.</p>
+		<div class="controls">
+			<button class="mbtn mbtn-filled" type="button">Continue</button>
+			<button class="mbtn mbtn-gray" type="button">Cancel</button>
+			<span class="popup">Notify <span class="dchev">⌄<br>⌃</span></span>
+			<span class="cbx">✓</span><span>Selected</span>
+			<span class="swh is-on"></span><span>Switch on</span>
+			<span class="swh"></span><span>Switch off</span>
+			<span class="slider"><span class="knob"></span></span><span>Volume</span>
+		</div>
+		<p class="note">Popups carry paired chevrons; checkboxes and radios tint with the accent;
+			destructive buttons stay plain text in danger red.</p>
+	</section>
+
+	<!-- 04 TYPE -->
+	<section class="section">
+		<p class="section-label">04 — Typography</p>
+		<h2>13px body — the Mac runs denser than the phone</h2>
+		<p class="lede">The system stack is the identity (SF is not redistributable, so the stack starts
+			with -apple-system). Sizes center on the 13px Mac default, with 11px for sidebar labels and
+			secondary text. Emphasis is weight, not size.</p>
+		<div class="ramp">
+			<div class="r"><span class="sample" style="font-size:17px;font-weight:700">Page title in content</span><span class="tag">17 · bold</span></div>
+			<div class="r"><span class="sample" style="font-size:13px;font-weight:600">Window title / toolbar</span><span class="tag">13 · semibold</span></div>
+			<div class="r"><span class="sample" style="font-size:13px">Body and controls</span><span class="tag">13 · regular</span></div>
+			<div class="r"><span class="sample" style="font-size:11px">Sidebar labels, secondary text</span><span class="tag">11</span></div>
+		</div>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>The desktop dissolves into the phone idiom</h2>
+		<p class="lede">Below desktop sizes the Mac metaphor lets go: no menu bar, no Dock, no traffic
+			lights. The window becomes a full-screen app and the sidebar becomes navigation; what survives
+			is the temperament — quiet gray chrome, one accent, hairline rows.</p>
+		<div class="mobile">
+			<div class="iphone">
+				<div class="statusrow"><span>9:41</span><span class="island"></span><span>▮▮▮</span></div>
+				<div class="nav-title">Settings</div>
+				<div class="card" style="margin:0 16px 14px;box-shadow:0 0 0 1px rgb(0 0 0 / 0.06)">
+					<div class="mrow"><span class="g" style="background:var(--color-primary)">⌇</span>Wi-Fi<span class="spacer"></span><span class="val">Vetta-5G</span><span class="chev2">›</span></div>
+					<div class="mrow"><span class="g" style="background:var(--color-primary)">ᛒ</span>Bluetooth<span class="spacer"></span><span class="val">On</span><span class="chev2">›</span></div>
+					<div class="mrow"><span class="g" style="background:var(--color-accent)">▤</span>Network<span class="spacer"></span><span class="chev2">›</span></div>
+				</div>
+				<div class="card" style="margin:0 16px 14px;box-shadow:0 0 0 1px rgb(0 0 0 / 0.06)">
+					<div class="mrow"><span class="g" style="background:#8e8e93">⌘</span>General<span class="spacer"></span><span class="chev2">›</span></div>
+					<div class="mrow"><span class="g" style="background:var(--color-danger)">◉</span>Notifications<span class="spacer"></span><span class="chev2">›</span></div>
+					<div class="mrow"><span class="g" style="background:var(--color-accent)">☾</span>Focus<span class="spacer"></span><span class="swh is-on"></span></div>
+				</div>
+				<div class="nav-bar"><span class="back">‹ Back</span><span class="spacer"></span>Wi-Fi<span class="spacer"></span><span style="color:var(--color-primary);font-weight:400">Edit</span></div>
+				<div class="homebar"></div>
+			</div>
+			<ul class="rules">
+				<li><b>Chrome dissolves</b><span>The menu bar, Dock and traffic lights have no touch equivalent. The window becomes the full screen; launching moves to the home screen and view-switching to tab bars.</span></li>
+				<li><b>Sidebar becomes navigation</b><span>The vibrant list turns into a pushed detail view with a back chevron. Selection color survives: the detail title keeps the accent treatment.</span></li>
+				<li><b>Type and rows grow</b><span>13px body rises to 15–17px and rows stretch to 44pt minimums — fingers tap where a pointer once hovered. Compact controls relax to their iOS metrics.</span></li>
+				<li><b>Vibrancy retreats to bars</b><span>The sidebar's blur becomes a solid or near-solid fill for legibility; translucent material remains on navigation bars, as the iOS system does it.</span></li>
+				<li><b>Hover becomes press</b><span>The pointer's soft gray highlight becomes a pressed fill for as long as the finger stays down; switches and checkboxes still take the user's accent in one motion.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the Mac</h2>
+		<div class="compare">
+			<div class="cmp cmp-off" style="padding:0;overflow:hidden;background:var(--color-surface)">
+				<div class="ios-off" style="border-radius:0">
+					<div class="ios-group">
+						<div class="ios-row">Wi-Fi <span class="spacer"></span><span class="swh is-on" style="width:44px;height:26px"></span></div>
+						<div class="ios-row">Bluetooth <span class="spacer"></span><span style="color:rgb(60 60 67 / 0.6);font-size:15px">On</span><span class="chev">›</span></div>
+					</div>
+					<div class="ios-group">
+						<div class="ios-row" style="color:var(--color-primary)">Sign Out</div>
+						<div class="ios-row" style="color:var(--color-danger)">Delete Account</div>
+					</div>
+				</div>
+				<small style="padding:10px 14px 0">An iPhone grouped list transplanted into the desktop:
+					gray canvas, inset white groups, 17px rows, 44pt minimums — no window chrome anywhere.</small>
+			</div>
+			<div class="cmp cmp-on">
+				<div class="mac-on">
+					<div class="t"><i class="l-close"></i><i class="l-min"></i><i class="l-max"></i><span>System Settings</span></div>
+					<div class="b">
+						<div class="s"><i class="on">Wi-Fi</i><i>Bluetooth</i><i>Network</i></div>
+						<div class="c"><i>Ask to join hotspots <em>Notify</em></i><i>Known networks <em>4</em></i></div>
+					</div>
+				</div>
+				<small>The same settings as Mac chrome: a window with traffic lights, a vibrant sidebar,
+					13px hairline rows. The platform reads from the chrome, not the list style.</small>
+			</div>
+		</div>
+		<p class="note">Also out: a flat window with no shadow, traffic lights on content cards, colored
+			sidebars, custom fonts, and a fixed "Apple blue" treated as brand law — the accent is the
+			user's, not yours.</p>
+	</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "material-3",
+	"name": "Material 3",
+	"version": "1.0.0",
+	"order": 107,
+	"category": "native",
+	"vibe": "light",
+	"tags": [
+		"native",
+		"light"
+	],
+	"blurb": "Google's Material 3 expressive baseline: tonal purple surfaces, large rounded shapes, filled tonal containers and gentle elevation.",
+	"tagline": {
+		"en": "Tonal, rounded, expressive",
+		"zh": "色调分层，圆润有表现力"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://m3.material.io/",
+		"note": "Adapted from Material Design 3 baseline tokens (Apache-2.0); original descriptions. Not affiliated with or endorsed by Google."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

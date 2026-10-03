@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luxury Serif — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #1a1a18;
+		--color-primary-foreground: #faf8f3;
+		--color-surface: #faf8f3;
+		--color-surface-foreground: #1a1a18;
+		--color-surface-raised: #ffffff;
+		--color-muted: #857f72;
+		--color-accent: #bfa05a;
+		--color-danger: #8c2f22;
+		--color-border: #e6e0d2;
+		--color-gold-line: #d9c9a3;
+
+		--radius-sm: 0px;
+		--radius-md: 2px;
+		--radius-lg: 2px;
+		--radius-xl: 4px;
+		--radius-2xl: 4px;
+
+		--shadow-sm: 0 1px 2px rgb(26 26 24 / 0.04);
+		--shadow-md: 0 2px 10px rgb(26 26 24 / 0.04);
+		--shadow-lg: 0 10px 30px rgb(26 26 24 / 0.05);
+
+		--display: "Didot", "Bodoni MT", "Times New Roman", ui-serif, Georgia, serif;
+		--serif: ui-serif, Georgia, "Times New Roman", serif;
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--serif);
+		font-size: 17px;
+		line-height: 1.7;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 400; line-height: 1.08; }
+	p { margin: 0; }
+	::selection { background: rgb(191 160 90 / 0.25); }
+	.spacer { flex: 1; }
+
+	/* Tracked caps: the 10–12px voice that does the work bold would do. */
+	.caps { font-family: var(--sans); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; }
+	.caps.gold { color: var(--color-accent); }
+	.caps.dim { color: var(--color-muted); }
+
+	.hairline { border: 0; border-top: 1px solid var(--color-gold-line); margin: 0; }
+
+	/* ── Navigation ───────────────────────────────────────────────── */
+	.nav { display: flex; align-items: center; gap: 28px; max-width: 1120px; margin: 0 auto; padding: 22px 32px; }
+	.nav .links { display: flex; gap: 22px; }
+	.nav a { font-family: var(--sans); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--color-muted); text-decoration: none; cursor: pointer; }
+	.nav a:hover { color: var(--color-surface-foreground); }
+	.wordmark { font-family: var(--display); font-size: 24px; letter-spacing: 0.34em; text-indent: 0.34em; }
+	.nav .cta { color: var(--color-accent); }
+
+	/* ── Hero ─────────────────────────────────────────────────────── */
+	.hero { max-width: 780px; margin: 0 auto; padding: 84px 32px 0; text-align: center; }
+	.hero h1 { font-size: clamp(52px, 8vw, 96px); margin-top: 26px; }
+	.hero h1 em { font-style: italic; }
+	.hero .lede { margin: 26px auto 0; max-width: 46ch; color: var(--color-muted); font-size: 18px; }
+
+	.btn {
+		font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase;
+		height: 52px; padding: 0 38px; border: 1px solid var(--color-primary); border-radius: var(--radius-md);
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: background-color 300ms ease;
+	}
+	.btn:hover { background: #000; }
+	.btn:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
+	.btn-ghost { background: transparent; color: var(--color-surface-foreground); border-color: var(--color-gold-line); transition: border-color 300ms ease, background-color 300ms ease; }
+	.btn-ghost:hover { border-color: var(--color-accent); background: rgb(191 160 90 / 0.06); }
+
+	/* Framed imagery: the vitrine. Gold hairline, generous mat, caption. */
+	.plate-wrap { max-width: 1120px; margin: 72px auto 0; padding: 0 32px 96px; }
+	.plate { background: var(--color-surface-raised); border: 1px solid var(--color-gold-line); padding: 26px; }
+	.plate-inner {
+		height: 420px; position: relative; overflow: hidden; border-radius: var(--radius-lg);
+		background: linear-gradient(165deg, #f3ecdd 0%, #e8dcc2 46%, #cbb289 100%);
+	}
+	/* A dial drawn in CSS: gold ring, cream face, two hands. */
+	.dial {
+		position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+		width: 240px; height: 240px; border-radius: 50%;
+		background: radial-gradient(circle at 38% 32%, #fbf7ee 0%, #efe6d2 58%, #dcc9a4 100%);
+		border: 1px solid var(--color-gold-line);
+		box-shadow: 0 10px 30px rgb(26 26 24 / 0.05);
+	}
+	.dial i { position: absolute; background: var(--color-surface-foreground); }
+	.dial .hour { width: 3px; height: 58px; left: calc(50% - 1.5px); top: calc(50% - 46px); transform: rotate(305deg); transform-origin: 50% 96%; }
+	.dial .min { width: 2px; height: 86px; left: calc(50% - 1px); top: calc(50% - 74px); transform: rotate(72deg); transform-origin: 50% 97%; }
+	.dial .pin { width: 9px; height: 9px; border-radius: 50%; background: var(--color-accent); left: calc(50% - 4.5px); top: calc(50% - 4.5px); }
+	.dial b { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--color-gold-line); }
+	.dial b.t { left: calc(50% - 2px); top: 16px; } .dial b.r { right: 16px; top: calc(50% - 2px); }
+	.dial b.b { left: calc(50% - 2px); bottom: 16px; } .dial b.l { left: 16px; top: calc(50% - 2px); }
+	.plate figcaption { margin: 18px 4px 2px; display: flex; gap: 14px; align-items: baseline; }
+	.plate figcaption b { font-family: var(--sans); font-weight: 500; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--color-accent); }
+
+	/* ── Spec list: hairlines frame the facts ─────────────────────── */
+	.specs { max-width: 780px; margin: 0 auto; padding: 0 32px 96px; }
+	.spec-row { display: flex; align-items: baseline; gap: 20px; padding: 18px 2px; border-bottom: 1px solid var(--color-border); }
+	.spec-row .k { color: var(--color-muted); }
+	.spec-row .v { margin-left: auto; font-family: var(--display); font-size: 21px; }
+	.spec-frame { border-top: 1px solid var(--color-gold-line); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 780px; margin: 0 auto; padding: 0 32px 96px; }
+	.section { margin-top: 96px; padding-top: 28px; border-top: 1px solid var(--color-gold-line); }
+	.section-label { font-size: 11px; color: var(--color-accent); letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; }
+	.section h2 { font-size: 38px; margin: 16px 0 14px; }
+	.lede { color: var(--color-muted); font-size: 16px; max-width: 58ch; }
+
+	.specimen { display: flex; align-items: baseline; gap: 24px; padding: 26px 2px; border-bottom: 1px solid var(--color-border); }
+	.specimen .glyph { font-family: var(--display); font-size: 76px; line-height: 1; }
+	.specimen .glyph.eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-accent); }
+	.specimen .glyph.body { font-size: 18px; max-width: 34ch; color: var(--color-muted); }
+	.specimen .glyph.nums { font-size: 44px; font-style: italic; color: var(--color-accent); }
+	.specimen .tag { margin-left: auto; font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-muted); white-space: nowrap; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 16px; margin-top: 28px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 72px; border: 1px solid var(--color-border); }
+	.sw .fill.hair { background: linear-gradient(rgb(217 201 163 / 0.45) 50%, transparent 50%); background-size: 100% 10px; border: 0; border-top: 1px solid var(--color-gold-line); }
+	.sw b { display: block; font-size: 12px; font-weight: 400; font-family: var(--sans); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 10px; }
+	.sw span { font-size: 13px; color: var(--color-muted); }
+
+	.row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+	.link-gold { font-family: var(--display); font-style: italic; font-size: 17px; color: var(--color-surface-foreground); text-decoration: underline; text-decoration-color: var(--color-accent); text-underline-offset: 6px; cursor: pointer; }
+	.link-gold:hover { color: var(--color-accent); }
+	.input {
+		font-family: var(--serif); font-size: 17px; width: 100%; max-width: 320px; height: 46px; padding: 0 2px;
+		background: transparent; border: 0; border-bottom: 1px solid var(--color-gold-line); border-radius: 0;
+		color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: var(--color-muted); font-style: italic; }
+	.input:focus { outline: none; border-bottom-color: var(--color-accent); }
+	.quote { margin-top: 34px; border-top: 1px solid var(--color-gold-line); padding-top: 30px; }
+	.quote p { font-family: var(--display); font-style: italic; font-size: 27px; line-height: 1.4; }
+	.quote .by { margin-top: 16px; }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 40px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-gold-line); border-radius: var(--radius-2xl);
+		overflow: hidden; background: var(--color-surface);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 8px 16px 2px; font-size: 10px; color: var(--color-muted); }
+	.phone-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--color-gold-line); }
+	.phone-nav .wm { font-family: var(--display); font-size: 15px; letter-spacing: 0.3em; text-indent: 0.3em; }
+	.phone-body { padding: 26px 18px 22px; text-align: center; }
+	.phone-body h6 { font-family: var(--display); font-weight: 400; font-size: 32px; line-height: 1.12; margin-top: 14px; }
+	.phone-body .sub { margin-top: 12px; font-size: 13px; color: var(--color-muted); line-height: 1.65; }
+	.phone-dial {
+		margin: 20px auto 0; width: 128px; height: 128px; border-radius: 50%; position: relative;
+		background: radial-gradient(circle at 38% 32%, #fbf7ee 0%, #efe6d2 58%, #dcc9a4 100%);
+		border: 1px solid var(--color-gold-line);
+	}
+	.phone-dial i { position: absolute; background: var(--color-surface-foreground); }
+	.phone-dial .hour { width: 2px; height: 30px; left: calc(50% - 1px); top: 26px; transform: rotate(305deg); transform-origin: 50% 100%; }
+	.phone-dial .min { width: 1.5px; height: 44px; left: calc(50% - 0.75px); top: 22px; transform: rotate(72deg); transform-origin: 50% 100%; }
+	.phone-dial .pin { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); left: calc(50% - 3px); top: calc(50% - 3px); }
+	.phone-foot { padding: 0 18px 20px; }
+	.phone-foot .btn { width: 100%; height: 48px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 15px 0; border-bottom: 1px solid var(--color-border); font-size: 15px; color: var(--color-muted); line-height: 1.6; }
+	.rules b { display: block; font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--color-surface-foreground); margin-bottom: 3px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		position: relative; padding: 30px 26px; text-align: center; border-radius: 14px; overflow: hidden;
+		background: linear-gradient(135deg, #ff4d6d 0%, #ff9e00 60%, #ffd23f 100%);
+		box-shadow: 0 14px 32px rgb(255 77 109 / 0.35);
+		color: #fff; font-family: var(--sans); font-weight: 800; font-size: 22px; text-transform: uppercase;
+	}
+	.cmp-off .burst {
+		position: absolute; top: -18px; right: -18px; width: 88px; height: 88px; display: grid; place-items: center;
+		background: #ffd23f; color: #b3001b; font-size: 13px; font-weight: 900; transform: rotate(12deg);
+		clip-path: polygon(50% 0%, 61% 12%, 77% 8%, 80% 25%, 96% 30%, 89% 45%, 100% 57%, 86% 66%, 88% 83%, 71% 82%, 63% 97%, 50% 87%, 37% 97%, 29% 82%, 12% 83%, 14% 66%, 0% 57%, 11% 45%, 4% 30%, 20% 25%, 23% 8%, 39% 12%);
+	}
+	.cmp-off small { display: block; margin-top: 10px; font-weight: 400; font-size: 12px; color: rgb(255 255 255 / 0.85); line-height: 1.6; }
+	.cmp-off .timer { display: inline-block; margin-top: 12px; padding: 7px 16px; border-radius: 9999px; background: #fff; color: #e0115f; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; }
+	.cmp-on { border: 1px solid var(--color-gold-line); padding: 34px 26px; text-align: center; background: var(--color-surface-raised); }
+	.cmp-on .eyebrow { color: var(--color-accent); }
+	.cmp-on h4 { font-family: var(--display); font-weight: 400; font-size: 27px; margin-top: 14px; }
+	.cmp-on h4 em { font-style: italic; }
+	.cmp-on .pr { margin-top: 10px; font-family: var(--display); font-style: italic; font-size: 17px; color: var(--color-accent); }
+	.note-plain { margin-top: 22px; font-size: 14px; color: var(--color-muted); line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the watchmaker's landing: three-part nav, gold hairline, Didone
+     hero, one charcoal button, and the framed dial plate. -->
+<nav class="nav">
+	<div class="links"><a>Collections</a><a>Maison</a><a>Journal</a></div>
+	<span class="wordmark">LUNEL</span>
+	<span class="spacer"></span>
+	<a class="cta">Book a fitting</a>
+</nav>
+<hr class="hairline">
+
+<header class="hero">
+	<p class="caps gold">Maison Lunel — Est. 1892</p>
+	<h1>Time, worn <em>lightly.</em></h1>
+	<p class="lede">One hundred and thirty-four years of the same conviction: that a
+		watch should be noticed by no one, and missed by everyone.</p>
+	<p style="margin-top:34px"><button class="btn">Discover the Calibre</button></p>
+</header>
+
+<figure class="plate-wrap" style="margin-top:0">
+	<div class="plate">
+		<div class="plate-inner">
+			<div class="dial" aria-label="Watch dial illustration">
+				<i class="hour"></i><i class="min"></i><b class="t"></b><b class="r"></b><b class="b"></b><b class="l"></b><i class="pin"></i>
+			</div>
+		</div>
+		<figcaption>
+			<b>Ref. 018</b>
+			<span class="caps dim">Calibre L-1892 · hand-wound · 72 h reserve</span>
+		</figcaption>
+	</div>
+</figure>
+
+<!-- Spec list: facts set in Didone numerals between gold hairlines. -->
+<section class="specs">
+	<div class="spec-frame">
+		<div class="spec-row"><span class="k caps dim">Calibre</span><span class="v">L-1892</span></div>
+		<div class="spec-row"><span class="k caps dim">Reserve</span><span class="v">72 hours</span></div>
+		<div class="spec-row"><span class="k caps dim">Case</span><span class="v">38 mm, rose gold</span></div>
+		<div class="spec-row"><span class="k caps dim">Dial</span><span class="v">Grand feu enamel</span></div>
+		<div class="spec-row"><span class="k caps dim">Edition</span><span class="v">189 pieces, yearly</span></div>
+	</div>
+</section>
+
+<div class="ref">
+	<!-- 01 -->
+	<section class="section" style="margin-top:0">
+		<p class="section-label">01 — Typography</p>
+		<h2>A serif that never raises its voice</h2>
+		<p class="lede">High-contrast Didone at weight 400 — authority through size and
+			air, never boldness. Wide-tracked caps do the labeling; gold italics do the
+			emphasizing.</p>
+		<div class="specimen" style="margin-top:22px"><span class="glyph">Aa</span><span class="tag">Display · Didone 400 · 44–110</span></div>
+		<div class="specimen"><span class="glyph eyebrow">Maison — Est. 1892</span><span class="tag">Eyebrow · caps · ls 0.3em</span></div>
+		<div class="specimen"><span class="glyph body">Body text sits in one unhurried column of fifty-five to sixty-five characters.</span><span class="tag">Body · serif 17–18</span></div>
+		<div class="specimen"><span class="glyph nums">1892 · 38 · 72</span><span class="tag">Numerals · gold italic</span></div>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Colour</p>
+		<h2>Cream, charcoal, and one hairline of gold</h2>
+		<p class="lede">Gold is a currency spent in millimetres: a hairline, a word, an
+			initial. The moment it fills a button or a band, the house becomes a shop.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-surface)"></div><b>Cream</b><span>surface · the ground</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><b>Charcoal</b><span>primary · ink &amp; buttons</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><b>Gold</b><span>accent · words &amp; marks</span></div>
+			<div class="sw"><div class="fill hair"></div><b>Gold line</b><span>hairline · the structure</span></div>
+		</div>
+		<p class="note-plain">The filled action is charcoal with cream text — black buttons,
+			gold whispers. There is no gold button in this system.</p>
+	</section>
+
+	<!-- 03 -->
+	<section class="section">
+		<p class="section-label">03 — Detail</p>
+		<h2>Slow buttons, quiet forms</h2>
+		<p class="lede">Hover states deepen over 300 milliseconds; nothing lifts, nothing
+			glows. Fields are underlines on cream and turn gold on focus.</p>
+		<div class="row" style="margin-top:24px">
+			<button class="btn">Reserve a fitting</button>
+			<button class="btn btn-ghost">The Journal</button>
+			<button class="link-gold">Request the catalogue</button>
+		</div>
+		<div class="row" style="margin-top:24px">
+			<input class="input" placeholder="Your correspondence address">
+			<button class="btn">Subscribe</button>
+		</div>
+		<div class="quote">
+			<p>“The finest movement is the one its owner never thinks about.”</p>
+			<p class="by caps dim">Hélène Lunel · Fourth-generation watchmaker</p>
+		</div>
+	</section>
+
+	<!-- 04 -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>The vitrine folds, nothing crowds</h2>
+		<p class="lede">The hero drops to a single centered column, the dial keeps its
+			frame, and spacing — not type size — absorbs the smaller screen.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-nav"><span class="caps dim">Menu</span><span class="wm">LUNEL</span><span class="caps gold">Fit</span></div>
+				<div class="phone-body">
+					<p class="caps gold">Est. 1892</p>
+					<h6>Time, worn <em style="color:var(--color-accent)">lightly.</em></h6>
+					<p class="sub">One hundred and thirty-four years of the same conviction.</p>
+					<div class="phone-dial"><i class="hour"></i><i class="min"></i><i class="pin"></i></div>
+				</div>
+				<div class="phone-foot"><button class="btn">Discover the Calibre</button></div>
+			</div>
+			<ul class="rules">
+				<li><b>Centered, single column</b><span>The hero stays centered and the measure narrows to 30–36 characters; asymmetry is a wide-screen privilege.</span></li>
+				<li><b>Display shrinks, stays Didone</b><span>Headlines step 96px → 32–36px at weight 400. Substituting a bold sans "for small screens" breaks the house.</span></li>
+				<li><b>Nav compresses to a hairline bar</b><span>Links collapse behind a tracked "Menu" label; the gold hairline beneath the bar survives at every width.</span></li>
+				<li><b>The dial keeps its mat</b><span>The framed plate keeps inner padding and its caption line; the image shrinks, the vitrine does not vanish.</span></li>
+				<li><b>Specs become stacked rows</b><span>Label-over-value rows replace the side-by-side list; hairlines stay 1px and the gold frame stays.</span></li>
+				<li><b>Buttons go full-width, slowly</b><span>The charcoal button spans the column at 48px; its 300ms hover deepening becomes a 150ms press state on touch.</span></li>
+				<li><b>Spacing absorbs the loss</b><span>Section rhythm drops 96 → 64px but never below; crowded sections are the one unforgivable mobile failure.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>What ends the quiet</h2>
+		<div class="compare">
+			<div class="cmp-off">
+				<span class="burst">50%<br>OFF</span>
+				Mega Watch Sale
+				<small>Loud gradient · starburst badge · countdown pill · rounded card ·
+					red-and-gold clash. This is a shop having a panic, not a house.</small>
+				<span class="timer">ENDS IN 02:41:07</span>
+			</div>
+			<div class="cmp-on">
+				<p class="caps gold eyebrow">Ref. 018</p>
+				<h4>The Calibre L-1892, in <em>rose gold</em></h4>
+				<p class="pr">CHF 18,400</p>
+				<small class="caps dim" style="display:block;margin-top:14px;line-height:1.7">Edition of 189 · allocation by correspondence</small>
+			</div>
+		</div>
+		<p class="note-plain">Also out: countdowns, dark backgrounds, gold fills, bold
+			headlines, sans-serif display, pills, and any two CTAs competing for the eye.</p>
+	</section>
+</div>
+
+</body>
+</html>

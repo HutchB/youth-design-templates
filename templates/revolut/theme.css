@@ -1,0 +1,22 @@
+/* Revolut — true-black canvas, white pill actions, one cobalt stamp. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #ffffff;
+	--color-primary-foreground: #000000;
+	--color-surface: #000000;
+	--color-surface-foreground: #ffffff;
+	--color-surface-raised: #16181a;
+	--color-muted: #9ca0ab;
+	--color-accent: #494fdf;
+	--color-danger: #e23b4a;
+	--color-border: #2a2a30;
+
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 20px;
+	--radius-xl: 28px;
+	--radius-2xl: 32px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+	--shadow-md: 0 8px 24px rgb(0 0 0 / 0.55);
+	--shadow-lg: 0 20px 56px rgb(0 0 0 / 0.65);
+}

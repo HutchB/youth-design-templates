@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "sentry",
+	"name": "Sentry",
+	"version": "1.0.0",
+	"order": 125,
+	"category": "dev",
+	"vibe": "dark",
+	"tags": [
+		"dev",
+		"dark"
+	],
+	"blurb": "Error-tracking vigilance: violet-tinted dark surfaces, severity purple, stack traces and issue rows that stay readable.",
+	"tagline": {
+		"en": "Violet vigilance for broken code",
+		"zh": "紫色的故障哨兵"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

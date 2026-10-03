@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "luxury",
+	"name": "Luxury Serif",
+	"version": "1.0.0",
+	"order": 163,
+	"category": "premium",
+	"vibe": "light",
+	"tags": [
+		"premium",
+		"light"
+	],
+	"blurb": "Quiet opulence: cream and charcoal, antique gold hairlines, high-contrast serif display and vast, unhurried whitespace.",
+	"tagline": {
+		"en": "Say less, in gold",
+		"zh": "留白与金色的高定"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing luxury-house web conventions (cream palettes, gold hairlines, serif display typography)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

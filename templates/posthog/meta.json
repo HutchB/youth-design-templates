@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "posthog",
+	"name": "PostHog",
+	"version": "1.0.0",
+	"order": 205,
+	"category": "dev",
+	"vibe": "light",
+	"tags": [
+		"dev",
+		"light"
+	],
+	"blurb": "Warm analytics engineering: cream paper surfaces, PostHog amber energy, playful hand-drawn edge on a serious data core.",
+	"tagline": {
+		"en": "Serious data, warm face",
+		"zh": "认真的数据，温暖的门面"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

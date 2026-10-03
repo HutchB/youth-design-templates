@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "gov-uk",
+	"name": "GOV.UK",
+	"version": "1.0.0",
+	"order": 165,
+	"category": "utility",
+	"vibe": "light",
+	"tags": [
+		"utility",
+		"light"
+	],
+	"blurb": "Utilitarian public-service clarity: black on white, one dependable blue, yellow focus, square corners, zero ornament.",
+	"tagline": {
+		"en": "Trustworthy, plain, nothing wasted",
+		"zh": "可信、平实、毫不浪费"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://design-system.service.gov.uk/",
+		"note": "Adapted from the GOV.UK Design System (MIT / OGL v3.0); original descriptions. Not affiliated with the UK Government Digital Service. GDS Transport font not redistributable — system stack only."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

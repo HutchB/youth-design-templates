@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "bmw-m",
+	"name": "BMW M",
+	"version": "1.0.0",
+	"order": 175,
+	"category": "automotive",
+	"vibe": "dark",
+	"tags": [
+		"automotive",
+		"dark"
+	],
+	"blurb": "Motorsport precision: carbon-dark surfaces, the M tri-stripe as the only ornament, razor-edged panels and machined uppercase typography.",
+	"tagline": {
+		"en": "Tri-stripe precision, carbon dark",
+		"zh": "三色条纹，碳黑精准"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

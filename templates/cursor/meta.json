@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "cursor",
+	"name": "Cursor",
+	"version": "1.0.0",
+	"order": 25,
+	"category": "dev",
+	"vibe": "dark",
+	"tags": [
+		"dev",
+		"dark"
+	],
+	"blurb": "AI IDE dark workspace: graphite surfaces, one restrained accent, dense editor chrome and calm focus.",
+	"tagline": {
+		"en": "Graphite editor, AI-calm",
+		"zh": "石墨色的 AI 编辑器"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

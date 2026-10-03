@@ -1,0 +1,29 @@
+/* Organic — grounded and grown, not manufactured: linen ground, sage and
+   terracotta, extra-large radii, warm shallow shadows. Original curated spec
+   for this collection (MIT). */
+@theme {
+	--color-primary: #4f7a5a; /* moss green — CTAs, links, the "grown" voice */
+	--color-primary-foreground: #f6f3ec; /* linen text on moss, never pure white */
+	--color-surface: #f6f3ec; /* linen — the unbleached page */
+	--color-surface-foreground: #2f3a2f; /* deep moss ink */
+	--color-surface-raised: #ffffff; /* product cards and panels */
+	--color-muted: #7d8577; /* lichen gray-green for secondary text */
+	--color-accent: #c97b5a; /* terracotta — second voice: prices, highlights, stamps */
+	--color-danger: #b0563f; /* fired clay, reads as a warm error */
+	--color-border: #e3ded2; /* oat hairline */
+	/* Sand is the mid earth tone: hero washes, dividers, chip fills. */
+	--color-sand: #ece5d8;
+
+	/* Everything grew, so nothing is sharp: the scale starts at 10px and
+	   product cards live at 20–28px. Pills are welcome everywhere. */
+	--radius-sm: 10px;
+	--radius-md: 14px;
+	--radius-lg: 20px;
+	--radius-xl: 24px;
+	--radius-2xl: 28px;
+
+	/* Warm and shallow: shadows come from an overcast sky, not a lamp. */
+	--shadow-sm: 0 1px 2px rgb(47 58 47 / 0.06);
+	--shadow-md: 0 4px 14px rgb(47 58 47 / 0.08);
+	--shadow-lg: 0 14px 32px rgb(47 58 47 / 0.10);
+}

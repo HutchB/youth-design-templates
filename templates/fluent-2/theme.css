@@ -1,0 +1,31 @@
+/* Fluent 2 — Microsoft's Fluent 2 / Windows 11 design language, adapted as
+   light-theme web tokens. Factual token values with original descriptions.
+   Not affiliated with or endorsed by Microsoft. */
+@theme {
+	--color-primary: #0f6cbd; /* Fluent 2 brand blue — the accent fill, focus, selection */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #f5f5f5; /* mica — the window base */
+	--color-surface-foreground: #1b1b1b; /* text ink */
+	--color-surface-raised: #fbfbfb; /* the content layer above mica */
+	--color-muted: #616161; /* secondary text, disabled glyphs */
+	--color-accent: #038387; /* teal — the pinned second voice (see DESIGN.md) */
+	--color-danger: #c50f1f; /* error red */
+	--color-border: #e5e5e5; /* the hairline that separates every layer */
+
+	/* The third gray: cards above the content layer. */
+	--color-card: #ffffff;
+	/* Acrylic — the float material for flyouts and menus only. */
+	--color-acrylic: rgb(249 249 249 / 0.85);
+	--blur-acrylic: 20px;
+
+	--radius-sm: 4px;  /* checkbox, input */
+	--radius-md: 8px;  /* the WinUI control corner: buttons, cards, flyouts */
+	--radius-lg: 8px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	/* Shallow, always: strokes carry layering, shadows only confirm floats. */
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
+	--shadow-md: 0 2px 8px rgb(0 0 0 / 0.14); /* flyout level */
+	--shadow-lg: 0 12px 28px rgb(0 0 0 / 0.2); /* dialog level */
+}

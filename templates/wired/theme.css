@@ -1,0 +1,23 @@
+/* Wired — stark black-on-white duet, high-contrast serif display, hairline dividers. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #000000;
+	--color-primary-foreground: #ffffff;
+	--color-surface: #ffffff;
+	--color-surface-foreground: #000000;
+	--color-surface-raised: #f5f5f5;
+	--color-muted: #757575;
+	--color-accent: #057dbc;
+	--color-danger: #c0272d;
+	--color-border: #e0e0e0;
+
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 0px;
+	--radius-xl: 0px;
+	--radius-2xl: 0px;
+
+	/* No shadows: surface contrast and hairlines carry hierarchy. */
+	--shadow-sm: 0 0 0 rgb(0 0 0 / 0);
+	--shadow-md: 0 0 0 rgb(0 0 0 / 0);
+	--shadow-lg: 0 0 0 rgb(0 0 0 / 0);
+}

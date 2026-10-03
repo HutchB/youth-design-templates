@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supabase — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #3ecf8e;
+		--color-primary-foreground: #003a1d;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #1c1c1c;
+		--color-surface-raised: #fafafa;
+		--color-muted: #6b7280;
+		--color-accent: #7c66a1;
+		--color-danger: #e5484d;
+		--color-border: #e5e7eb;
+
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 8px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+		--shadow-md: 0 2px 8px rgb(0 0 0 / 0.08);
+		--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.12);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; }
+	p { margin: 0; }
+	::selection { background: rgb(62 207 142 / 0.3); }
+	.spacer { flex: 1; }
+
+	/* ── Console shell: hairline panes on white ───────────────────── */
+	.console { border-bottom: 1px solid var(--color-border); display: grid; grid-template-columns: 1fr; }
+	@media (min-width: 900px) { .console { grid-template-columns: 224px minmax(0, 1fr); } }
+
+	.side { display: none; border-right: 1px solid var(--color-border); background: var(--color-surface-raised); }
+	@media (min-width: 900px) { .side { display: block; } }
+	.side-org { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--color-border); }
+	.logo { width: 20px; height: 20px; border-radius: 5px; background: var(--color-primary); flex: none; }
+	.side-org b { font-size: 13px; font-weight: 500; }
+	.side-org span { font-size: 11px; color: var(--color-muted); }
+	.side-label { font-size: 11px; color: var(--color-muted); padding: 14px 14px 6px; letter-spacing: 0.02em; }
+	.tbl { display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px; font-family: var(--mono); font-size: 12.5px; color: var(--color-muted); }
+	.tbl.is-active { color: var(--color-surface-foreground); background: rgb(62 207 142 / 0.1); box-shadow: inset 2px 0 0 var(--color-primary); }
+	.tbl .n { margin-left: auto; font-size: 10.5px; }
+
+	.main { min-width: 0; }
+	.topbar { display: flex; align-items: center; gap: 4px; height: 42px; padding: 0 14px; border-bottom: 1px solid var(--color-border); }
+	.tp { font-size: 13px; color: var(--color-muted); padding: 0 10px; height: 42px; display: flex; align-items: center; }
+	.tp.is-active { color: var(--color-surface-foreground); box-shadow: inset 0 -2px 0 var(--color-primary); font-weight: 500; }
+
+	.gridbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 44px; padding: 6px 14px; border-bottom: 1px solid var(--color-border); }
+	.gridbar h1 { font-size: 14px; font-family: var(--mono); font-weight: 500; }
+	.searchbox {
+		display: flex; align-items: center; gap: 6px;
+		height: 28px; padding: 0 10px; min-width: 150px;
+		border: 1px solid var(--color-border); border-radius: var(--radius-md);
+		color: var(--color-muted); font-size: 12px; background: var(--color-surface);
+	}
+
+	/* Data grid: 34px rows, hairline dividers, mono ids */
+	.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
+	.grid th {
+		text-align: left; font-weight: 500; font-size: 12px; color: var(--color-muted);
+		background: var(--color-surface-raised); border-bottom: 1px solid var(--color-border);
+		padding: 7px 14px; white-space: nowrap;
+	}
+	.grid td { padding: 6px 14px; border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+	.grid tr.is-selected td { background: rgb(62 207 142 / 0.06); }
+	.grid .mono { font-family: var(--mono); font-size: 12px; }
+	.grid .mut { color: var(--color-muted); }
+	.grid .cb { width: 14px; height: 14px; border: 1px solid var(--color-border); border-radius: 3px; display: inline-block; vertical-align: middle; }
+	.grid tr.is-selected .cb { border-color: var(--color-primary); background: var(--color-primary); }
+
+	.badge {
+		display: inline-flex; align-items: center; gap: 5px;
+		font-size: 11px; padding: 1px 8px; border-radius: 9999px;
+		border: 1px solid var(--color-border); color: var(--color-muted); background: var(--color-surface);
+	}
+	.badge i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: block; }
+	.badge.ok { color: #1f8a65; border-color: rgb(62 207 142 / 0.4); background: rgb(62 207 142 / 0.08); }
+	.badge.pending { color: #92600a; border-color: rgb(234 179 8 / 0.35); background: rgb(234 179 8 / 0.08); }
+	.badge.err { color: var(--color-danger); border-color: rgb(229 72 77 / 0.35); background: rgb(229 72 77 / 0.06); }
+
+	/* ── Controls ─────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 13px; font-weight: 500;
+		height: 30px; padding: 0 12px;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-border);
+		background: var(--color-surface); color: var(--color-surface-foreground);
+		cursor: pointer;
+		transition: background-color 120ms ease, border-color 120ms ease;
+	}
+	.btn:hover { background: var(--color-surface-raised); }
+	.btn:focus-visible { outline: none; border-color: var(--color-primary); }
+	.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); border-radius: 9999px; padding: 0 16px; }
+	.btn-primary:hover { background: #4fd79a; }
+	.btn-ghost { border-color: transparent; background: transparent; color: var(--color-muted); }
+	.btn-ghost:hover { color: var(--color-surface-foreground); background: var(--color-surface-raised); }
+	.btn[disabled] { cursor: not-allowed; color: #b3b9c2; border-color: var(--color-border); background: var(--color-surface); }
+
+	kbd {
+		font-family: var(--mono); font-size: 11px; line-height: 16px;
+		padding: 0 5px; display: inline-block; text-align: center;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); color: var(--color-muted);
+	}
+
+	/* Inverted code block: the one dark island on the light page */
+	.sql {
+		background: #1c1c1c; color: #e5e7eb;
+		border-radius: var(--radius-lg); overflow: hidden;
+		font-family: var(--mono); font-size: 12.5px; line-height: 1.7;
+	}
+	.sql .bar { display: flex; align-items: center; padding: 7px 14px; border-bottom: 1px solid #2d2d2d; font-size: 11px; color: #9ca3af; }
+	.sql .bd { padding: 12px 14px; white-space: pre; overflow-x: auto; }
+	.sql .kw { color: var(--color-primary); }
+	.sql .id { color: #93c5fd; }
+	.sql .st { color: #fbbf24; }
+	.sql .cm { color: #6b7280; }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 112px; } }
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 72px; } }
+	.section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1f8a65; margin-bottom: 10px; }
+	.section h2 { font-size: 20px; font-weight: 500; }
+	@media (min-width: 768px) { .section h2 { font-size: 24px; } }
+	.lede { color: var(--color-muted); max-width: 62ch; margin-top: 8px; font-size: 13.5px; }
+	.note { margin-top: 16px; font-size: 12.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+	.panels { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 768px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+	.panel { border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 14px 16px; background: var(--color-surface); }
+	.panel h3 { font-size: 13px; font-weight: 500; }
+	.panel p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 22px; letter-spacing: -0.02em; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 10px; }
+	.sw b { font-family: var(--mono); font-size: 11px; font-weight: 500; display: block; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Mobile: the grid becomes cards ───────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		border-radius: 28px;
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.phone-head { display: flex; align-items: center; gap: 8px; padding: 6px 14px 10px; border-bottom: 1px solid var(--color-border); }
+	.phone-head b { font-size: 13px; font-weight: 500; font-family: var(--mono); }
+	.m-card { border: 1px solid var(--color-border); border-radius: var(--radius-lg); margin: 10px 12px 0; padding: 10px 12px; font-size: 12.5px; }
+	.m-card .r1 { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; }
+	.m-card .r2 { margin-top: 6px; color: var(--color-muted); font-family: var(--mono); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+	.m-card .r3 { margin-top: 8px; display: flex; align-items: center; }
+	.tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 12px; background: var(--color-surface-raised); }
+	.tabbar div { flex: 1; text-align: center; padding: 9px 0 13px; font-size: 10px; color: var(--color-muted); }
+	.tabbar div.is-active { color: #1f8a65; box-shadow: inset 0 1px 0 var(--color-primary); }
+	.tabbar .g { display: block; width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 4px; margin: 0 auto 3px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 116px; font-size: 12px; font-family: var(--mono); }
+	@media (max-width: 520px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── Off-style comparison ─────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 24px; border-radius: var(--radius-2xl);
+		background: rgb(62 207 142 / 0.14); border: 1px solid rgb(62 207 142 / 0.5);
+		box-shadow: 0 16px 36px rgb(62 207 142 / 0.25);
+		color: #14532d; font-size: 19px; font-weight: 700;
+	}
+	.cmp-off small { display: block; font-size: 12px; font-weight: 400; color: #1f8a65; margin-top: 8px; }
+	.cmp-on { padding: 14px 16px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); background: var(--color-surface); font-size: 13.5px; }
+	.cmp-on small { display: block; font-size: 12px; color: var(--color-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the table editor: project sidebar, tabs, filter toolbar, a dense
+     data grid with mono ids and status badges. Emerald appears three times,
+     and that is already close to the ceiling. -->
+<div class="console">
+	<aside class="side">
+		<div class="side-org"><span class="logo"></span><span><b>vetta-prod</b><br><span>org · us-east-1</span></span></div>
+		<div class="side-label">Table Editor</div>
+		<div class="tbl is-active">users<span class="n">12.4k</span></div>
+		<div class="tbl">orders<span class="n">87k</span></div>
+		<div class="tbl">products<span class="n">1,204</span></div>
+		<div class="tbl">api_keys<span class="n">312</span></div>
+		<div class="side-label">Database</div>
+		<div class="tbl">backups</div>
+		<div class="tbl">triggers</div>
+	</aside>
+
+	<main class="main">
+		<div class="topbar">
+			<span class="tp">Table</span><span class="tp">SQL</span><span class="tp is-active">users</span><span class="tp">Auth</span><span class="tp">Storage</span>
+		</div>
+		<div class="gridbar">
+			<h1>public.users</h1>
+			<span class="searchbox">filter email contains @vetta…<span class="spacer"></span><kbd>/</kbd></span>
+			<span class="spacer"></span>
+			<button class="btn btn-ghost">CSV ▾</button>
+			<button class="btn">Filter</button>
+			<button class="btn btn-primary">Insert row</button>
+		</div>
+		<table class="grid">
+			<thead>
+				<tr><th style="width:36px"><span class="cb"></span></th><th>id</th><th>email</th><th>plan</th><th>created_at</th><th>status</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><span class="cb"></span></td><td class="mono">4271</td><td>ana@vetta.dev</td><td class="mut">pro</td><td class="mono mut">2026-09-28 08:14</td><td><span class="badge ok"><i></i>active</span></td></tr>
+				<tr class="is-selected"><td><span class="cb"></span></td><td class="mono">4270</td><td>jun@studio.jp</td><td class="mut">free</td><td class="mono mut">2026-09-28 06:52</td><td><span class="badge pending"><i></i>pending</span></td></tr>
+				<tr><td><span class="cb"></span></td><td class="mono">4269</td><td>mo.okafor@labs.io</td><td class="mut">pro</td><td class="mono mut">2026-09-27 21:03</td><td><span class="badge ok"><i></i>active</span></td></tr>
+				<tr><td><span class="cb"></span></td><td class="mono">4268</td><td>kaori@mori.design</td><td class="mut">team</td><td class="mono mut">2026-09-27 17:41</td><td><span class="badge err"><i></i>suspended</span></td></tr>
+				<tr><td><span class="cb"></span></td><td class="mono">4267</td><td>li.wei@vetta.dev</td><td class="mut">free</td><td class="mono mut">2026-09-27 11:26</td><td><span class="badge ok"><i></i>active</span></td></tr>
+				<tr><td><span class="cb"></span></td><td class="mono">4266</td><td>sofia@runtime.es</td><td class="mut">team</td><td class="mono mut">2026-09-26 19:08</td><td><span class="badge pending"><i></i>pending</span></td></tr>
+			</tbody>
+		</table>
+	</main>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 EMERALD -->
+	<section class="section">
+		<p class="section-label">01 — The emerald rule</p>
+		<h2>One green, spent like ink</h2>
+		<p class="lede">Emerald marks brand moments: the logo tile, the primary pill, the active
+			nav edge. It always carries deep-green text, never white, and it never becomes a
+			background field. Everything structural is gray hairlines on white.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><div class="meta"><b>primary</b><span>#3ecf8e · brand signal</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-primary-foreground)"></div><div class="meta"><b>on-primary</b><span>#003a1d · text on green</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><div class="meta"><b>raised</b><span>#fafafa · headers, nav</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><div class="meta"><b>accent</b><span>#7c66a1 · charts only</span></div></div>
+		</div>
+		<p class="note">The violet and chart hues stay inside illustrations. If a color would appear in a pie chart, it does not appear in a toolbar.</p>
+	</section>
+
+	<!-- 02 THE GRID -->
+	<section class="section">
+		<p class="section-label">02 — The grid</p>
+		<h2>Dense rows, honest data, no chrome</h2>
+		<div class="panels">
+			<div class="panel"><div class="metric">34px</div><p>Row height. Header cells share the raised fill; dividers are 1px and nothing else.</p></div>
+			<div class="panel"><div class="metric">12px mono</div><p>Ids, timestamps and values run in monospace so columns align by nature, not by padding.</p></div>
+			<div class="panel"><div class="metric">0 shadows</div><p>Panels are bordered rectangles. Depth comes from the raised fill one step below white.</p></div>
+		</div>
+		<p class="note">A selected row tints green at six percent with a filled checkbox — the loudest a selection is allowed to get.</p>
+	</section>
+
+	<!-- 03 SQL -->
+	<section class="section">
+		<p class="section-label">03 — SQL &amp; mono</p>
+		<h2>Code blocks are the one dark island</h2>
+		<p class="lede">On an otherwise light console, SQL inverts to near-black with light text
+			and emerald keywords. The inversion is the signature: when you see the dark block,
+			you are looking at the actual query.</p>
+		<div class="sql" style="max-width: 640px; margin-top: 20px;">
+			<div class="bar">query · users_by_plan<span class="spacer"></span>postgres 15</div>
+			<div class="bd"><span class="kw">select</span> <span class="id">plan</span>, <span class="fn">count</span>(*) <span class="kw">as</span> <span class="id">n</span>
+<span class="kw">from</span> <span class="id">public.users</span>
+<span class="kw">where</span> <span class="id">status</span> = <span class="st">'active'</span>  <span class="cm">-- soft-deleted rows excluded by view</span>
+<span class="kw">group by</span> <span class="id">plan</span>
+<span class="kw">order by</span> <span class="id">n</span> <span class="kw">desc</span>;</div>
+		</div>
+		<p class="note">Inline code stays light: mono at 12–13px on a raised fill with a hairline border — the inversion is reserved for full statements.</p>
+	</section>
+
+	<!-- 04 CONTROLS -->
+	<section class="section">
+		<p class="section-label">04 — Controls</p>
+		<h2>One pill, bordered siblings, quiet ghosts</h2>
+		<div class="row" style="margin-top: 20px;">
+			<button class="btn btn-primary">Start project</button>
+			<button class="btn">Add column</button>
+			<button class="btn btn-ghost">Docs</button>
+			<button class="btn" disabled>Running…</button>
+		</div>
+		<div class="row" style="margin-top: 16px;">
+			<span class="badge ok"><i></i>active</span>
+			<span class="badge pending"><i></i>pending</span>
+			<span class="badge err"><i></i>suspended</span>
+			<span style="font-size:12px;color:var(--color-muted)">press <kbd>/</kbd> to filter</span>
+		</div>
+		<p class="note">Only the primary CTA is a pill. Tool buttons stay 30px bordered rectangles; ghost buttons belong in toolbars, never in dialogs.</p>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>The grid becomes cards, the hairlines stay</h2>
+		<p class="lede">Six columns cannot survive a phone, so each row folds into a small bordered
+			card: id and badge on the first line, email on the second, timestamp in muted mono on
+			the third. The language does not change — only the packaging does.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-head"><span class="logo"></span><b>users</b><span class="spacer"></span><span class="badge ok"><i></i>live</span></div>
+				<div class="m-card">
+					<div class="r1"><span class="mono" style="font-family:var(--mono)">4271</span><span class="spacer"></span><span class="badge ok"><i></i>active</span></div>
+					<div class="r2">ana@vetta.dev</div>
+					<div class="r3"><span class="mono mut" style="font-family:var(--mono);font-size:10.5px;color:var(--color-muted)">pro · 2026-09-28</span></div>
+				</div>
+				<div class="m-card">
+					<div class="r1"><span style="font-family:var(--mono)">4270</span><span class="spacer"></span><span class="badge pending"><i></i>pending</span></div>
+					<div class="r2">jun@studio.jp</div>
+					<div class="r3"><span style="font-family:var(--mono);font-size:10.5px;color:var(--color-muted)">free · 2026-09-28</span></div>
+				</div>
+				<div class="m-card">
+					<div class="r1"><span style="font-family:var(--mono)">4269</span><span class="spacer"></span><span class="badge ok"><i></i>active</span></div>
+					<div class="r2">mo.okafor@labs.io</div>
+					<div class="r3"><span style="font-family:var(--mono);font-size:10.5px;color:var(--color-muted)">pro · 2026-09-27</span></div>
+				</div>
+				<div class="tabbar">
+					<div class="is-active"><span class="g"></span>Tables</div>
+					<div><span class="g"></span>SQL</div>
+					<div><span class="g"></span>Auth</div>
+					<div><span class="g"></span>Logs</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>&lt; 900px</b><span>The 224px sidebar collapses; tables move into a picker sheet. The tab bar carries the four console areas.</span></li>
+				<li><b>Row → card</b><span>Six columns fold into three lines: mono id plus badge, email, muted meta. Column order is preserved top to bottom.</span></li>
+				<li><b>Toolbar</b><span>Filter and CSV move behind the row-actions menu; only the emerald Insert pill survives, at 36px for touch.</span></li>
+				<li><b>Type floor</b><span>12.5px cards, 11px badges, 10.5px meta. Mono keeps every id and timestamp.</span></li>
+				<li><b>Code blocks</b><span>The dark SQL island stays dark on mobile and scrolls horizontally — it is never reflowed.</span></li>
+				<li><b>Touch</b><span>Hover tints become a pressed state; row selection uses the same filled checkbox, enlarged to 20px.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the quiet</h2>
+		<div class="compare">
+			<div class="cmp-off">Green-washed panel
+				<small>16px radius, emerald at 14% as a field, a green glow shadow, bold green heading. The signal color became wallpaper, and the glow replaced the border.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>8px radius, white fill, 1px gray border, 13.5px regular text. Green appears once, on the badge, exactly where it means something.</small></div>
+		</div>
+		<p class="note">Also out: heavy shadows, radius above 12px, chart hues in chrome, and bold weights beyond 500 anywhere in the UI.</p>
+	</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "dell-1996",
+	"name": "Dell 1996",
+	"version": "1.0.0",
+	"order": 145,
+	"category": "retro",
+	"vibe": "light",
+	"tags": [
+		"retro",
+		"light"
+	],
+	"blurb": "1996 consumer catalog web: white page in a hard black frame, flat 8-bit ribbon colors, beveled boxes and unapologetic table layout.",
+	"tagline": {
+		"en": "The web when it was a catalog",
+		"zh": "目录册时代的网页"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "neo-brutalism",
+	"name": "Neo Brutalism",
+	"version": "1.0.0",
+	"order": 15,
+	"category": "creative",
+	"vibe": "light",
+	"tags": [
+		"creative",
+		"light"
+	],
+	"blurb": "Raw anti-polish: thick black outlines, hard offset shadows, flat saturated color blocks and unapologetically loud type.",
+	"tagline": {
+		"en": "Hard edges, hard shadows, zero polish",
+		"zh": "粗黑描边，硬投影，拒绝抛光"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://neobrutalism.dev",
+		"note": "Original spec written for this collection; proportions checked against neobrutalism.dev (MIT). No upstream code or assets included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "wise",
+	"name": "Wise",
+	"version": "1.0.0",
+	"order": 235,
+	"category": "fintech",
+	"vibe": "light",
+	"tags": [
+		"fintech",
+		"light"
+	],
+	"blurb": "Borderless money, loud type: forest green and flag-yellow on generous white, oversized numerals and confetti accents.",
+	"tagline": {
+		"en": "Loud green, borderless",
+		"zh": "响亮的森林绿"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

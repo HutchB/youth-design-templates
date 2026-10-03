@@ -1,0 +1,22 @@
+/* MongoDB — white enterprise surfaces, one bright leaf-green pill. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #00ed64;
+	--color-primary-foreground: #001e2b;
+	--color-surface: #ffffff;
+	--color-surface-foreground: #001e2b;
+	--color-surface-raised: #f4f7f6;
+	--color-muted: #5c6c7a;
+	--color-accent: #00684a;
+	--color-danger: #cf4a35;
+	--color-border: #e1e5e8;
+
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--radius-2xl: 24px;
+
+	--shadow-sm: 0 1px 2px rgb(0 30 43 / 0.04);
+	--shadow-md: 0 4px 12px rgb(0 30 43 / 0.08);
+	--shadow-lg: 0 12px 24px -4px rgb(0 30 43 / 0.12);
+}

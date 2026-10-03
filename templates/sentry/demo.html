@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentry — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #6a5fc1;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #1f1633;
+		--color-surface-foreground: #f2eefa;
+		--color-surface-raised: #2a1e42;
+		--color-muted: #b1a5c9;
+		--color-accent: #c2ef4e;
+		--color-danger: #ff5c5c;
+		--color-border: #362d59;
+
+		--radius-sm: 6px;
+		--radius-md: 8px;
+		--radius-lg: 12px;
+		--radius-xl: 16px;
+		--radius-2xl: 20px;
+
+		--shadow-sm: 0 1px 2px rgb(16 10 32 / 0.4);
+		--shadow-md: 0 10px 24px -6px rgb(16 10 32 / 0.5);
+		--shadow-lg: 0 24px 56px -12px rgb(16 10 32 / 0.6);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; }
+	p { margin: 0; }
+	::selection { background: rgb(106 95 193 / 0.5); }
+	.spacer { flex: 1; }
+
+	/* ── Console chrome: purple sea, raised islands ───────────────── */
+	.topbar { display: flex; align-items: center; gap: 12px; height: 50px; padding: 0 16px; border-bottom: 1px solid var(--color-border); }
+	.mark { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+	.mark i { width: 18px; height: 18px; border-radius: 5px; background: linear-gradient(135deg, #6a5fc1, #422082); display: block; }
+	.proj {
+		display: flex; align-items: center; gap: 6px;
+		height: 30px; padding: 0 10px;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); font-size: 12.5px;
+	}
+	.searchbox {
+		display: flex; align-items: center; gap: 8px;
+		height: 30px; width: min(300px, 100%); padding: 0 10px;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); color: var(--color-muted); font-size: 12.5px;
+	}
+
+	.filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 16px; border-bottom: 1px solid var(--color-border); }
+	.fchip {
+		font-size: 11px; letter-spacing: 0.02em; padding: 4px 10px;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		color: var(--color-muted);
+	}
+	.fchip.is-active { color: var(--color-surface-foreground); border-color: var(--color-primary); background: rgb(106 95 193 / 0.18); }
+
+	/* Issue rows: the heart of the stream */
+	.stream { max-width: 1120px; margin: 0 auto; padding: 14px 16px 4px; }
+	.issue {
+		display: flex; align-items: center; gap: 12px;
+		padding: 12px 14px; margin-bottom: 8px;
+		background: rgb(255 255 255 / 0.015);
+		border: 1px solid transparent; border-radius: var(--radius-md);
+	}
+	.issue.is-selected { background: var(--color-surface-raised); border-color: var(--color-border); box-shadow: inset 3px 0 0 var(--color-primary), var(--shadow-sm); }
+	.sev {
+		flex: none; font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+		padding: 2px 7px; border-radius: var(--radius-sm); text-transform: uppercase;
+	}
+	.sev.fatal { color: var(--color-danger); background: rgb(255 92 92 / 0.14); }
+	.sev.error { color: #ff9d66; background: rgb(255 157 102 / 0.12); }
+	.sev.warning { color: #ffd666; background: rgb(255 214 102 / 0.1); }
+	.sev.info { color: #8fb6e8; background: rgb(143 182 232 / 0.12); }
+	.issue .txt { min-width: 0; flex: 1; }
+	.issue .ttl { font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.issue .cul { font-family: var(--mono); font-size: 11.5px; color: var(--color-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+	.issue .nums { flex: none; text-align: right; font-size: 12px; color: var(--color-muted); line-height: 1.4; }
+	.issue .nums b { display: block; color: var(--color-surface-foreground); font-weight: 500; font-variant-numeric: tabular-nums; }
+	.spark { display: flex; align-items: flex-end; gap: 2px; height: 22px; flex: none; }
+	.spark i { width: 3px; border-radius: 1px; background: var(--color-primary); opacity: 0.75; display: block; }
+	.spark.hot i { background: var(--color-danger); }
+
+	/* Stack trace panel */
+	.detail { max-width: 1120px; margin: 18px auto 0; padding: 0 16px; }
+	.trace {
+		background: var(--color-surface-raised);
+		border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-md); overflow: hidden;
+	}
+	.trace .thead { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--color-border); font-size: 12.5px; font-weight: 500; }
+	.trace .tid { font-family: var(--mono); font-size: 11px; color: var(--color-muted); font-weight: 400; }
+	.frame { display: flex; gap: 10px; padding: 6px 14px; font-family: var(--mono); font-size: 12px; line-height: 1.6; color: var(--color-muted); }
+	.frame .no { flex: none; width: 26px; text-align: right; opacity: 0.6; }
+	.frame.bad { background: rgb(106 95 193 / 0.14); box-shadow: inset 3px 0 0 var(--color-primary); color: var(--color-surface-foreground); }
+	.frame .fn { color: var(--color-surface-foreground); }
+	.trace .tfoot { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--color-border); }
+
+	/* ── Controls ─────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 12px; font-weight: 600;
+		height: 32px; padding: 0 14px;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-border);
+		background: transparent; color: var(--color-surface-foreground);
+		cursor: pointer;
+		transition: background-color 120ms ease, border-color 120ms ease;
+	}
+	.btn:hover { background: rgb(255 255 255 / 0.04); }
+	.btn:focus-visible { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgb(106 95 193 / 0.35); }
+	.btn-primary {
+		background: var(--color-primary); border-color: var(--color-primary);
+		color: var(--color-primary-foreground);
+		text-transform: uppercase; letter-spacing: 0.03em; font-size: 11px;
+		border-radius: 13px;
+		box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.18), inset 0 -2px 0 rgb(16 10 32 / 0.3);
+	}
+	.btn-primary:hover { background: #7a6fd0; }
+	.btn-white { background: var(--color-surface-foreground); border-color: var(--color-surface-foreground); color: var(--color-surface); text-transform: uppercase; letter-spacing: 0.03em; font-size: 11px; border-radius: 13px; }
+	.btn-ghost { border-color: transparent; color: var(--color-muted); }
+	.btn-ghost:hover { color: var(--color-surface-foreground); }
+	.btn[disabled] { cursor: not-allowed; color: #6f6390; border-color: #2e2347; background: transparent; box-shadow: none; }
+
+	kbd {
+		font-family: var(--mono); font-size: 11px; line-height: 17px;
+		min-width: 19px; padding: 0 5px; display: inline-block; text-align: center;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); color: var(--color-muted);
+	}
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px 80px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 112px; } }
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 72px; } }
+	.section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 10px; }
+	.section h2 { font-size: 20px; }
+	@media (min-width: 768px) { .section h2 { font-size: 24px; } }
+	.lede { color: var(--color-muted); max-width: 62ch; margin-top: 8px; font-size: 13px; }
+	.note { margin-top: 16px; font-size: 12px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+	.panels { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 768px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+	.panel { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 14px 16px; box-shadow: var(--shadow-sm); }
+	.panel h3 { font-size: 13px; }
+	.panel p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 22px; letter-spacing: -0.02em; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 10px; background: var(--color-surface-raised); }
+	.sw b { font-family: var(--mono); font-size: 11px; font-weight: 500; display: block; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Mobile: stream-first ─────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		border-radius: 28px;
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.phone-head { display: flex; align-items: center; gap: 8px; padding: 6px 14px 10px; border-bottom: 1px solid var(--color-border); }
+	.phone-head b { font-size: 13px; font-weight: 600; }
+	.m-issue { margin: 8px 10px 0; padding: 9px 11px; border-radius: var(--radius-md); background: var(--color-surface-raised); border: 1px solid var(--color-border); }
+	.m-issue .ttl { font-size: 12.5px; font-weight: 500; }
+	.m-issue .cul { font-family: var(--mono); font-size: 10.5px; color: var(--color-muted); margin-top: 2px; }
+	.m-issue .foot { display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 10.5px; color: var(--color-muted); }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 116px; font-size: 12px; font-family: var(--mono); }
+	@media (max-width: 520px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── Off-style comparison ─────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 24px; border-radius: var(--radius-sm);
+		background: #0a0a0c; border: 1px solid #3a3a3f;
+		color: #c8c8d0; font-size: 18px; font-weight: 700;
+	}
+	.cmp-off small { display: block; font-size: 12px; font-weight: 400; color: #8a8a94; margin-top: 8px; }
+	.cmp-on { padding: 14px 16px; border-radius: var(--radius-lg); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: 13.5px; box-shadow: var(--shadow-sm); }
+	.cmp-on small { display: block; font-size: 12px; color: var(--color-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the issue stream: severity chips, culprits in mono, event counts,
+     trend sparklines, and the failing frame highlighted inside a stack trace.
+     Every surface leans violet; nothing is pure black. -->
+<div class="topbar">
+	<span class="mark"><i></i>Sentry</span>
+	<span class="proj">vetta-web ▾</span>
+	<span class="spacer"></span>
+	<span class="searchbox">⌕ is:unresolved level:error<span class="spacer"></span><kbd>⌘K</kbd></span>
+</div>
+<div class="filters">
+	<span class="fchip is-active">Unresolved</span>
+	<span class="fchip">Assigned to me</span>
+	<span class="fchip">New today</span>
+	<span class="fchip">Level ▾</span>
+	<span class="spacer"></span>
+	<button class="btn btn-ghost">Discover</button>
+</div>
+
+<div class="stream">
+	<div class="issue is-selected">
+		<span class="sev fatal">F3</span>
+		<span class="txt">
+			<span class="ttl">TypeError: Cannot read properties of undefined (reading 'map')</span>
+			<span class="cul">at IssueList › renderRows — issue-list.tsx:214</span>
+		</span>
+		<span class="spark hot"><i style="height:4px"></i><i style="height:8px"></i><i style="height:6px"></i><i style="height:14px"></i><i style="height:11px"></i><i style="height:20px"></i><i style="height:16px"></i><i style="height:22px"></i></span>
+		<span class="nums"><b>1,204</b> events · 89 users</span>
+	</div>
+	<div class="issue">
+		<span class="sev error">E2</span>
+		<span class="txt">
+			<span class="ttl">TimeoutError: awaiting 5000ms at POST /api/ingest</span>
+			<span class="cul">at withRetry — ingest/client.ts:77</span>
+		</span>
+		<span class="spark"><i style="height:10px"></i><i style="height:14px"></i><i style="height:8px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:11px"></i><i style="height:7px"></i><i style="height:10px"></i></span>
+		<span class="nums"><b>318</b> events · 41 users</span>
+	</div>
+	<div class="issue">
+		<span class="sev warning">W1</span>
+		<span class="txt">
+			<span class="ttl">DeprecationWarning: legacy flag keys will stop resolving in v3</span>
+			<span class="cul">at parseFlags — flags/legacy.ts:31</span>
+		</span>
+		<span class="spark"><i style="height:16px"></i><i style="height:13px"></i><i style="height:14px"></i><i style="height:9px"></i><i style="height:11px"></i><i style="height:8px"></i><i style="height:6px"></i><i style="height:5px"></i></span>
+		<span class="nums"><b>96</b> events · 17 users</span>
+	</div>
+	<div class="issue">
+		<span class="sev info">I0</span>
+		<span class="txt">
+			<span class="ttl">Session replay attached to 3 unresolved issues</span>
+			<span class="cul">at hydrateReplay — sdk/replay.ts:104</span>
+		</span>
+		<span class="spark"><i style="height:6px"></i><i style="height:7px"></i><i style="height:9px"></i><i style="height:8px"></i><i style="height:10px"></i><i style="height:9px"></i><i style="height:11px"></i><i style="height:12px"></i></span>
+		<span class="nums"><b>42</b> events · 12 users</span>
+	</div>
+</div>
+
+<div class="detail">
+	<div class="trace">
+		<div class="thead">TypeError: Cannot read properties of undefined (reading 'map')<span class="spacer"></span><span class="tid">VETTA-WEB-4Q7 · 38s ago</span></div>
+		<div class="frame"><span class="no">12</span><span>at Object.renderRows (<span class="fn">issue-list.tsx:214:19</span>)</span></div>
+		<div class="frame bad"><span class="no">13</span><span>at IssueList.<span class="fn">render</span> (issue-list.tsx:189:24) ← throwing</span></div>
+		<div class="frame"><span class="no">14</span><span>at performSyncWorkOnRoot (<span class="fn">react-dom-client.js:11228:7</span>)</span></div>
+		<div class="tfoot">
+			<button class="btn btn-primary">Assign</button>
+			<button class="btn">Resolve</button>
+			<button class="btn btn-ghost">Ignore</button>
+			<span class="spacer"></span>
+			<span style="font-size:11px;color:var(--color-muted)">first seen 2d ago · regressed 38s ago</span>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 ATMOSPHERE -->
+	<section class="section">
+		<p class="section-label">01 — Violet atmosphere</p>
+		<h2>Every gray leans purple</h2>
+		<p class="lede">The sea is #1f1633 and everything floats on it: raised rows, trace panels,
+			chips. Borders, shadows and secondary text are all lavender-tinted — a neutral gray
+			anywhere reads as a foreign object. Pure black is banned; the purple cast IS the brand.</p>
+		<div class="panels">
+			<div class="panel"><div class="metric">#1f1633 → #2a1e42</div><p>The whole depth story: page to raised island, one purple step, plus a tinted ambient shadow.</p></div>
+			<div class="panel"><div class="metric">1px</div><p>Border weight, always in border purple #362d59. Never gray, never black.</p></div>
+			<div class="panel"><div class="metric">3px</div><p>Selected-row edge: an inset primary bar that survives every density mode.</p></div>
+		</div>
+	</section>
+
+	<!-- 02 SEVERITY -->
+	<section class="section">
+		<p class="section-label">02 — Severity colors</p>
+		<h2>A small strict palette for how broken it is</h2>
+		<p class="lede">Severity is the one place hue carries data: red F3 fatal, orange E2 error,
+			yellow W1 warning, blue I0 info — always as uppercase chips on low-alpha fills. Red is
+			strictly for real failures; lime pops once per section for the state worth celebrating.</p>
+		<div class="row" style="margin-top: 20px;">
+			<span class="sev fatal">F3 · fatal</span>
+			<span class="sev error">E2 · error</span>
+			<span class="sev warning">W1 · warning</span>
+			<span class="sev info">I0 · info</span>
+			<span class="sev" style="color:var(--color-accent);background:rgb(194 239 78 / 0.12)">resolved</span>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><div class="meta"><b>primary</b><span>#6a5fc1 · action, links</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><div class="meta"><b>accent</b><span>#c2ef4e · one pop</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><div class="meta"><b>raised</b><span>#2a1e42 · islands</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-danger)"></div><div class="meta"><b>danger</b><span>#ff5c5c · fatal only</span></div></div>
+		</div>
+		<p class="note">Sparklines follow the severity of their row — a trending fatal burns red, a quiet warning stays purple.</p>
+	</section>
+
+	<!-- 03 CONTROLS -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>Chunky buttons, inset press, uppercase labels</h2>
+		<div class="row" style="margin-top: 20px;">
+			<button class="btn btn-primary">Assign</button>
+			<button class="btn btn-white">Upgrade</button>
+			<button class="btn">Resolve</button>
+			<button class="btn btn-ghost">Ignore</button>
+			<button class="btn" disabled>Archiving…</button>
+		</div>
+		<div class="row" style="margin-top: 18px; font-size: 12px; color: var(--color-muted);">
+			<span><kbd>⌘K</kbd> jump to</span>
+			<span><kbd>E</kbd> resolve</span>
+			<span><kbd>I</kbd> ignore</span>
+			<span><kbd>A</kbd> assign</span>
+		</div>
+		<p class="note">The filled button runs 13px radius with an inset top-light and bottom-shade — it should feel like a physical key. White is the loudest CTA and appears only in marketing moments.</p>
+	</section>
+
+	<!-- 04 MOBILE -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>The stream survives; the trace collapses</h2>
+		<p class="lede">On a phone the issue card loses its sparkline and counts first, keeping
+			chip, title and mono culprit. The stack trace becomes an expandable section inside the
+			issue, and the filter row shrinks to two chips plus a level menu.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-head"><span class="mark" style="font-size:12px"><i style="width:15px;height:15px"></i>Sentry</span><span class="spacer"></span><span class="proj" style="height:26px;font-size:11px">vetta-web ▾</span></div>
+				<div class="m-issue">
+					<div class="ttl">TypeError: Cannot read properties of undefined (reading 'map')</div>
+					<div class="cul">issue-list.tsx:214</div>
+					<div class="foot"><span class="sev fatal">F3</span><span>1,204 events</span><span class="spacer"></span><span style="color:var(--color-danger)">↑ trending</span></div>
+				</div>
+				<div class="m-issue">
+					<div class="ttl">TimeoutError at POST /api/ingest</div>
+					<div class="cul">ingest/client.ts:77</div>
+					<div class="foot"><span class="sev error">E2</span><span>318 events</span></div>
+				</div>
+				<div class="m-issue">
+					<div class="ttl">DeprecationWarning: legacy flag keys</div>
+					<div class="cul">flags/legacy.ts:31</div>
+					<div class="foot"><span class="sev warning">W1</span><span>96 events</span></div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>&lt; 900px</b><span>The detail pane drops; stack traces open inside the issue card as an expandable raised section.</span></li>
+				<li><b>Row → card</b><span>Sparklines and user counts leave first; severity chip, title and mono culprit are the irreducible core.</span></li>
+				<li><b>Filters</b><span>The chip row collapses to "Unresolved" plus a level menu — the saved-query bar is a desktop luxury.</span></li>
+				<li><b>Type floor</b><span>12.5px titles, 10.5px culprits, 10px chips. Uppercase tracking survives every breakpoint.</span></li>
+				<li><b>Buttons</b><span>Assign/Resolve move into the card footer at 40px height; the inset-press treatment stays, only taller.</span></li>
+				<li><b>Touch</b><span>Hover on rows becomes a pressed tint; the 3px purple edge appears on the expanded card instead of the hovered one.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>What breaks the vigilance</h2>
+		<div class="compare">
+			<div class="cmp-off">Neutral dark card
+				<small>6px radius is fine, but the surface is #0a0a0c with gray #3a3a3f borders and gray text — flat, hueless, anonymous. Drop it into any app and nothing would look wrong. That is the failure.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Purple-black surface, lavender-tinted border, 12px radius, tinted ambient shadow. It could belong nowhere else but here.</small></div>
+		</div>
+		<p class="note">Also out: pure black, lime next to coral in one component, radius below 6px on anything tappable, and neutral gray shadows.</p>
+	</section>
+
+</div>
+</body>
+</html>

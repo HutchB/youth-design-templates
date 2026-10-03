@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquid Glass — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0a84ff;
+		--color-primary-foreground: #ffffff;
+		--color-surface: rgb(16 18 26 / 0.55);
+		--color-surface-foreground: #f5f7ff;
+		--color-surface-raised: rgb(32 36 48 / 0.6);
+		--color-muted: rgb(235 240 255 / 0.62);
+		--color-accent: #ff375f;
+		--color-danger: #ff453a;
+		--color-border: rgb(255 255 255 / 0.16);
+		--edge-highlight: rgb(255 255 255 / 0.45);
+		--edge-ground: rgb(255 255 255 / 0.1);
+		--blur-glass: 24px;
+		--saturate-glass: 180%;
+		--color-cyan: #64d2ff;
+		--gradient-backdrop-a: #2b1e66;
+		--gradient-backdrop-b: #0e7a8a;
+		--gradient-backdrop-c: #c2186e;
+		--radius-sm: 12px;
+		--radius-md: 16px;
+		--radius-lg: 20px;
+		--radius-xl: 28px;
+		--radius-2xl: 32px;
+		--shadow-sm: 0 2px 12px rgb(0 0 0 / 0.25), inset 0 1px 0 rgb(255 255 255 / 0.28);
+		--shadow-md: 0 8px 32px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.1);
+		--shadow-lg: 0 20px 64px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.5), inset 0 -1px 0 rgb(255 255 255 / 0.12);
+		--sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body { margin: 0; background: #0b0d18; color: var(--color-surface-foreground); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+	h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 88px; }
+	.section { padding-top: 44px; }
+	.section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-cyan); margin-bottom: 6px; }
+	.section h2 { font-size: 24px; }
+	.lede { margin-top: 8px; max-width: 72ch; font-size: 14px; color: var(--color-muted); }
+	.note { margin-top: 14px; font-size: 13px; color: var(--color-muted); }
+
+	/* The vivid fluid backdrop every panel floats over. */
+	.scene { border-radius: var(--radius-2xl); overflow: hidden; position: relative; box-shadow: var(--shadow-lg);
+		background: radial-gradient(58% 52% at 14% 16%, var(--gradient-backdrop-a) 0%, rgb(43 30 102 / 0) 68%), radial-gradient(52% 46% at 88% 12%, var(--gradient-backdrop-b) 0%, rgb(14 122 138 / 0) 62%), radial-gradient(66% 58% at 76% 94%, var(--gradient-backdrop-c) 0%, rgb(194 24 110 / 0) 66%), radial-gradient(40% 36% at 40% 80%, #123a6b 0%, rgb(18 58 107 / 0) 70%), linear-gradient(160deg, #141625, #0b0d18); }
+
+	/* ── The glass material: tint + blur/saturate + specular edge ── */
+	.glass { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+	.glass.raise { background: var(--color-surface-raised); }
+	.tilt { transform: rotate(-2.5deg); }
+
+	/* ── COVER: control center + player over the light field ── */
+	.stage { padding: 36px 16px 8px; }
+	.cover { max-width: 880px; margin: 0 auto; min-height: 640px; padding: 40px 36px 48px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+	@media (min-width: 760px) { .cover { grid-template-columns: 320px minmax(0, 1fr); align-items: start; } }
+	.clockbar { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 14px; padding: 2px 8px 0; }
+	.clockbar b { font-size: 44px; font-weight: 600; letter-spacing: -0.02em; }
+	.clockbar span { color: var(--color-muted); font-size: 14px; }
+
+	.player { padding: 22px; max-width: 320px; }
+	.art { width: 64px; height: 64px; border-radius: var(--radius-md); background: conic-gradient(from 210deg at 55% 45%, #c2186e, #2b1e66, #0e7a8a, #c2186e); box-shadow: inset 0 1px 0 var(--edge-highlight); display: grid; place-items: center; font-size: 22px; color: rgb(255 255 255 / 0.85); }
+	.player h3 { margin-top: 14px; font-size: 17px; }
+	.player .artist { color: var(--color-muted); font-size: 13px; }
+	.track { position: relative; height: 6px; border-radius: 999px; background: rgb(255 255 255 / 0.18); margin: 16px 0 6px; }
+	.track .fill { position: absolute; inset: 0; right: 42%; border-radius: 999px; background: rgb(255 255 255 / 0.92); }
+	.times { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-muted); }
+	.transport { display: flex; justify-content: center; gap: 22px; margin-top: 16px; }
+	.tbtn { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; color: var(--color-surface-foreground); background: var(--color-surface-raised); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+	.tbtn.main { width: 54px; height: 54px; font-size: 17px; background: rgb(255 255 255 / 0.92); color: #10121c; border-color: rgb(255 255 255 / 0.5); }
+
+	.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 18px; }
+	.tile { aspect-ratio: 1; border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); font-size: 18px; }
+	.tile small { font-size: 11px; color: var(--color-muted); }
+	.tile.on { background: linear-gradient(180deg, rgb(10 132 255 / 0.85), rgb(10 132 255 / 0.55)); border-color: rgb(255 255 255 / 0.35); }
+	.tile.on small { color: rgb(255 255 255 / 0.8); }
+	.tile.pink { background: linear-gradient(180deg, rgb(255 55 95 / 0.8), rgb(255 55 95 / 0.5)); border-color: rgb(255 255 255 / 0.3); }
+
+	.siders { padding: 18px 22px; max-width: 320px; justify-self: end; }
+	@media (max-width: 759px) { .siders { justify-self: stretch; max-width: none; } }
+	.srow { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+	.srow:first-child { margin-top: 0; }
+	.srow .ico { width: 18px; text-align: center; font-size: 14px; }
+	.hslider { position: relative; flex: 1; height: 26px; border-radius: 999px; background: rgb(255 255 255 / 0.14); border: 1px solid var(--color-border); box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.25); overflow: hidden; }
+	.hslider::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; right: 55%; background: rgb(255 255 255 / 0.92); }
+	.hslider.v { flex: none; width: 26px; height: 110px; }
+	.hslider.v::before { right: 0; left: 0; top: auto; bottom: 68%; }
+
+	.pillrow { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 18px; max-width: 640px; }
+	.seg { display: flex; padding: 3px; border-radius: 999px; background: rgb(255 255 255 / 0.12); border: 1px solid var(--color-border); }
+	.seg span { font-size: 13px; padding: 6px 14px; border-radius: 999px; color: var(--color-muted); }
+	.seg .is-active { background: rgb(255 255 255 / 0.9); color: #10121c; font-weight: 600; }
+
+	/* ── 01 material recipe: edge zoom ── */
+	.recipe { display: grid; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .recipe { grid-template-columns: 1fr 1fr; } }
+	.edge-demo { padding: 18px; min-height: 120px; }
+	.edge-demo b { font-size: 14px; }
+	.edge-demo small { display: block; margin-top: 6px; font-size: 12px; color: var(--color-muted); line-height: 1.55; }
+	.edge-plain { border: 1px solid rgb(255 255 255 / 0.16); background: rgb(16 18 26 / 0.55); border-radius: var(--radius-lg); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+	.layers { margin-top: 16px; padding: 16px 18px; }
+	.layers li { display: flex; gap: 12px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgb(255 255 255 / 0.08); font-size: 13px; list-style: none; }
+	.layers li:last-child { border-bottom: 0; }
+	.layers i { font-style: normal; font-size: 11px; color: var(--color-cyan); flex: none; width: 96px; }
+
+	/* ── 02 color swatches ── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); }
+	.sw .fill { height: 48px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 12px; font-weight: 600; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── 03 controls ── */
+	.controls { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 20px; padding: 22px; }
+	.gbtn { font: 600 14px/1 var(--sans); border-radius: 999px; padding: 11px 20px; cursor: pointer; color: var(--color-surface-foreground); background: var(--color-surface-raised); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+	.gbtn-primary { color: #fff; border-color: rgb(255 255 255 / 0.35); background: linear-gradient(180deg, rgb(10 132 255 / 0.9), rgb(10 132 255 / 0.6)); }
+	.gbtn-danger { color: #fff; border-color: rgb(255 255 255 / 0.3); background: linear-gradient(180deg, rgb(255 69 58 / 0.85), rgb(255 69 58 / 0.55)); }
+	.gtoggle { position: relative; width: 52px; height: 30px; border-radius: 999px; background: rgb(255 255 255 / 0.14); border: 1px solid var(--color-border); box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.25); }
+	.gtoggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgb(0 0 0 / 0.35); }
+	.gtoggle.is-on { background: linear-gradient(180deg, rgb(10 132 255 / 0.9), rgb(10 132 255 / 0.55)); }
+	.gtoggle.is-on::after { left: 25px; }
+
+	/* ── 04 mobile ── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.phone { position: relative; width: 320px; max-width: 100%; margin: 0 auto; border-radius: 44px; padding: 10px; overflow: hidden;
+		background: radial-gradient(70% 50% at 20% 0%, var(--gradient-backdrop-a) 0%, rgb(43 30 102 / 0) 70%), radial-gradient(60% 44% at 90% 30%, var(--gradient-backdrop-b) 0%, rgb(14 122 138 / 0) 64%), radial-gradient(70% 50% at 80% 100%, var(--gradient-backdrop-c) 0%, rgb(194 24 110 / 0) 64%), linear-gradient(170deg, #141625, #0b0d18);
+		box-shadow: var(--shadow-lg); }
+	.phone-in { border-radius: 36px; border: 1px solid rgb(255 255 255 / 0.1); padding: 12px 12px 14px; }
+	.statusrow { display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 10px; font-size: 13px; font-weight: 600; }
+	.island { width: 80px; height: 22px; border-radius: 999px; background: #000; }
+	.cc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+	.cc-tile { border-radius: var(--radius-md); padding: 12px; min-height: 74px; display: flex; flex-direction: column; justify-content: space-between; background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); -webkit-backdrop-filter: blur(16px) saturate(var(--saturate-glass)); backdrop-filter: blur(16px) saturate(var(--saturate-glass)); font-size: 15px; }
+	.cc-tile small { font-size: 10px; color: var(--color-muted); }
+	.cc-tile.on { background: linear-gradient(180deg, rgb(10 132 255 / 0.85), rgb(10 132 255 / 0.5)); border-color: rgb(255 255 255 / 0.3); }
+	.cc-tile.on small { color: rgb(255 255 255 / 0.75); }
+	.cc-media { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge-highlight); -webkit-backdrop-filter: blur(16px) saturate(var(--saturate-glass)); backdrop-filter: blur(16px) saturate(var(--saturate-glass)); }
+	.cc-media .art { width: 42px; height: 42px; border-radius: 10px; font-size: 14px; }
+	.cc-media b { display: block; font-size: 13px; }
+	.cc-media small { font-size: 11px; color: var(--color-muted); }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid rgb(255 255 255 / 0.1); font-size: 13px; color: var(--color-muted); display: flex; gap: 14px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 132px; font-size: 13px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 05 off-style ── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { border-radius: var(--radius-lg); padding: 18px; font-size: 14px; }
+	.cmp b { font-size: 15px; }
+	.cmp small { display: block; margin-top: 10px; font-size: 12px; color: var(--color-muted); line-height: 1.55; }
+	.cmp-off.solid-off { background: #ffffff; color: #1d1d1f; box-shadow: 0 16px 40px rgb(0 0 0 / 0.35); }
+	.cmp-off.solid-off small { color: #6e6e73; }
+	.cmp-on { background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-md); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+	.cmp-off.edge-off { background: var(--color-surface); border: 1px solid rgb(255 255 255 / 0.16); -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); backdrop-filter: blur(var(--blur-glass)) saturate(var(--saturate-glass)); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the material in its native habitat: a control center and a media
+     player floating as tinted glass over a vivid fluid light field. One card
+     tilts a few degrees for depth. -->
+<div class="stage">
+	<div class="scene cover">
+		<div class="clockbar"><b>21:47</b><span>Tuesday, October 3 — lights drifting</span></div>
+
+		<div class="glass player tilt">
+			<div class="art">♪</div>
+			<h3>Nocturne Fields</h3>
+			<p class="artist">Vetta Sound — Refraction EP</p>
+			<div class="track"><span class="fill"></span></div>
+			<div class="times"><span>1:42</span><span>−2:38</span></div>
+			<div class="transport">
+				<span class="tbtn">⏮</span>
+				<span class="tbtn main">▶</span>
+				<span class="tbtn">⏭</span>
+			</div>
+		</div>
+
+		<div class="glass tiles">
+			<div class="tile on">⌇<small>Wi-Fi</small></div>
+			<div class="tile on">ᛒ<small>Bluetooth</small></div>
+			<div class="tile">◉<small>AirDrop</small></div>
+			<div class="tile pink">☾<small>Focus</small></div>
+		</div>
+
+		<div class="glass siders">
+			<div class="srow"><span class="ico">☀</span><span class="hslider"></span></div>
+			<div class="srow"><span class="ico">♪</span><span class="hslider" style="--x:0"></span></div>
+			<div class="srow"><span style="font-size:12px;color:var(--color-muted)">Brightness &amp; volume — white fill on a recessed glass track</span></div>
+		</div>
+
+		<div class="glass pillrow">
+			<div class="seg"><span>Day</span><span class="is-active">Night</span><span>Auto</span></div>
+			<span class="gtoggle is-on"></span>
+			<span style="font-size:12px;color:var(--color-muted)">Adaptive lighting</span>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 MATERIAL -->
+	<section class="section">
+		<p class="section-label">01 — Material recipe</p>
+		<h2>Three layers, all of them required</h2>
+		<p class="lede">A Liquid Glass panel is a tinted fill (rgba(16,18,26,0.55)) with blur(24px) +
+			saturate(180%), a specular edge — a 1px inset top highlight at 45% white over a faint ground —
+			and a real drop shadow. The tint is the point: color lives in the backdrop, the glass carries a
+			dark film of it. The specular edge is what makes a panel look bent rather than merely blurry.</p>
+		<div class="recipe">
+			<div class="edge-demo edge-plain"><b>Flat translucency</b>
+				<small>Fill + blur only, a bare 1px border, no specular inset. It reads as a dim sticker
+					on the light — this is the layer most often forgotten.</small></div>
+			<div class="edge-demo cmp-on"><b>Liquid Glass</b>
+				<small>The same fill and blur plus the specular edge (inset 0 1px 0 at 45% white), a
+					faint bottom ground, and the drop. The rim now catches the light field.</small></div>
+		</div>
+		<ul class="glass layers">
+			<li><i>1 · tint</i><span>surface fill, never above ~70% opacity — the backdrop must roll through</span></li>
+			<li><i>2 · optics</i><span>backdrop-filter: blur(24px) saturate(180%) — the boost makes color glow</span></li>
+			<li><i>3 · specular</i><span>inset 1px top highlight at edge-highlight, ground at edge-ground</span></li>
+			<li><i>4 · drop</i><span>shadow-md keeps the panel above the light field; hover brightens the border</span></li>
+		</ul>
+		<p class="note">This is the boundary with the collection's Glassmorphism entry: there the glass is
+			colourless (white at 5–12%) over an ink night scene and tint is forbidden. Here the glass itself
+			is tinted and the backdrop is vivid. Colourless panels over a dark monochrome scene are the
+			other system.</p>
+	</section>
+
+	<!-- 02 COLOR -->
+	<section class="section">
+		<p class="section-label">02 — Color roles</p>
+		<h2>The backdrop owns the color; the glass borrows it</h2>
+		<p class="lede">Three light fields — violet #2b1e66, teal #0e7a8a, magenta #c2186e — stage the
+			scene as large soft radials. System blue marks active tiles and the primary control; system pink
+			is the rare second signal; cyan is garnish, once per screen at most.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>systemBlue · active, primary</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>systemPink · rare signals</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-cyan)"></div><div class="meta"><b>cyan</b><span>garnish, once per screen</span></div></div>
+			<div class="sw"><div class="fill" style="background:conic-gradient(from 210deg at 55% 45%, #c2186e, #2b1e66, #0e7a8a, #c2186e)"></div><div class="meta"><b>backdrop a/b/c</b><span>the light field itself</span></div></div>
+		</div>
+		<p class="note">Text is near-white ink; secondary text is translucent white at 62%. Never tint text
+			with a backdrop hue — the panel already carries it.</p>
+	</section>
+
+	<!-- 03 CONTROLS -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>Everything round, everything glass</h2>
+		<p class="lede">Controls are capsules and circles that keep the full material stack — tint,
+			optics, specular edge — even when tinted with a state color. The white thumb and white fills
+			are the moving parts; color marks state, ink stays legible.</p>
+		<div class="glass controls">
+			<button class="gbtn gbtn-primary" type="button">Continue</button>
+			<button class="gbtn" type="button">Options</button>
+			<button class="gbtn gbtn-danger" type="button">Reset</button>
+			<span class="gtoggle is-on"></span><span style="font-size:13px">On</span>
+			<span class="gtoggle"></span><span style="font-size:13px">Off</span>
+			<span class="hslider" style="width:180px"></span>
+		</div>
+		<p class="note">One tilted panel per composition at most; press states scale to ~0.97; focus is a
+			2px white ring, never a removed outline.</p>
+	</section>
+
+	<!-- 04 MOBILE -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>The phone is the material's home ground</h2>
+		<p class="lede">Control center shrinks the tiles, halves the blur for performance, and keeps the
+			specular edge — it is the identity. The backdrop gets larger and smoother so small panels still
+			have clean light to refract.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-in">
+					<div class="statusrow"><span>21:47</span><span class="island"></span><span>▮▮▮</span></div>
+					<div class="cc-grid">
+						<div class="cc-tile on">⌇<small>Wi-Fi — Vetta-5G</small></div>
+						<div class="cc-tile on">ᛒ<small>Bluetooth — on</small></div>
+						<div class="cc-tile">◉<small>AirDrop — off</small></div>
+						<div class="cc-tile" style="background:linear-gradient(180deg, rgb(255 55 95 / 0.8), rgb(255 55 95 / 0.5));border-color:rgb(255 255 255 / 0.3)">☾<small style="color:rgb(255 255 255 / 0.75)">Focus — Sleep</small></div>
+						<div class="cc-media">
+							<span class="art">♪</span>
+							<span><b>Nocturne Fields</b><small>Vetta Sound — Refraction EP</small></span>
+							<span class="spacer"></span><span style="font-size:16px">▶</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Blur halves</b><span>Tiles and bars drop from 24px to ~16px backdrop blur to stay cheap on mobile GPUs; saturate(180%) never drops — it carries the color.</span></li>
+				<li><b>The edge stays</b><span>The specular inset highlight is the identity; even at small tile sizes the 1px rim is what separates glass from a gray rectangle.</span></li>
+				<li><b>Bigger, smoother light</b><span>Backdrop light fields widen and lose detail behind text; small busy gradients turn panels to noise at phone scale.</span></li>
+				<li><b>Targets stay human</b><span>Tiles keep 44pt+ hit areas and controls stay capsule-shaped; radii shrink at most one step, never below 12px.</span></li>
+				<li><b>Tilt is removed</b><span>The rotated depth garnish does not survive small screens — it costs space and reads as misalignment in a narrow column.</span></li>
+				<li><b>Hover becomes press</b><span>Border brightening is replaced by a quick fill lift while the finger is down; there is no resting hover state on touch.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>What kills the material</h2>
+		<div class="compare">
+			<div class="cmp cmp-off solid-off"><b>Solid white card</b>
+				<p style="margin-top:6px;font-size:13px">Opaque, flat, no optics — a card from a light
+					marketing theme dropped onto the light field.</p>
+				<small>Once the panel is opaque it stops being glass: no tint to carry the backdrop, no
+					light rolling through, nothing to refract. The light field behind becomes wallpaper.</small></div>
+			<div class="cmp cmp-on"><b>Liquid Glass card</b>
+				<p style="margin-top:6px;font-size:13px">Tinted translucent fill, blur + saturate, specular
+					rim, real drop.</p>
+				<small>The same layout as glass: the scene glows through the film, the rim catches it,
+					and the panel reads as a material instead of a sticker.</small></div>
+		</div>
+		<div class="compare">
+			<div class="cmp cmp-off edge-off"><b>Glass without the specular edge</b>
+				<p style="margin-top:6px;font-size:13px">Correct tint, correct blur — but only a bare 1px
+					border, no inset highlight.</p>
+				<small>It slides into the night-glass look of the Glassmorphism entry: colourless-feeling
+					panels over a dim field. The bent-light signature is gone.</small></div>
+			<div class="cmp cmp-on"><b>Specular edge restored</b>
+				<p style="margin-top:6px;font-size:13px">Same panel with the inset 45% white rim and the
+					faint ground.</p>
+				<small>The rim is what bends light; with it, the panel belongs to this language, not the
+					other glass system.</small></div>
+		</div>
+		<p class="note">Also out: glass fill above ~70% opacity, flat solid backdrops, nesting glass more
+			than one level deep, radii under 12px, neon tube borders, scanlines, and glowing text.</p>
+	</section>
+
+</div>
+</body>
+</html>

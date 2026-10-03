@@ -1,0 +1,29 @@
+/* Swiss Grid — International Typographic Style: white ground, ink text, one Swiss
+   red, a strict visible grid, sans type only, zero ornament. Original curated spec
+   for this collection (MIT). */
+@theme {
+	--color-primary: #e32636; /* Swiss red — the page's only color: numbers, markers, the one real action */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #ffffff; /* the white ground */
+	--color-surface-foreground: #111111; /* ink — text and structure share it */
+	--color-surface-raised: #f7f7f7; /* the only tonal step: image plates and pull blocks */
+	--color-muted: #6b6b6b; /* secondary text, captions, folios */
+	/* The accent is ink black on purpose: the grid, the rules and the display type
+	   carry it. A second hue would dilute the single Swiss red. */
+	--color-accent: #111111;
+	--color-danger: #cc2b1d;
+	/* The border is the grid: black 1px hairlines are the structure of every layout. */
+	--color-border: #111111;
+
+	/* Corners do not exist. Every radius is 0; a rounded rectangle is off-style. */
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 0px;
+	--radius-xl: 0px;
+	--radius-2xl: 0px;
+
+	/* The page has no light source: separation comes from the grid, not elevation. */
+	--shadow-sm: none;
+	--shadow-md: none;
+	--shadow-lg: none;
+}

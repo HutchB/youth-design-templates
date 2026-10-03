@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wired — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #000000;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #000000;
+		--color-surface-raised: #f5f5f5;
+		--color-muted: #757575;
+		--color-accent: #057dbc;
+		--color-danger: #c0272d;
+		--color-border: #e0e0e0;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 0px;
+		--radius-xl: 0px;
+		--radius-2xl: 0px;
+
+		--shadow-sm: 0 0 0 rgb(0 0 0 / 0);
+		--shadow-md: 0 0 0 rgb(0 0 0 / 0);
+		--shadow-lg: 0 0 0 rgb(0 0 0 / 0);
+
+		--serif-display: "Bodoni MT", "Didot", "Playfair Display", Georgia, "Times New Roman", serif;
+		--serif: Georgia, "Times New Roman", serif;
+		--sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 17px;
+		line-height: 1.35;
+	}
+	h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+	p { margin: 0; }
+	a { color: inherit; text-decoration: none; }
+	::selection { background: #000; color: #fff; }
+	.spacer { flex: 1; }
+	.muted { color: var(--color-muted); }
+	a.inline { color: var(--color-accent); }
+	a.inline:hover { text-decoration: underline; }
+
+	/* ── Masthead: thin band, black wordmark centered ─────────────── */
+	.masthead { display: flex; align-items: center; gap: 16px; padding: 12px 20px; }
+	.wordmark {
+		display: inline-block; font-family: var(--serif-display); font-weight: 700;
+		font-size: 30px; letter-spacing: 1px; transform: scaleX(0.74); white-space: nowrap;
+	}
+	.hairline { height: 1px; background: var(--color-border); }
+	.navlinks { display: flex; gap: 4px; overflow: hidden; }
+	.navlinks a { font-size: 14px; font-weight: 700; letter-spacing: 0.4px; padding: 4px 9px; white-space: nowrap; }
+	.navlinks a:hover { background: #000; color: #fff; }
+	.burger { font-size: 18px; font-weight: 700; }
+
+	/* Square everything: the black block and the outline are the two buttons. */
+	.btn {
+		display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+		font-family: var(--sans); font-weight: 700; font-size: 16px; letter-spacing: 0.3px;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		border: 1px solid var(--color-primary); padding: 12px 20px; cursor: pointer;
+		border-radius: 0;
+	}
+	.btn.outline { background: var(--color-surface); color: var(--color-surface-foreground); }
+	.btn.icon { width: 36px; height: 36px; padding: 0; border-radius: 9999px; background: var(--color-surface); color: #000; border-color: var(--color-border); }
+
+	/* ── Cover story: eyebrow + 64px serif + byline + duotone art ─── */
+	.hero { max-width: 1400px; margin: 0 auto; padding: 44px 20px 40px; }
+	.eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 10px; }
+	.hero h1 {
+		font-family: var(--serif-display); font-weight: 400;
+		font-size: 44px; line-height: 1.02; letter-spacing: -0.5px; max-width: 20ch;
+	}
+	@media (min-width: 900px) { .hero h1 { font-size: 64px; } }
+	.byline { font-family: var(--serif); font-weight: 700; font-size: 12.7px; line-height: 2.2; color: var(--color-muted); margin-top: 14px; }
+	.byline b { color: var(--color-surface-foreground); font-weight: 700; }
+	.dek { font-family: var(--serif); font-size: 19px; line-height: 1.47; max-width: 62ch; margin-top: 10px; }
+	.art {
+		aspect-ratio: 16 / 9; margin-top: 28px; position: relative; overflow: hidden;
+		background:
+			radial-gradient(60% 90% at 78% 22%, #d9d9d9, transparent 60%),
+			radial-gradient(rgb(0 0 0 / 0.16) 1px, transparent 1.4px) 0 0 / 7px 7px,
+			linear-gradient(120deg, #0c0c0c 20%, #4b4b4b 55%, #e8e8e8 100%);
+	}
+	.art .chip {
+		position: absolute; left: 8%; bottom: 12%; width: 26%; aspect-ratio: 1;
+		background: #fff;
+		clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
+		mix-blend-mode: difference; filter: contrast(1.1);
+	}
+	.art .cap { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: #f0f0f0; }
+	@media (min-width: 900px) {
+		.hero-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 40px; align-items: end; }
+		.art { margin-top: 0; }
+	}
+
+	/* ── Story grid: two-up cards, then hairline rows ─────────────── */
+	.two-up {
+		max-width: 1400px; margin: 0 auto; padding: 0 20px;
+		display: grid; grid-template-columns: 1fr; gap: 32px;
+	}
+	@media (min-width: 820px) { .two-up { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
+	.card .thumb { aspect-ratio: 4 / 3; background: linear-gradient(140deg, #1a1a1a, #6f6f6f 70%, #dcdcdc); }
+	.card .thumb.alt { background: linear-gradient(160deg, #e0e0e0, #8a8a8a 45%, #101010); }
+	.card h3 { font-family: var(--sans); font-weight: 700; font-size: 20px; line-height: 1.2; letter-spacing: -0.28px; margin: 14px 0 6px; }
+	.card .lead { font-size: 14px; color: var(--color-muted); letter-spacing: 0.2px; max-width: 56ch; }
+
+	.rows { max-width: 1400px; margin: 44px auto 0; padding: 0 20px; }
+	.rowline {
+		display: flex; align-items: baseline; gap: 18px; padding: 16px 0;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.rowline:first-child { border-top: 1px solid var(--color-border); }
+	.rowline b { font-size: 17px; font-weight: 700; letter-spacing: -0.14px; flex: 1; min-width: 0; }
+	.rowline .meta { font-size: 14px; color: var(--color-muted); letter-spacing: 0.4px; white-space: nowrap; }
+
+	/* ── Newsletter: square input, square black button ────────────── */
+	.newsletter { max-width: 1400px; margin: 48px auto 0; padding: 48px 20px; background: var(--color-surface-raised); }
+	.newsletter .inner { max-width: 620px; }
+	.newsletter h2 { font-family: var(--serif-display); font-weight: 400; font-size: 32px; letter-spacing: -0.3px; line-height: 1.1; }
+	.newsletter p { font-size: 14px; color: var(--color-muted); margin: 10px 0 18px; }
+	.nlform { display: flex; gap: 0; max-width: 480px; }
+	.nlform input {
+		flex: 1; min-width: 0; font-family: var(--sans); font-size: 17px; padding: 12px 16px;
+		border: 1px solid var(--color-primary); border-right: 0; border-radius: 0; background: #fff;
+	}
+	.nlform input:focus { outline: 2px solid #000; outline-offset: -2px; }
+
+	/* ── Footer: black band, dense link matrix ────────────────────── */
+	.footer { background: var(--color-primary); color: var(--color-primary-foreground); padding: 48px 20px 36px; }
+	.footer .cols { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 28px; }
+	@media (min-width: 820px) { .footer .cols { grid-template-columns: 2fr repeat(4, 1fr); } }
+	.footer .wordmark { color: #fff; }
+	.footer h4 { font-size: 14px; font-weight: 700; letter-spacing: 0.4px; margin-bottom: 10px; }
+	.footer a { display: block; font-size: 14px; color: #bdbdbd; padding: 3px 0; }
+	.footer a:hover { color: #fff; }
+	.footer .fine { max-width: 1400px; margin: 32px auto 0; font-size: 12px; color: #8f8f8f; }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 90px; }
+	.section { padding-top: 56px; border-top: 1px solid var(--color-border); }
+	.section:first-child { border-top: 0; }
+	.section-label { font-size: 14px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--color-muted); margin-bottom: 10px; }
+	.section h2 { font-family: var(--serif-display); font-weight: 400; font-size: 34px; letter-spacing: -0.3px; }
+	.lede { font-family: var(--serif); font-size: 17px; line-height: 1.5; margin-top: 12px; max-width: 62ch; }
+	.note { margin-top: 18px; font-size: 14px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 26px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 60px; border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 700; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 286px 1fr; gap: 44px; } }
+	.phone { width: 286px; max-width: 100%; margin: 0 auto; border: 1px solid var(--color-border); background: #fff; }
+	.p-mast { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+	.p-mast .wordmark { font-size: 20px; }
+	.p-navrow { display: flex; gap: 2px; padding: 0 12px 8px; overflow: hidden; font-size: 11px; font-weight: 700; letter-spacing: 0.4px; }
+	.p-navrow span { padding: 3px 6px; white-space: nowrap; }
+	.p-hero { padding: 16px 12px 20px; }
+	.p-hero h4 { font-family: var(--serif-display); font-weight: 400; font-size: 27px; line-height: 1.04; letter-spacing: -0.4px; }
+	.p-art { aspect-ratio: 16 / 10; margin-top: 12px;
+		background: radial-gradient(60% 90% at 78% 22%, #d9d9d9, transparent 60%), linear-gradient(120deg, #0c0c0c 20%, #4b4b4b 60%, #e8e8e8); }
+	.p-rows { padding: 4px 12px 16px; }
+	.p-row { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; font-weight: 700; letter-spacing: -0.14px; }
+	.p-row small { display: block; font-size: 10px; font-weight: 400; color: var(--color-muted); letter-spacing: 0.4px; margin-top: 2px; }
+	.p-foot { background: #000; color: #bdbdbd; font-size: 10px; padding: 12px; }
+	.p-foot b { display: block; font-family: var(--serif-display); font-size: 13px; color: #fff; margin-bottom: 4px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { display: block; color: #000; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 24px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 22px; border-radius: 18px; color: #27303d; font-size: 15px;
+		background: linear-gradient(145deg, #f6f8fc, #e3e9f2);
+		box-shadow: 0 14px 34px rgb(15 23 42 / 0.15); font-weight: 700;
+	}
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: #67717f; margin-top: 8px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); font-size: 15px; font-weight: 700; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the magazine front: black wordmark masthead, 64px serif cover
+     story, duotone art, hairline story rows, black footer matrix. -->
+<div class="masthead">
+	<span class="burger">≡</span>
+	<span class="navlinks">
+		<a href="#latest">LATEST</a><a href="#tech">TECH</a><a href="#science">SCIENCE</a><a href="#culture">CULTURE</a><a href="#reviews">REVIEWS</a><a href="#ideas">IDEAS</a>
+	</span>
+	<span class="spacer"></span>
+	<span class="wordmark">WIRED</span>
+	<span class="spacer"></span>
+	<button class="btn" style="padding:8px 16px;font-size:14px">SUBSCRIBE</button>
+</div>
+<div class="hairline"></div>
+
+<div class="hero">
+	<div class="hero-grid">
+		<div>
+			<p class="eyebrow">SECURITY</p>
+			<h1>The Quiet War Inside Your Router</h1>
+			<p class="byline"><b>By Mara Okafor</b> &nbsp;·&nbsp; 09.14.2026 06:30 AM</p>
+			<p class="dek">For a decade the little box on your shelf has been quietly negotiating with
+				half the planet. <a class="inline" href="#story">The truce is over</a>, and the next
+				decade of home networking will be defined by who blinks first.</p>
+		</div>
+		<div class="art">
+			<div class="chip"></div>
+			<span class="cap">Illustration: Vetta Studio</span>
+		</div>
+	</div>
+</div>
+
+<div class="two-up">
+	<div class="card">
+		<div class="thumb"></div>
+		<p class="eyebrow" style="margin-top:16px">ARTIFICIAL INTELLIGENCE</p>
+		<h3>The Data Center Next Door</h3>
+		<p class="lead">Compute is moving into basements, barns and strip malls. The neighbors have
+			questions.</p>
+	</div>
+	<div class="card">
+		<div class="thumb alt"></div>
+		<p class="eyebrow" style="margin-top:16px">SPACE</p>
+		<h3>Ground Control Loses Patience</h3>
+		<p class="lead">A new generation of launch operators is rewriting the rules of the pad —
+			again.</p>
+	</div>
+</div>
+
+<div class="rows">
+	<div class="rowline"><b>The Battery Swap Economy Is About to Get Ugly</b><span class="meta">TRANSPORT · 6 MIN</span></div>
+	<div class="rowline"><b>What Happens When a City Runs Its Own Fiber</b><span class="meta">NETWORK · 9 MIN</span></div>
+	<div class="rowline"><b>The Case for Boring Firmware</b><span class="meta">OPINION · 4 MIN</span></div>
+	<div class="rowline"><b>A Field Guide to Auction-Rate Laptops</b><span class="meta">REVIEWS · 11 MIN</span></div>
+	<div class="rowline"><b>Why the Ocean Floor Is the Next Landing Zone</b><span class="meta">SCIENCE · 7 MIN</span></div>
+</div>
+
+<div class="newsletter">
+	<div class="inner">
+		<h2>Get one great story, every day.</h2>
+		<p>Join 1.2 million readers who start their morning with the most important line in tech.</p>
+		<div class="nlform">
+			<input placeholder="you@example.com">
+			<button class="btn">SIGN UP</button>
+		</div>
+	</div>
+</div>
+
+<div class="footer">
+	<div class="cols">
+		<div><span class="wordmark">WIRED</span></div>
+		<div><h4>SECTIONS</h4><a href="#latest">Latest</a><a href="#tech">Tech</a><a href="#science">Science</a><a href="#culture">Culture</a><a href="#reviews">Reviews</a><a href="#ideas">Ideas</a></div>
+		<div><h4>MORE</h4><a href="#podcasts">Podcasts</a><a href="#video">Video</a><a href="#longform">Longform</a><a href="#archive">Archive</a><a href="#rss">RSS</a></div>
+		<div><h4>ACCOUNT</h4><a href="#subscribe">Subscribe</a><a href="#gift">Give a gift</a><a href="#signin">Sign in</a><a href="#app">Get the app</a></div>
+		<div><h4>COMPANY</h4><a href="#about">About</a><a href="#jobs">Careers</a><a href="#press">Press</a><a href="#terms">Terms of use</a><a href="#privacy">Privacy</a></div>
+	</div>
+	<div class="fine">©2026 Condé Nast-style reference layout · all stories and figures on this page are fictional placeholders.</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — The duet</p>
+		<h2>Black, white, and one blue that stays in the prose</h2>
+		<p class="lede">Black is the brand: the wordmark, the CTA fill, the campaign border, the
+			footer band. The link blue exists to mark destinations inside an article and never
+			graduates to navigation or buttons. Everything else is paper and hairlines.</p>
+		<div class="row">
+			<button class="btn">SUBSCRIBE</button>
+			<button class="btn outline">SIGN IN</button>
+			<button class="btn icon">✚</button>
+			<span style="font-family:var(--serif);font-size:17px">Read <a class="inline" href="#story">the filing</a> before it vanishes.</span>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#000000 · wordmark, CTA, footer</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#057dbc · in-prose links only</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-border)"></div><b>border</b><span>#e0e0e0 · the only line</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-muted)"></div><b>muted</b><span>#757575 · bylines, meta</span></div>
+		</div>
+		<p class="note">Serif display at weight 400 (64/48/32px), serif prose, sans chrome. Square
+			corners on every control; the only circles are icon containers and avatars.</p>
+	</section>
+
+	<!-- 02 MOBILE -->
+	<section class="section">
+		<p class="section-label">02 — Mobile</p>
+		<h2>One column that never becomes a card</h2>
+		<p class="lede">The phone edition keeps the printed-magazine logic: the wordmark shrinks and
+			stays centered, the cover headline drops from 64 to 40px without bolding, and the story
+			rows stay a hairline list instead of turning into boxes.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="p-mast">
+					<span class="burger">≡</span>
+					<span class="spacer"></span>
+					<span class="wordmark">WIRED</span>
+					<span class="spacer"></span>
+					<span style="font-size:13px;font-weight:700">⌕</span>
+				</div>
+				<div class="p-navrow"><span>LATEST</span><span>TECH</span><span>SCIENCE</span><span>CULTURE</span></div>
+				<div class="hairline"></div>
+				<div class="p-hero">
+					<p class="eyebrow" style="font-size:11px">SECURITY</p>
+					<h4>The Quiet War Inside Your Router</h4>
+					<p style="font-family:var(--serif);font-weight:700;font-size:11px;color:var(--color-muted);margin-top:8px">By Mara Okafor · 09.14.2026</p>
+					<div class="p-art"></div>
+				</div>
+				<div class="p-rows">
+					<div class="p-row">The Battery Swap Economy Is About to Get Ugly<small>TRANSPORT · 6 MIN</small></div>
+					<div class="p-row">What Happens When a City Runs Its Own Fiber<small>NETWORK · 9 MIN</small></div>
+					<div class="p-row">The Case for Boring Firmware<small>OPINION · 4 MIN</small></div>
+				</div>
+				<div class="p-foot"><b>WIRED</b>©2026 reference layout · stories are fictional placeholders</div>
+			</div>
+			<ul class="rules">
+				<li><b>Headline 64 → 40px</b><span>The serif drops one display tier and keeps weight 400 with tight leading; bolding it to "read better" would break the voice.</span></li>
+				<li><b>Wordmark survives</b><span>It stays centered and condensed via the same narrow serif treatment — it never collapses into a hamburger-only bar.</span></li>
+				<li><b>Rows stay rows</b><span>The hairline list is the scan rhythm of the page; secondary stories drop thumbnails before the rows ever gain borders or shadows.</span></li>
+				<li><b>Art crops, duotone holds</b><span>Cover imagery trims from 16:9 toward 16:10; the black-white halftone treatment carries over unchanged.</span></li>
+				<li><b>Targets 44px</b><span>Buttons keep ~44px height via padding; nav links grow through tap padding rather than font size.</span></li>
+				<li><b>Blue stays in prose</b><span>Inline article links keep their blue; the mobile UI adds no color to compensate for the small canvas.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 03 DON'T -->
+	<section class="section">
+		<p class="section-label">03 — Off-style, for contrast</p>
+		<h2>What breaks the magazine</h2>
+		<div class="compare">
+			<div class="cmp-off">SaaS marketing card
+				<small>18px radius · gradient wash · soft shadow · accent-chip eyebrow. The story
+					grid turns into a product page and the masthead loses its authority.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>White paper · hairline above and below · square black CTA · uppercase sans
+					eyebrow. The hairline grid is the whole structure.</small></div>
+		</div>
+		<p class="note">Also out: display set in a sans or pushed past weight 400, shadows on cards,
+			and the link blue anywhere outside article prose.</p>
+	</section>
+
+</div>
+
+</body>
+</html>

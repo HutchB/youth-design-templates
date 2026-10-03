@@ -1,0 +1,25 @@
+/* PlayStation — black chapters, blue pill CTAs, light display type. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #0070d1;
+	--color-primary-foreground: #ffffff;
+	--color-surface: #000000;
+	--color-surface-foreground: #ffffff;
+	--color-surface-raised: #181818;
+	--color-muted: #cccccc;
+	--color-accent: #53b1ff;
+	--color-danger: #c81b3a;
+	--color-border: rgb(229 229 229 / 0.2);
+	--color-commerce: #d53b00;
+	--color-ink-elevated: #121314;
+
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 16px;
+	--radius-xl: 24px;
+	--radius-2xl: 9999px;
+
+	/* Cards rest flat; lift happens only on press. */
+	--shadow-sm: 0 2px 8px rgb(0 0 0 / 0.3);
+	--shadow-md: 0 4px 12px rgb(0 0 0 / 0.16);
+	--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.5);
+}

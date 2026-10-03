@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MongoDB — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #00ed64;
+		--color-primary-foreground: #001e2b;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #001e2b;
+		--color-surface-raised: #f4f7f6;
+		--color-muted: #5c6c7a;
+		--color-accent: #00684a;
+		--color-danger: #cf4a35;
+		--color-border: #e1e5e8;
+
+		--radius-sm: 4px;
+		--radius-md: 8px;
+		--radius-lg: 12px;
+		--radius-xl: 16px;
+		--radius-2xl: 24px;
+
+		--shadow-sm: 0 1px 2px rgb(0 30 43 / 0.04);
+		--shadow-md: 0 4px 12px rgb(0 30 43 / 0.08);
+		--shadow-lg: 0 12px 24px -4px rgb(0 30 43 / 0.12);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 500; line-height: 1.2; }
+	p { margin: 0; }
+	code, .mono { font-family: var(--mono); }
+	::selection { background: rgb(0 237 100 / 0.28); }
+	.spacer { flex: 1; }
+	.num { font-variant-numeric: tabular-nums; }
+
+	.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px; } }
+
+	/* ── Chrome: white sticky nav, pill pair ──────────────────────── */
+	.topbar { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; min-height: 64px; border-bottom: 1px solid var(--color-border); }
+	.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; }
+	.mark { width: 26px; height: 26px; border-radius: 50% 50% 50% 4px; background: var(--color-primary); border: 2px solid var(--color-surface-foreground); flex: none; }
+	.topnav { display: none; gap: 20px; font-size: 14px; font-weight: 500; color: var(--color-muted); }
+	@media (min-width: 900px) { .topnav { display: flex; } }
+	.topnav .is-active { color: var(--color-surface-foreground); font-weight: 600; box-shadow: inset 0 -2px 0 var(--color-accent); padding-bottom: 21px; margin-bottom: -21px; }
+
+	/* ── Page head ────────────────────────────────────────────────── */
+	.pagehead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 30px 0 20px; }
+	.pagehead h1 { font-size: 32px; letter-spacing: -0.02em; font-weight: 500; }
+	.pagehead .count { font-size: 14px; color: var(--color-muted); margin-top: 4px; }
+	.search { margin-left: auto; display: flex; align-items: center; gap: 8px; background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-md); height: 44px; padding: 0 14px; color: var(--color-muted); min-width: 220px; }
+	.search .ph { font-size: 14px; }
+
+	/* ── Cluster cards ────────────────────────────────────────────── */
+	.clusters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+	@media (min-width: 860px) { .clusters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 22px; min-width: 0; }
+	.c-head { display: flex; align-items: center; gap: 10px; }
+	.c-head h2 { font-size: 18px; font-weight: 600; }
+	.badge { font-size: 12px; font-weight: 600; border-radius: 9999px; padding: 3px 10px; background: #c3f0d2; color: var(--color-accent); flex: none; }
+	.badge.warn { background: #f4f7f6; color: var(--color-muted); }
+	.c-meta { font-size: 13px; color: var(--color-muted); margin-top: 4px; }
+	.meter { margin-top: 13px; }
+	.meter .mt { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--color-muted); margin-bottom: 5px; }
+	.meter .mt b { color: var(--color-surface-foreground); font-weight: 600; }
+	.track { height: 6px; border-radius: 3px; background: var(--color-surface-raised); overflow: hidden; }
+	.fillb { height: 100%; border-radius: 3px; background: var(--color-accent); }
+
+	/* ── Collections table ────────────────────────────────────────── */
+	.tablecard { margin-top: 16px; padding: 0; overflow: hidden; }
+	.tc-head { display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--color-border); }
+	.tc-head h2 { font-size: 16px; font-weight: 600; }
+	.tc-head .pill-sm { font-size: 12px; font-weight: 600; border: 1px solid var(--color-border); border-radius: 9999px; padding: 3px 11px; color: var(--color-muted); }
+	.tc-head .link { margin-left: auto; font-size: 13.5px; font-weight: 600; color: var(--color-accent); }
+	table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+	th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); padding: 11px 22px; border-bottom: 1px solid var(--color-border); background: var(--color-surface-raised); }
+	td { padding: 13px 22px; border-bottom: 1px solid var(--color-border); }
+	tr:last-child td { border-bottom: 0; }
+	td .cname { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+	th.r, td.r { text-align: right; }
+	td .dim { color: var(--color-muted); }
+	.tag { font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; border-radius: var(--radius-sm); padding: 2px 7px; color: #fff; }
+
+	/* ── Ops chart + connection block ─────────────────────────────── */
+	.duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+	@media (min-width: 900px) { .duo { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+	.plot { display: flex; align-items: flex-end; gap: 8px; height: 130px; margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--color-border); }
+	.plot i { flex: 1; border-radius: 3px 3px 0 0; background: var(--color-accent); opacity: 0.9; }
+	.plot i.dim { background: var(--color-border); }
+	.plot-x { display: flex; gap: 8px; margin-top: 8px; }
+	.plot-x span { flex: 1; text-align: center; font-size: 11px; color: var(--color-muted); font-family: var(--mono); }
+	.codecard { background: var(--color-surface-foreground); color: #ffffff; border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-lg); }
+	.codecard .cc-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+	.codecard .driver { margin-left: auto; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(255 255 255 / 0.55); }
+	.codecard pre { margin: 14px 0 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #ffffff; overflow-x: auto; }
+	.codecard .str { color: var(--color-primary); }
+	.codecard .kwd { color: rgb(255 255 255 / 0.6); }
+
+	/* ── Buttons: pills, green or outlined ────────────────────────── */
+	.btn {
+		font: inherit; font-size: 14px; font-weight: 600; height: 42px; padding: 0 22px;
+		border: 0; border-radius: 9999px;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: background-color 140ms ease;
+	}
+	.btn:hover { background: #00c951; }
+	.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(0 104 74 / 0.3); }
+	.btn-outline { background: transparent; color: var(--color-surface-foreground); border: 1px solid #c1ccd6; }
+	.btn-outline:hover { background: var(--color-surface-raised); }
+	.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+	.btn-auto { width: auto; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section { padding: 46px 0; border-top: 1px solid var(--color-border); }
+	@media (min-width: 768px) { .section { padding: 62px 0; } }
+	.section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px; }
+	.section h2 { font-size: 26px; font-weight: 500; letter-spacing: -0.02em; }
+	.lede { color: var(--color-muted); margin-top: 10px; max-width: 64ch; font-size: 15px; }
+	.note { margin-top: 16px; font-size: 13.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 58px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 600; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 26px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 44px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 28px;
+		overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 11px 18px 4px; font-size: 10px; color: var(--color-muted); }
+	.phone-body { padding: 8px 14px 4px; }
+	.p-head { display: flex; align-items: center; gap: 8px; padding: 6px 0 12px; }
+	.p-head .mark { width: 20px; height: 20px; }
+	.p-head b { font-size: 14px; font-weight: 600; }
+	.p-sec { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); margin: 12px 0 6px; }
+	.p-cluster { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; }
+	.p-cluster .c-head h2 { font-size: 14.5px; }
+	.p-cluster .badge { font-size: 10.5px; padding: 2px 8px; }
+	.meter { margin-top: 10px; }
+	.p-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 12.5px; }
+	.p-row .cname { font-size: 12px; }
+	.p-row .num { margin-left: auto; color: var(--color-muted); font-size: 12px; }
+	.p-cta { padding: 12px 0 6px; }
+	.p-tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 10px; }
+	.p-tabbar div { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 9px 0 12px; }
+	.p-tabbar .is-active { color: var(--color-accent); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off { padding: 22px; border-radius: 9999px; background: rgb(0 237 100 / 0.15); font-size: 16px; font-weight: 600; color: var(--color-accent); }
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-border); font-size: 16px; font-weight: 600; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+
+	footer { border-top: 1px solid var(--color-border); padding: 32px 0 56px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the Atlas cluster console. White enterprise chrome, dense tables,
+     one bright green pill, deep green data marks. -->
+<div class="wrap">
+	<div class="topbar">
+		<span class="brand"><span class="mark"></span>Vetta Atlas</span>
+		<nav class="topnav"><span class="is-active">Clusters</span><span>Database</span><span>Search</span><span>Charts</span><span>Backups</span></nav>
+		<span class="spacer"></span>
+		<button class="btn btn-outline btn-sm btn-auto">Connect</button>
+		<button class="btn btn-sm btn-auto">Create deployment</button>
+	</div>
+
+	<div class="pagehead">
+		<div>
+			<h1>Clusters</h1>
+			<div class="count num">2 deployments · project <span class="mono">shop-prod</span></div>
+		</div>
+		<div class="search"><span>⌕</span><span class="ph">Search collections, indexes…</span></div>
+	</div>
+
+	<div class="clusters">
+		<div class="card">
+			<div class="c-head"><h2>Cluster0</h2><span class="badge">Healthy</span></div>
+			<div class="c-meta num">M10 · AWS eu-west-1 · v7.0 · 3 nodes</div>
+			<div class="meter">
+				<div class="mt"><span>CPU utilization</span><b class="num">34%</b></div>
+				<div class="track"><div class="fillb" style="width:34%"></div></div>
+			</div>
+			<div class="meter">
+				<div class="mt"><span>Active connections</span><b class="num">412 / 500</b></div>
+				<div class="track"><div class="fillb" style="width:82%"></div></div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="c-head"><h2>Cluster1</h2><span class="badge warn">Paused</span></div>
+			<div class="c-meta num">M30 · AWS eu-west-1 · v7.0 · 3 nodes</div>
+			<div class="meter">
+				<div class="mt"><span>CPU utilization</span><b class="num">0%</b></div>
+				<div class="track"><div class="fillb" style="width:0%"></div></div>
+			</div>
+			<div class="meter">
+				<div class="mt"><span>Active connections</span><b class="num">0 / 1,500</b></div>
+				<div class="track"><div class="fillb" style="width:0%"></div></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card tablecard">
+		<div class="tc-head">
+			<h2>Collections</h2>
+			<span class="pill-sm num">24 total</span>
+			<span class="link">View all →</span>
+		</div>
+		<table>
+			<thead>
+				<tr><th>Collection</th><th>Category</th><th class="r">Documents</th><th class="r">Avg size</th><th class="r">Indexes</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="cname">orders</span></td>
+					<td><span class="tag" style="background:#7b3ff2">CORE</span></td>
+					<td class="r num">1,204,551</td>
+					<td class="r num dim">2.1 KB</td>
+					<td class="r num">6</td>
+				</tr>
+				<tr>
+					<td><span class="cname">users</span></td>
+					<td><span class="tag" style="background:#7b3ff2">CORE</span></td>
+					<td class="r num">86,310</td>
+					<td class="r num dim">1.4 KB</td>
+					<td class="r num">4</td>
+				</tr>
+				<tr>
+					<td><span class="cname">search_queries</span></td>
+					<td><span class="tag" style="background:#fa6e39">SEARCH</span></td>
+					<td class="r num">5,918,042</td>
+					<td class="r num dim">0.6 KB</td>
+					<td class="r num">2</td>
+				</tr>
+				<tr>
+					<td><span class="cname">audit_log</span></td>
+					<td><span class="tag" style="background:#3d4f9f">ATLAS</span></td>
+					<td class="r num">12,774,206</td>
+					<td class="r num dim">0.9 KB</td>
+					<td class="r num">3</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="duo">
+		<div class="card">
+			<h2 style="font-size:16px;font-weight:600">Operations per second</h2>
+			<p style="font-size:13px;color:var(--color-muted);margin-top:2px">Cluster0 · last 12 hours</p>
+			<div class="plot">
+				<i style="height:34%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:62%"></i><i style="height:55%"></i><i style="height:72%"></i><i class="dim" style="height:30%"></i><i style="height:66%"></i><i style="height:80%"></i><i style="height:58%"></i><i style="height:88%"></i><i style="height:74%"></i>
+			</div>
+			<div class="plot-x"><span>00</span><span>02</span><span>04</span><span>06</span><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span><span>22</span></div>
+		</div>
+
+		<div class="codecard">
+			<div class="cc-head">Connect — MongoDB Shell <span class="driver">node.js</span></div>
+			<pre>mongosh <span class="str">"mongodb+srv://cluster0.
+ab12c.mongodb.net/shop"</span>
+  --username <span class="str">app_reader</span>
+  --password ○○○○○○○○○○○○
+
+<span class="kwd">// connect from node</span>
+<span class="kwd">const</span> client =
+  <span class="kwd">new</span> MongoClient(uri)</pre>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — Color</p>
+		<h2>Green at full strength or not at all</h2>
+		<p class="lede">The bright leaf green belongs to pill buttons and highlight badges, always solid with
+			dark teal text on it. Deep green handles links, active tabs and data marks. The only other
+			saturated colors are the tiny category tags — a fixed, narrow set.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#00ed64 · pills, badges</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#00684a · links, marks</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><b>raised</b><span>#f4f7f6 · wells, headers</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-foreground)"></div><b>ink</b><span>#001e2b · text, code block</span></div>
+		</div>
+		<div class="row" style="margin-top: 24px;">
+			<button class="btn btn-auto">Create deployment</button>
+			<button class="btn btn-outline btn-auto">Connect</button>
+			<span class="tag" style="background:#7b3ff2">CORE</span>
+			<span class="tag" style="background:#fa6e39">SEARCH</span>
+			<span class="badge">Healthy</span>
+		</div>
+		<p class="note">Category tags stay square-cornered and small — they encode a fixed vocabulary and are
+			the only place purple or orange may appear. Never reuse them as button or link colors.</p>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Structure</p>
+		<h2>Pills for people, rectangles for data</h2>
+		<p class="lede">Every interactive button is a full pill at 42px — squaring it breaks the brand
+			signature. Content containers are 12px rounded rectangles, tables sit in 8px frames, and the
+			code block is the one inverted island on the page, floating on a teal-tinted shadow.</p>
+		<div class="row" style="margin-top: 20px;">
+			<span class="pill-sm" style="font-size:12px;font-weight:600;border:1px solid var(--color-border);border-radius:9999px;padding:4px 12px">Overview</span>
+			<span style="font-size:12px;font-weight:600;border-bottom:2px solid var(--color-accent);color:var(--color-accent);padding-bottom:2px">Collections</span>
+			<span style="font-size:12px;font-weight:600;color:var(--color-muted)">Indexes</span>
+			<span class="mono" style="background:var(--color-surface-raised);border-radius:var(--radius-sm);padding:3px 8px;font-size:12.5px">mongosh …</span>
+		</div>
+		<p class="note">Inputs focus to a 2px deep-green border; rows stay hairline gray. Elevation scales are
+			teal-tinted, not gray, so shadows never turn muddy on white.</p>
+	</section>
+
+	<!-- 03 MOBILE -->
+	<section class="section">
+		<p class="section-label">03 — Mobile</p>
+		<h2>The console in one thumb column</h2>
+		<p class="lede">Cluster cards stack first, the collections table keeps its three most-read columns,
+			and the connect block collapses to a single copyable string. The green pill survives as a full
+			thumb-width action above the tab bar.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>5G ▮</span></div>
+				<div class="phone-body">
+					<div class="p-head"><span class="mark"></span><b>Atlas</b></div>
+					<div class="p-sec">Clusters</div>
+					<div class="p-cluster">
+						<div class="c-head"><h2>Cluster0</h2><span class="badge">Healthy</span></div>
+						<div class="meter">
+							<div class="mt"><span>CPU</span><b class="num">34%</b></div>
+							<div class="track"><div class="fillb" style="width:34%"></div></div>
+						</div>
+					</div>
+					<div class="p-sec">Collections</div>
+					<div class="p-row"><span class="cname">orders</span><span class="num">1,204,551</span></div>
+					<div class="p-row"><span class="cname">search_queries</span><span class="num">5,918,042</span></div>
+					<div class="p-row"><span class="cname">audit_log</span><span class="num">12,774,206</span></div>
+					<div class="p-cta"><button class="btn" style="width:100%">Create deployment</button></div>
+				</div>
+				<div class="p-tabbar">
+					<div class="is-active">Clusters</div><div>Database</div><div>Search</div><div>Charts</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Cluster cards</b>Side-by-side becomes stacked; each keeps the status badge, tier line and its two most important meters.</li>
+				<li><b>Table</b>Five columns drop to two — collection name and document count. Category tags and sizes live on the detail page.</li>
+				<li><b>Metric charts</b>Bars thin out and lose hourly labels; a single axis caption carries the time range.</li>
+				<li><b>Connection block</b>The multi-line snippet becomes a one-line string with a copy affordance; monospace sizing never drops below 12px.</li>
+				<li><b>Actions</b>The green pill keeps its 42px height at full width — a shrunken pill reads as disabled.</li>
+				<li><b>Nav</b>Top tabs become a four-item bottom bar; the active item keeps its deep-green color but loses the underline rule.</li>
+				<li><b>Search</b>The 44px search pill moves under the header and keeps its inset-well background.</li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 04 DON'T -->
+	<section class="section">
+		<p class="section-label">04 — Off-style, for contrast</p>
+		<h2>Where enterprise calm breaks</h2>
+		<div class="compare">
+			<div class="cmp-off">Green wash in a pill box
+				<small>Bright green at 15% as a card fill, text set in deep green, everything rounded to a
+				pill. The signal color becomes wallpaper and the hierarchy disappears.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>White card with a hairline border, ink text, and green reserved for the pill button and
+				status badge. Data marks use deep green; the background never gets tinted.</small></div>
+		</div>
+		<p class="note">Also out: squared pill buttons, rounded-off category tags, gray shadows on plain
+			tables, and monospace prose — each one erodes the pragmatic enterprise voice.</p>
+	</section>
+</div>
+
+<footer><div class="wrap">Vetta design reference — mongodb · white chrome, one green pill, deep-green data.</div></footer>
+</body>
+</html>

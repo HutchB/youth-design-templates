@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material 3 — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #6750a4;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #fef7ff;
+		--color-surface-foreground: #1d1b20;
+		--color-surface-raised: #e8def8;
+		--color-muted: #49454f;
+		--color-accent: #7d5260;
+		--color-danger: #b3261e;
+		--color-border: #cac4d0;
+
+		--radius-sm: 8px;
+		--radius-md: 12px;
+		--radius-lg: 16px;
+		--radius-xl: 28px;
+		--radius-2xl: 28px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+		--shadow-md: 0 1px 3px rgb(0 0 0 / 0.15);
+		--shadow-lg: 0 4px 8px rgb(0 0 0 / 0.15);
+
+		--container: #f3edf7;      /* surface-container */
+		--container-high: #ece6f0; /* surface-container-high */
+		--primary-container: #eaddff;
+		--on-primary-container: #21005d;
+		--on-secondary-container: #1d192b;
+		--error-container: #f9dedc;
+		--on-error-container: #410e0b;
+		--sans: Roboto, "Segoe UI", system-ui, -apple-system, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 400; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+	.wrap { max-width: 1020px; margin: 0 auto; padding: 0 20px 88px; }
+	.section { padding-top: 48px; }
+	.section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 6px; }
+	.section h2 { font-size: 26px; font-weight: 400; }
+	.lede { margin-top: 8px; max-width: 64ch; color: var(--color-muted); }
+	.note { margin-top: 14px; font-size: 13px; color: var(--color-muted); }
+
+	/* ── COVER: the product — an Android plant-care app ───────────── */
+	.stage { padding: 40px 16px 8px; }
+	.phone {
+		width: 344px; max-width: 100%;
+		margin: 0 auto;
+		border-radius: 40px; /* device shell, not a token */
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+		position: relative;
+	}
+	.statusrow { display: flex; justify-content: space-between; padding: 12px 22px 2px; font-size: 13px; font-weight: 500; }
+	.camdot { width: 70px; height: 22px; border-radius: 999px; background: #141218; align-self: center; }
+	.appbar { padding: 14px 20px 4px; }
+	.appbar h1 { font-size: 30px; letter-spacing: 0; }
+	.search {
+		display: flex; align-items: center; gap: 10px;
+		margin: 12px 16px 4px; height: 44px; padding: 0 16px;
+		border-radius: 999px; background: var(--container-high); color: var(--color-muted);
+	}
+	.chips { display: flex; gap: 8px; padding: 12px 16px 6px; flex-wrap: wrap; }
+	.chip {
+		display: inline-flex; align-items: center; gap: 6px;
+		height: 32px; padding: 0 14px; border-radius: 999px;
+		border: 1px solid var(--color-border); font-size: 13px; font-weight: 500; color: var(--color-muted);
+	}
+	.chip.is-selected { background: var(--color-surface-raised); border-color: transparent; color: var(--on-secondary-container); }
+	.chip.is-selected::before { content: "✓"; font-size: 12px; }
+
+	.cards { display: grid; gap: 10px; padding: 10px 16px 16px; }
+	.card {
+		background: var(--color-surface-raised); color: var(--on-secondary-container);
+		border-radius: var(--radius-md); padding: 14px 16px;
+		display: flex; align-items: center; gap: 14px;
+	}
+	.card .glyph { width: 44px; height: 44px; border-radius: 50%; background: rgb(29 25 43 / 0.08); display: grid; place-items: center; font-size: 20px; flex: none; }
+	.card b { display: block; font-weight: 500; font-size: 15px; }
+	.card small { color: var(--on-secondary-container); opacity: 0.65; font-size: 12px; }
+	.card .due { margin-left: auto; flex: none; text-align: right; font-size: 11px; font-weight: 500; }
+	.due .tag { display: inline-block; padding: 3px 8px; border-radius: 8px; background: var(--error-container); color: var(--on-error-container); }
+	.due .ok { display: inline-block; padding: 3px 8px; border-radius: 8px; background: rgb(29 25 43 / 0.08); }
+
+	.fab {
+		position: absolute; right: 18px; bottom: 92px;
+		width: 56px; height: 56px; border-radius: var(--radius-lg);
+		background: var(--primary-container); color: var(--on-primary-container);
+		box-shadow: var(--shadow-md);
+		display: grid; place-items: center; font-size: 24px;
+	}
+	.bottomnav { display: flex; background: var(--container); padding: 8px 4px 14px; }
+	.bn { flex: 1; text-align: center; font-size: 12px; color: var(--color-muted); }
+	.bn .pill { width: 64px; height: 32px; border-radius: 999px; margin: 0 auto 2px; display: grid; place-items: center; font-size: 17px; }
+	.bn.is-active { color: var(--on-secondary-container); font-weight: 500; }
+	.bn.is-active .pill { background: var(--color-surface-raised); }
+
+	/* ── 01 tonal ladder & swatches ───────────────────────────────── */
+	.ladder { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .ladder { grid-template-columns: repeat(4, 1fr); } }
+	.lad { border-radius: var(--radius-md); padding: 14px; min-height: 96px; display: flex; flex-direction: column; justify-content: flex-end; font-size: 12px; }
+	.lad .mono { font-size: 11px; opacity: 0.7; }
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--container); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 48px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 13px; font-weight: 500; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── 02 shape scale ───────────────────────────────────────────── */
+	.shapes { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-top: 20px; }
+	.shape { width: 88px; height: 88px; background: var(--color-surface-raised); display: grid; place-items: center; font-size: 12px; color: var(--on-secondary-container); }
+	.shape.pill { border-radius: 999px; width: 110px; }
+
+	/* ── 03 components ────────────────────────────────────────────── */
+	.btnrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 20px; }
+	.btn { font: inherit; font-size: 14px; font-weight: 500; letter-spacing: 0.1px; height: 40px; padding: 0 22px; border-radius: 999px; border: 0; cursor: pointer; }
+	.btn-filled { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-tonal { background: var(--color-surface-raised); color: var(--on-secondary-container); }
+	.btn-outlined { background: transparent; color: var(--color-primary); border: 1px solid var(--color-border); }
+	.btn-text { background: transparent; color: var(--color-primary); padding: 0 14px; }
+	.btn:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+
+	.demo-card { max-width: 520px; margin-top: 20px; background: var(--container); border-radius: var(--radius-lg); padding: 16px; display: grid; gap: 14px; }
+	.m3switch { width: 52px; height: 32px; border-radius: 999px; background: var(--color-primary); position: relative; flex: none; }
+	.m3switch::after { content: ""; position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border-radius: 50%; background: var(--primary-container); }
+	.m3switch.is-off { background: var(--container-high); border: 2px solid var(--color-border); }
+	.m3switch.is-off::after { width: 16px; height: 16px; top: 6px; left: 6px; right: auto; background: var(--color-muted); }
+	.srow { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+	.srow .spacer { flex: 1; }
+
+	/* ── 04 elevation / state ─────────────────────────────────────── */
+	.state-demo { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 640px) { .state-demo { grid-template-columns: repeat(3, 1fr); } }
+	.state { border-radius: var(--radius-md); background: var(--color-surface-raised); color: var(--on-secondary-container); padding: 16px; font-size: 13px; min-height: 96px; display: flex; flex-direction: column; justify-content: space-between; }
+	.state small { font-size: 11px; opacity: 0.7; }
+	.state.is-hover { box-shadow: inset 0 0 0 999px rgb(29 25 43 / 0.08); }
+	.state.is-focus { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+
+	/* ── 05 mobile ────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.phone.mini { width: 320px; }
+	.topbar-collapsed { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--container); font-size: 16px; font-weight: 500; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 124px; font-size: 13px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 06 off-style ─────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { padding: 16px; font-size: 14px; }
+	.cmp small { display: block; margin-top: 8px; font-size: 13px; color: var(--color-muted); }
+	.cmp-off { background: #fff; border: 2px solid #1d1b20; border-radius: 0; box-shadow: 4px 4px 0 #1d1b20; }
+	.cmp-on { background: var(--color-surface-raised); border-radius: var(--radius-md); color: var(--on-secondary-container); }
+	.gray-on-purple { background: var(--color-surface-raised); border-radius: var(--radius-md); padding: 16px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the product surface: large top bar, search, filter chips,
+     tonal cards, FAB, bottom navigation with a pill indicator. Tonal
+     containers and big radii carry the whole screen. -->
+<div class="stage">
+	<div class="phone">
+		<div class="statusrow"><span>9:41</span><span class="camdot"></span><span>ᛒ ▮ 84%</span></div>
+		<div class="appbar"><h1>Sprout</h1></div>
+		<div class="search"><span>⌕</span>Search plants<span class="spacer"></span><span style="font-size:16px">≡</span></div>
+		<div class="chips">
+			<span class="chip is-selected">All</span>
+			<span class="chip">Watering</span>
+			<span class="chip">Repot</span>
+			<span class="chip">Misting</span>
+		</div>
+		<div class="cards">
+			<div class="card">
+				<span class="glyph">✿</span>
+				<span><b>Fiddle-leaf Fig</b><small>Ficus lyrata · bright, indirect</small></span>
+				<span class="due"><span class="tag">Due today</span></span>
+			</div>
+			<div class="card">
+				<span class="glyph">✿</span>
+				<span><b>Monstera</b><small>Monstera deliciosa · east window</small></span>
+				<span class="due"><span class="ok">2 days</span></span>
+			</div>
+			<div class="card">
+				<span class="glyph">✿</span>
+				<span><b>Snake Plant</b><small>Dracaena trifasciata · low light</small></span>
+				<span class="due"><span class="ok">6 days</span></span>
+			</div>
+		</div>
+		<div class="fab">＋</div>
+		<div class="bottomnav">
+			<div class="bn is-active"><span class="pill">⌂</span>Home</div>
+			<div class="bn"><span class="pill">✿</span>Plants</div>
+			<div class="bn"><span class="pill">✚</span>Care</div>
+			<div class="bn"><span class="pill">◍</span>Profile</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 COLOR -->
+	<section class="section">
+		<p class="section-label">01 — Color roles</p>
+		<h2>Depth is a ladder of tints, not shadows</h2>
+		<p class="lede">Every level of the interface owns a container color one step deeper than the
+			last, and each container carries its matching on-color for text. Purple fills the one most
+			important action; the tertiary rose is a single deliberate moment per screen.</p>
+		<div class="ladder">
+			<div class="lad" style="background:#fef7ff;border:1px solid var(--color-border);color:var(--color-surface-foreground)">surface<span class="mono">#fef7ff · page</span></div>
+			<div class="lad" style="background:#f3edf7;color:var(--color-surface-foreground)">surface-container<span class="mono">#f3edf7 · bars</span></div>
+			<div class="lad" style="background:#ece6f0;color:var(--color-surface-foreground)">container-high<span class="mono">#ece6f0 · search</span></div>
+			<div class="lad" style="background:#e8def8;color:#1d192b">secondary-container<span class="mono">#e8def8 · cards</span></div>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>#6750a4 · the one fill</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--primary-container)"></div><div class="meta"><b>primary-container</b><span>#eaddff · FAB</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>#7d5260 · tertiary</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>#b3261e · error</span></div></div>
+		</div>
+		<p class="note">Text on a tint is never gray: #e8def8 pairs with #1d192b, #eaddff with #21005d,
+			#error-container with #410e0b. The container and its on-color move as one token pair.</p>
+	</section>
+
+	<!-- 02 SHAPE -->
+	<section class="section">
+		<p class="section-label">02 — Shape</p>
+		<h2>Rounder means more important</h2>
+		<p class="lede">Shape is a token like color: 8 for small controls, 12 for cards, 16 for the FAB,
+			28 for sheets and dialogs, full-round for pills, chips and the nav indicator. The bigger the
+			radius, the closer the element reads to the user.</p>
+		<div class="shapes">
+			<div class="shape" style="border-radius:8px">8 · control</div>
+			<div class="shape" style="border-radius:12px">12 · card</div>
+			<div class="shape" style="border-radius:16px">16 · FAB</div>
+			<div class="shape" style="border-radius:28px">28 · sheet</div>
+			<div class="shape pill">full · chip</div>
+		</div>
+		<p class="note">Nothing ships with a corner under 8px. A square card is the single fastest way
+			to make this system look like something else entirely.</p>
+	</section>
+
+	<!-- 03 COMPONENTS -->
+	<section class="section">
+		<p class="section-label">03 — Components</p>
+		<h2>Four buttons, one FAB, chips that earn their fill</h2>
+		<p class="lede">Filled carries the primary action, tonal sits second, outlined and text finish
+			the ladder. Filter chips gain a checkmark and the tonal fill when selected. The switch
+			grows its thumb from 16 to 24 when it turns on.</p>
+		<div class="btnrow">
+			<button class="btn btn-filled" type="button">Water all</button>
+			<button class="btn btn-tonal" type="button">Add plant</button>
+			<button class="btn btn-outlined" type="button">Reminders</button>
+			<button class="btn btn-text" type="button">Skip</button>
+		</div>
+		<div class="demo-card">
+			<div class="srow">Notifications<span class="spacer"></span><span class="m3switch"></span></div>
+			<div class="srow">Care tips<span class="spacer"></span><span class="m3switch is-off"></span></div>
+			<div class="srow"><span class="chip is-selected">Weekly</span><span class="chip">Monthly</span><span class="chip">Off</span></div>
+		</div>
+		<p class="note">One FAB per screen — 56px, 16px radius, primary-container fill, resting above the
+			bottom bar on the trailing edge.</p>
+	</section>
+
+	<!-- 04 ELEVATION -->
+	<section class="section">
+		<p class="section-label">04 — Elevation &amp; state</p>
+		<h2>Tone first, shadow last, states as a wash</h2>
+		<p class="lede">Cards rest flat in their container color. The three low shadows are kept for
+			truly floating parts — FAB, menus, dialogs. Interaction states are an 8% wash of the
+			on-color (12% pressed), and focus is a 3px primary ring.</p>
+		<div class="state-demo">
+			<div class="state">Resting<small>container color only · no shadow</small></div>
+			<div class="state is-hover">Hover / pressed<small>8–12% on-color wash over the container</small></div>
+			<div class="state is-focus">Focus<small>3px primary ring · keyboard navigation</small></div>
+		</div>
+		<p class="note">Hover never recolors the text or swaps hues — the wash is always the container's
+			own on-color, so any palette swap keeps working.</p>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>Built for the thumb first</h2>
+		<p class="lede">This interface is Android-native, so the phone layout is the source of truth:
+			targets stay at 48dp, the bottom bar keeps its 80dp height, and the large top bar collapses
+			into a 64dp bar when content scrolls under it.</p>
+		<div class="mobile">
+			<div class="phone mini">
+				<div class="statusrow" style="padding:10px 18px 0"><span>9:41</span><span style="width:56px;height:18px;border-radius:999px;background:#141218"></span><span>▮ 84%</span></div>
+				<div class="topbar-collapsed"><span style="color:var(--color-primary)">←</span>Sprout<span class="spacer"></span><span style="color:var(--color-muted)">⌕</span></div>
+				<div class="cards" style="padding:10px 14px">
+					<div class="card"><span class="glyph">✿</span><span><b>Fiddle-leaf Fig</b><small>Water today · 200 ml</small></span><span class="due"><span class="tag">Due</span></span></div>
+					<div class="card"><span class="glyph">✿</span><span><b>Monstera</b><small>Mist tomorrow</small></span><span class="due"><span class="ok">1 day</span></span></div>
+					<div class="card"><span class="glyph">✿</span><span><b>Snake Plant</b><small>Feed in 6 days</small></span><span class="due"><span class="ok">6 days</span></span></div>
+				</div>
+				<div class="bottomnav">
+					<div class="bn is-active"><span class="pill">⌂</span>Home</div>
+					<div class="bn"><span class="pill">✿</span>Plants</div>
+					<div class="bn"><span class="pill">✚</span>Care</div>
+					<div class="bn"><span class="pill">◍</span>Profile</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Touch targets</b><span>48dp minimum for every interactive element; chips and switches meet it through their container padding, not by growing the control's visible chrome.</span></li>
+				<li><b>Top bar</b><span>The 30px large title collapses into a 64dp surface-container bar with a back arrow; the page slides beneath it — tone, not shadow, keeps the layers legible.</span></li>
+				<li><b>Bottom bar</b><span>80dp tall including labels, always opaque surface-container. The active pill is 64×32 full-round behind the icon, and its label switches to on-secondary-container.</span></li>
+				<li><b>FAB</b><span>Stays 56dp and 16px-radius on the smallest screens, docked above the bottom bar. It never shrinks — the FAB is the system's most recognizable shape.</span></li>
+				<li><b>Chips</b><span>Filter rows scroll horizontally instead of wrapping; the selected chip keeps its checkmark and tonal fill so state survives the scroll.</span></li>
+				<li><b>Type</b><span>Body stays 14–16px and labels 14px/500. Cards stack single-column with 10px gaps; nothing shrinks below 11px to fit.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the tonal language</h2>
+		<div class="compare">
+			<div class="cmp cmp-off">Hard-edged neo card
+				<small>Square corners, 2px black border, offset hard shadow, white fill. Every choice is
+					readable — and none of them belong to this system, which separates layers with tone
+					and rounds everything from 8px up.</small></div>
+			<div class="cmp cmp-on">Same content, on-style
+				<small>12px radius, secondary-container fill, matching on-container text, no border and
+					no shadow. The card is separated by tint alone — that is the whole trick.</small></div>
+		</div>
+		<div class="compare">
+			<div class="cmp gray-on-purple">Gray text on a tonal container
+				<small>Mid-gray secondary text on #e8def8 fails contrast and breaks the pairing rule —
+					containers always take their own on-color.</small></div>
+			<div class="cmp cmp-on">On-color pairing
+				<small>#1d192b on #e8def8. If a container changes, its text token changes with it —
+					they are one pair, never mixed à la carte.</small></div>
+		</div>
+		<p class="note">Also out: shadows between sibling cards, corners under 8px, more than one
+			tertiary moment per screen, and glossy gradients standing in for elevation.</p>
+	</section>
+
+</div>
+</body>
+</html>

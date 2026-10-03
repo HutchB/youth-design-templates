@@ -1,0 +1,22 @@
+/* GOV.UK — adapted from the GOV.UK Design System (MIT / OGL v3.0, design-system.service.gov.uk). Original descriptions. Not affiliated with the UK Government Digital Service; GDS Transport is not redistributable, so the theme ships a system stack. */
+@theme {
+	--color-primary: #1d70b8; /* GOV.UK blue — links and primary actions */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #ffffff; /* the page is plain white */
+	--color-surface-foreground: #0b0c0c; /* GOV.UK black */
+	--color-surface-raised: #f3f2f1; /* light grey — panels, phase banners, hovers */
+	--color-muted: #505a5f; /* secondary text */
+	--color-accent: #ffdd00; /* focus yellow — also warning backgrounds */
+	--color-danger: #d4351c; /* error text and error borders */
+	--color-border: #b1b4b6; /* the one border grey */
+
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 0px;
+	--radius-xl: 0px;
+	--radius-2xl: 0px;
+
+	--shadow-sm: none;
+	--shadow-md: none;
+	--shadow-lg: none;
+}

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "ibm-carbon",
+	"name": "IBM Carbon",
+	"version": "1.0.0",
+	"order": 75,
+	"category": "enterprise",
+	"vibe": "light",
+	"tags": [
+		"enterprise",
+		"light"
+	],
+	"blurb": "Enterprise-grade precision: IBM Blue on a strict grayscale, 2px corners, hairline grid lines and dense data-first layouts.",
+	"tagline": {
+		"en": "Serious, systematic, built for data",
+		"zh": "企业级的严谨与秩序"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://carbondesignsystem.com/",
+		"note": "Adapted from the IBM Carbon Design System (Apache-2.0); factual token values with original descriptions. Not affiliated with or endorsed by IBM."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluent 2 — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0f6cbd;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #f5f5f5;
+		--color-surface-foreground: #1b1b1b;
+		--color-surface-raised: #fbfbfb;
+		--color-muted: #616161;
+		--color-accent: #038387;
+		--color-danger: #c50f1f;
+		--color-border: #e5e5e5;
+		--color-card: #ffffff;
+		--color-acrylic: rgb(249 249 249 / 0.85);
+		--blur-acrylic: 20px;
+		--radius-sm: 4px;
+		--radius-md: 8px;
+		--radius-lg: 8px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
+		--shadow-md: 0 2px 8px rgb(0 0 0 / 0.14);
+		--shadow-lg: 0 12px 28px rgb(0 0 0 / 0.2);
+		--sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body { margin: 0; background: var(--color-surface); color: var(--color-surface-foreground); font-family: var(--sans); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+	h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.005em; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 88px; }
+	.section { padding-top: 44px; }
+	.section-label { font-size: 12px; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
+	.section h2 { font-size: 20px; }
+	.lede { margin-top: 6px; max-width: 74ch; font-size: 14px; color: var(--color-muted); }
+	.note { margin-top: 14px; font-size: 13px; color: var(--color-muted); }
+
+	/* ── COVER: a Windows 11 file manager window ── */
+	.stage { padding: 36px 16px 8px; }
+	.desktop {
+		position: relative; max-width: 880px; margin: 0 auto; padding: 44px 40px 56px;
+		border-radius: var(--radius-2xl); overflow: hidden;
+		background: radial-gradient(90% 80% at 80% 0%, rgb(11 92 255 / 0.10) 0%, rgb(11 92 255 / 0) 60%), linear-gradient(180deg, #eef1f6, #e2e7ee);
+	}
+	.window { max-width: 720px; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg), 0 0 0 1px rgb(0 0 0 / 0.06); }
+	.titlebar { display: flex; align-items: center; height: 36px; padding-left: 12px; background: var(--color-surface); }
+	.appglyph { width: 16px; height: 16px; border-radius: var(--radius-sm); background: linear-gradient(135deg, #ffd400, #f7a500); margin-right: 8px; }
+	.titlebar .t { font-size: 12px; color: var(--color-muted); }
+	.captions { display: flex; align-self: stretch; }
+	.captions i { width: 44px; display: grid; place-items: center; font-style: normal; font-size: 10px; color: var(--color-surface-foreground); }
+	.captions i.close { width: 48px; background: rgb(0 0 0 / 0.03); }
+	.commandbar { display: flex; align-items: center; gap: 4px; padding: 4px 12px 8px; background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+	.cbtn { font: 400 13px/1 var(--sans); display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: var(--radius-sm); border: 1px solid transparent; color: var(--color-surface-foreground); cursor: pointer; background: transparent; }
+	.cbtn:hover { background: rgb(0 0 0 / 0.04); }
+	.cbtn.new { background: var(--color-primary); color: var(--color-primary-foreground); font-weight: 600; padding-right: 0; }
+	.cbtn.new .chev { border-left: 1px solid rgb(255 255 255 / 0.35); padding: 7px 8px; margin-left: 4px; }
+	.cbtn .ico { font-size: 13px; width: 15px; text-align: center; }
+	.csep { width: 1px; height: 18px; background: var(--color-border); margin: 0 6px; }
+	.addressbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+	.navglyphs { display: flex; gap: 2px; color: var(--color-muted); font-size: 12px; }
+	.crumbs { flex: 1; display: flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 12px; }
+	.crumbs b { font-weight: 400; color: var(--color-muted); }
+	.searchbox { width: 170px; height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 12px; color: var(--color-muted); }
+	.winbody { position: relative; display: grid; grid-template-columns: 190px 1fr; min-height: 330px; background: var(--color-surface-raised); }
+	.navpane { padding: 8px; border-right: 1px solid var(--color-border); background: var(--color-surface); }
+	.nrow { position: relative; display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: var(--radius-sm); font-size: 13px; color: var(--color-surface-foreground); }
+	.nrow .ico { width: 16px; text-align: center; font-size: 13px; color: var(--color-muted); }
+	.nrow.is-on { background: rgb(0 0 0 / 0.045); }
+	.nrow.is-on::before { content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 3px; border-radius: 2px; background: var(--color-primary); }
+	.nrow.is-on .ico { color: var(--color-primary); }
+	.nsec { font-size: 12px; color: var(--color-muted); padding: 12px 10px 4px; }
+	.content { padding: 16px 18px; }
+	.content h3 { font-size: 20px; }
+	.fgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+	.fcard { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--radius-md); background: var(--color-card); border: 1px solid var(--color-border); }
+	.fcard .folder { position: relative; width: 30px; height: 22px; background: #ffd400; border-radius: 0 3px 3px 3px; }
+	.fcard .folder::before { content: ""; position: absolute; top: -4px; left: 0; width: 14px; height: 5px; background: #ffd400; border-radius: 2px 2px 0 0; }
+	.fcard b { font-size: 12px; font-weight: 600; }
+	.fcard small { font-size: 11px; color: var(--color-muted); }
+	.recent { margin-top: 16px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+	.rrow { position: relative; display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 14px; font-size: 13px; }
+	.rrow + .rrow::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--color-border); }
+	.rrow .meta { color: var(--color-muted); font-size: 12px; }
+	.rrow .chip { font-size: 10px; font-weight: 600; color: var(--color-accent); background: rgb(3 131 135 / 0.08); border-radius: var(--radius-sm); padding: 2px 6px; }
+	.statusbar { display: flex; align-items: center; padding: 6px 14px; font-size: 12px; color: var(--color-muted); border-top: 1px solid var(--color-border); background: var(--color-surface); }
+	/* Acrylic flyout, floating over the content */
+	.flyout { position: absolute; right: 26px; top: -6px; width: 208px; padding: 6px; border-radius: var(--radius-md); background: var(--color-acrylic); -webkit-backdrop-filter: blur(var(--blur-acrylic)) saturate(140%); backdrop-filter: blur(var(--blur-acrylic)) saturate(140%); border: 1px solid var(--color-border); box-shadow: var(--shadow-md); z-index: 2; }
+	.fitem { position: relative; display: flex; align-items: center; height: 32px; padding: 0 10px; border-radius: var(--radius-sm); font-size: 13px; }
+	.fitem .check { margin-left: auto; color: var(--color-primary); font-weight: 700; font-size: 12px; }
+	.fitem:hover { background: rgb(0 0 0 / 0.045); }
+	.fsep { height: 1px; background: var(--color-border); margin: 5px 8px; }
+
+	/* Windows toggle */
+	.wtgl { position: relative; width: 40px; height: 20px; border-radius: 999px; background: var(--color-card); border: 1px solid #8a8a8a; flex: none; }
+	.wtgl::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 4px; background: #5d5d5d; }
+	.wtgl.is-on { background: var(--color-primary); border-color: var(--color-primary); }
+	.wtgl.is-on::after { left: 23px; background: #fff; }
+
+	/* ── 01 layering ── */
+	.layers { display: grid; gap: 10px; margin-top: 20px; max-width: 460px; }
+	.lay { border-radius: var(--radius-md); padding: 12px 16px; font-size: 13px; }
+	.lay b { font-size: 12px; }
+	.lay span { color: var(--color-muted); font-size: 12px; }
+	.lay-1 { background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-border); }
+	.lay-2 { background: var(--color-surface-raised); box-shadow: 0 0 0 1px var(--color-border); margin-left: 18px; }
+	.lay-3 { background: var(--color-card); box-shadow: 0 0 0 1px var(--color-border); margin-left: 36px; }
+	.acrylic-demo { margin-top: 16px; max-width: 460px; border-radius: var(--radius-md); min-height: 120px; position: relative; overflow: hidden; background: linear-gradient(120deg, #ffd400 0%, #0f6cbd 55%, #038387 100%); padding: 14px; }
+	.acrylic-demo .sample { position: absolute; left: 20px; right: 20px; top: 24px; padding: 10px 14px; border-radius: var(--radius-md); background: var(--color-acrylic); -webkit-backdrop-filter: blur(var(--blur-acrylic)) saturate(140%); backdrop-filter: blur(var(--blur-acrylic)) saturate(140%); border: 1px solid var(--color-border); box-shadow: var(--shadow-md); font-size: 13px; }
+
+	/* ── 02 swatches ── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--color-card); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 0 0 1px var(--color-border); }
+	.sw .fill { height: 48px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 12px; font-weight: 600; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── 03 controls ── */
+	.controls { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 20px; padding: 20px; background: var(--color-card); border-radius: var(--radius-md); box-shadow: 0 0 0 1px var(--color-border); }
+	.mbtn { font: 600 13px/1 var(--sans); border: 1px solid transparent; border-radius: var(--radius-sm); padding: 7px 14px; cursor: pointer; }
+	.mbtn-acc { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.mbtn-std { background: var(--color-card); color: var(--color-surface-foreground); border-color: #d1d1d1; box-shadow: var(--shadow-sm); }
+	.mbtn-sub { background: rgb(0 0 0 / 0.045); color: var(--color-surface-foreground); border-color: transparent; }
+	.hlink { color: var(--color-primary); font-size: 13px; }
+	.cbx { width: 16px; height: 16px; border-radius: var(--radius-sm); display: inline-grid; place-items: center; background: var(--color-primary); color: #fff; font-size: 10px; font-weight: 700; }
+	.cbx.empty { background: var(--color-card); box-shadow: inset 0 0 0 1px #8a8a8a; }
+	.radio { width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--color-card); box-shadow: inset 0 0 0 1px #8a8a8a; }
+	.radio::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); }
+	.textin { width: 200px; padding: 7px 10px; font: 400 13px/1 var(--sans); color: var(--color-surface-foreground); background: var(--color-card); border: 1px solid #d1d1d1; border-bottom: 2px solid var(--color-primary); border-radius: var(--radius-sm); }
+	.textin::placeholder { color: var(--color-muted); }
+
+	/* ── 04 type ramp ── */
+	.ramp { margin-top: 20px; background: var(--color-card); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 0 0 1px var(--color-border); }
+	.ramp .r { display: flex; align-items: baseline; gap: 14px; padding: 8px 16px; border-bottom: 1px solid var(--color-border); }
+	.ramp .r:last-child { border-bottom: 0; }
+	.ramp .sample { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.ramp .tag { flex: none; width: 128px; font-size: 11px; color: var(--color-muted); }
+
+	/* ── 05 mobile ── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.phone { width: 320px; max-width: 100%; margin: 0 auto; border-radius: 40px; border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-lg); overflow: hidden; }
+	.statusrow { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px 2px; font-size: 13px; font-weight: 600; }
+	.appheader { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+	.appheader b { font-size: 15px; font-weight: 600; }
+	.commandscroll { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--color-border); overflow: hidden; font-size: 12px; color: var(--color-muted); }
+	.commandscroll .cbtn { padding: 6px 8px; }
+	.plist { background: var(--color-surface-raised); }
+	.prow { position: relative; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; font-size: 14px; }
+	.prow + .prow::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--color-border); }
+	.prow .folder { position: relative; width: 26px; height: 19px; background: #ffd400; border-radius: 0 3px 3px 3px; flex: none; }
+	.prow .folder::before { content: ""; position: absolute; top: -4px; left: 0; width: 12px; height: 5px; background: #ffd400; border-radius: 2px 2px 0 0; }
+	.prow .meta { color: var(--color-muted); font-size: 12px; }
+	.bottomnav { display: flex; border-top: 1px solid var(--color-border); background: var(--color-surface); padding: 4px 0 2px; }
+	.bottomnav span { flex: 1; text-align: center; font-size: 11px; color: var(--color-muted); padding: 6px 0; }
+	.bottomnav .on { color: var(--color-primary); font-weight: 600; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 14px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 130px; font-size: 13px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 06 off-style ── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { border-radius: var(--radius-lg); padding: 18px; font-size: 14px; background: var(--color-card); box-shadow: 0 0 0 1px var(--color-border); }
+	.cmp b { font-size: 15px; }
+	.cmp small { display: block; margin-top: 10px; font-size: 12px; color: var(--color-muted); line-height: 1.55; }
+	.mac-off { position: relative; border-radius: 12px; background: var(--color-surface); box-shadow: 0 18px 44px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(0 0 0 / 0.08); overflow: hidden; }
+	.mac-off .tb { position: relative; display: flex; align-items: center; height: 30px; padding: 0 10px; background: rgb(240 240 244 / 0.9); border-bottom: 1px solid var(--color-border); }
+	.mac-off .tb i { width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+	.mac-off .tb span { position: absolute; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 600; color: #6e6e73; }
+	.mac-off .body { padding: 14px; font-size: 15px; }
+	.acrylic-off { padding: 18px; border-radius: var(--radius-md); min-height: 120px; position: relative; overflow: hidden; background: linear-gradient(120deg, #ffd400 0%, #0f6cbd 55%, #038387 100%); }
+	.acrylic-off .sample { position: absolute; left: 16px; right: 16px; top: 20px; padding: 10px 14px; border-radius: var(--radius-md); background: rgb(249 249 249 / 0.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgb(255 255 255 / 0.5); font-size: 13px; color: #1b1b1b; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the product surface: a Windows 11 file manager window with a
+     command bar, breadcrumb, nav pane and an acrylic flyout floating open. -->
+<div class="stage">
+	<div class="desktop">
+		<div class="window">
+			<div class="titlebar">
+				<span class="appglyph"></span><span class="t">Vetta Files — Projects</span>
+				<span class="spacer"></span>
+				<span class="captions"><i>─</i><i>▢</i><i class="close">✕</i></span>
+			</div>
+			<div class="commandbar">
+				<button class="cbtn new" type="button"><span class="ico">＋</span> New <span class="chev">⌄</span></button>
+				<span class="csep"></span>
+				<button class="cbtn" type="button"><span class="ico">✂</span></button>
+				<button class="cbtn" type="button"><span class="ico">⧉</span></button>
+				<button class="cbtn" type="button"><span class="ico">⎘</span></button>
+				<span class="csep"></span>
+				<button class="cbtn" type="button"><span class="ico">⇅</span> Sort</button>
+				<button class="cbtn" type="button"><span class="ico">▦</span> View</button>
+				<span class="spacer"></span>
+				<button class="cbtn" type="button"><span class="ico">…</span></button>
+			</div>
+			<div class="addressbar">
+				<span class="navglyphs">← → ↑</span>
+				<span class="crumbs">⌂ &gt; Vetta &gt; <b style="color:var(--color-surface-foreground)">Projects</b></span>
+				<span class="searchbox">⌕ Search</span>
+			</div>
+			<div class="winbody">
+				<aside class="navpane">
+					<div class="nrow is-on"><span class="ico">⌂</span>Home</div>
+					<div class="nrow"><span class="ico">▦</span>Gallery</div>
+					<div class="nrow"><span class="ico">☁</span>Vetta Cloud</div>
+					<div class="nsec">Quick access</div>
+					<div class="nrow"><span class="ico">▶</span>Desktop</div>
+					<div class="nrow"><span class="ico">▶</span>Downloads</div>
+					<div class="nrow"><span class="ico">▶</span>Projects</div>
+				</aside>
+				<main class="content">
+					<h3>Quick access</h3>
+					<div class="fgrid">
+						<div class="fcard"><span class="folder"></span><b>Brand refresh</b><small>248 items · shared</small></div>
+						<div class="fcard"><span class="folder"></span><b>Specs 2026</b><small>61 items</small></div>
+						<div class="fcard"><span class="folder"></span><b>Field notes</b><small>12 items</small></div>
+					</div>
+					<div class="recent">
+						<div class="rrow">brief-spec-v2.docx <span class="chip">Edited by you</span><span class="spacer"></span><span class="meta">Yesterday 14:02</span></div>
+						<div class="rrow">tokens-export.json <span class="spacer"></span><span class="meta">Tue 09:41</span></div>
+						<div class="rrow">roadmap-onion.xlsx <span class="chip">Shared</span><span class="spacer"></span><span class="meta">Mon 18:20</span></div>
+					</div>
+				</main>
+				<div class="flyout">
+					<div class="fitem">Name <span class="check">✓</span></div>
+					<div class="fitem">Date modified</div>
+					<div class="fitem">Type</div>
+					<div class="fitem">Size</div>
+					<div class="fsep"></div>
+					<div class="fitem">Ascending <span class="check" style="color:var(--color-muted)">›</span></div>
+					<div class="fitem">Show hidden <span class="wtgl"></span></div>
+				</div>
+			</div>
+			<div class="statusbar">12 items · 1 item selected · 2.4 GB</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 LAYERS -->
+	<section class="section">
+		<p class="section-label">01 — Chrome &amp; layering</p>
+		<h2>Three grays and a hairline</h2>
+		<p class="lede">The window stacks mica (surface, #f5f5f5), a content layer (surface-raised,
+			#fbfbfb) and white cards, every step separated by an #e5e5e5 hairline. Shadows stay shallow —
+			the stroke and the gray ladder do the depth work; acrylic is reserved for the surfaces that
+			float over content, like the Sort flyout on the cover.</p>
+		<div class="layers">
+			<div class="lay lay-1"><b>mica — surface</b> <span>the window base</span></div>
+			<div class="lay lay-2"><b>content layer — surface-raised</b> <span>where lists live</span></div>
+			<div class="lay lay-3"><b>card</b> <span>cards and inputs, hairline stroke, no shadow</span></div>
+		</div>
+		<div class="acrylic-demo">
+			<div class="sample">Acrylic — rgb(249 249 249 / 0.85) + blur(20px). It floats over content,
+				carries shadow-md and a hairline, and never appears on cards or the page itself.</div>
+		</div>
+		<p class="note">Window anatomy: app glyph and title left, caption buttons right with close hovering
+			red; one vertical hairline spines the command bar, address bar and content.</p>
+	</section>
+
+	<!-- 02 COLOR -->
+	<section class="section">
+		<p class="section-label">02 — Color roles</p>
+		<h2>One calm blue, a teal second voice</h2>
+		<p class="lede">Fluent blue #0f6cbd fills the single primary command and draws focus and selection.
+			The pinned second voice is teal #038387 — chosen over the lighter brand variant #2899f5, which
+			reads as the same blue one step brighter and adds no second meaning. Error red #c50f1f stays
+			serious and undecorated.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>Fluent blue · commands</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>teal · data, chips</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-surface)"></div><div class="meta"><b>surface</b><span>mica base #f5f5f5</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>error red #c50f1f</span></div></div>
+		</div>
+		<p class="note">Window chrome never takes color: title bar, command bar and nav pane stay gray;
+			color marks content and state only.</p>
+	</section>
+
+	<!-- 03 CONTROLS -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>8px corners, subtle by default</h2>
+		<p class="lede">Buttons come in accent, standard (white with a #d1d1d1 stroke) and subtle (a soft
+			gray fill). Focus draws a 2px blue underline at the input's bottom edge. The toggle is a pill
+			with a square-ish thumb — dark on gray when off, white on blue when on.</p>
+		<div class="controls">
+			<button class="mbtn mbtn-acc" type="button">New</button>
+			<button class="mbtn mbtn-std" type="button">Options</button>
+			<button class="mbtn mbtn-sub" type="button">Dismiss</button>
+			<span class="hlink">Learn more</span>
+			<span class="cbx">✓</span><span>Selected</span>
+			<span class="radio"></span><span>Chosen</span>
+			<span class="wtgl is-on"></span><span>Sync on</span>
+			<span class="wtgl"></span><span>Sync off</span>
+			<span class="textin" contenteditable="false" spellcheck="false">Projects</span>
+		</div>
+		<p class="note">One accent-filled command per view; checkboxes and radios tint blue only when
+			selected; destructive actions use error red text or fill, alone.</p>
+	</section>
+
+	<!-- 04 TYPE -->
+	<section class="section">
+		<p class="section-label">04 — Typography</p>
+		<h2>Segoe rhythm, weight 600, 14px body</h2>
+		<p class="lede">The stack starts at Segoe UI Variable and falls back through the system sans.
+			Body and controls run 14px; captions 12px; page titles 28px and section titles 20px at weight
+			600. Emphasis is weight, never a color change.</p>
+		<div class="ramp">
+			<div class="r"><span class="sample" style="font-size:28px;font-weight:600">Page title</span><span class="tag">28 · semibold</span></div>
+			<div class="r"><span class="sample" style="font-size:20px;font-weight:600">Section title</span><span class="tag">20 · semibold</span></div>
+			<div class="r"><span class="sample" style="font-size:14px">Body and controls</span><span class="tag">14 · regular</span></div>
+			<div class="r"><span class="sample" style="font-size:12px">Caption, title bar, column headers</span><span class="tag">12</span></div>
+		</div>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>The window becomes a page; the pane becomes a bar</h2>
+		<p class="lede">On small screens the three-gray stack survives but the furniture re-arranges: the
+			nav pane folds away, the command bar scrolls horizontally, and a bottom bar takes over
+			navigation. Targets grow; hover gives way to press.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="statusrow"><span>9:41</span><span>▮▮▮</span></div>
+				<div class="appheader"><span class="appglyph"></span><b>Vetta Files</b><span class="spacer"></span><span style="color:var(--color-muted);font-size:13px">⌕</span></div>
+				<div class="commandscroll">
+					<button class="cbtn new" type="button"><span class="ico">＋</span> New <span class="chev">⌄</span></button>
+					<button class="cbtn" type="button"><span class="ico">✂</span></button>
+					<button class="cbtn" type="button"><span class="ico">⧉</span></button>
+					<button class="cbtn" type="button"><span class="ico">⇅</span> Sort</button>
+					<button class="cbtn" type="button"><span class="ico">▦</span> View</button>
+				</div>
+				<div class="plist">
+					<div class="prow"><span class="folder"></span>Brand refresh<span class="spacer"></span><span class="meta">248 items</span></div>
+					<div class="prow"><span class="folder"></span>Specs 2026<span class="spacer"></span><span class="meta">61 items</span></div>
+					<div class="prow"><span class="folder"></span>Field notes<span class="spacer"></span><span class="meta">12 items</span></div>
+					<div class="prow">brief-spec-v2.docx<span class="spacer"></span><span class="meta">Yesterday</span></div>
+					<div class="prow">tokens-export.json<span class="spacer"></span><span class="meta">Tue</span></div>
+				</div>
+				<div class="bottomnav"><span class="on">⌂ Home</span><span>▦ Gallery</span><span>☁ Cloud</span><span>⋯ More</span></div>
+			</div>
+			<ul class="rules">
+				<li><b>Nav pane folds</b><span>The 190–320px pane disappears; its top entries become the bottom bar and the rest live behind the More tab. The accent selection indicator stays with the active row.</span></li>
+				<li><b>Command bar scrolls</b><span>Icon buttons keep their 40px height in a horizontally scrollable strip; the accent New button stays first and pinned.</span></li>
+				<li><b>Flyouts become sheets</b><span>The acrylic sort panel docks to the bottom edge as a sheet with the same 8px corners, hairline and shadow-md — still translucent, still over content.</span></li>
+				<li><b>Targets grow to 48px</b><span>Rows stretch from 36px to 48px and type holds at 14px; nothing shrinks to fit — lists simply get longer.</span></li>
+				<li><b>Hover becomes press</b><span>Subtle gray hover fills switch to a pressed fill while the finger is down; reveal highlight, being pointer-born, is dropped entirely.</span></li>
+				<li><b>Title bar dissolves</b><span>Caption buttons have no meaning on touch; the title becomes a page header with the same 12px quiet gray treatment.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the Windows calm</h2>
+		<div class="compare">
+			<div class="cmp cmp-off" style="background:var(--color-surface)">
+				<div class="mac-off">
+					<div class="tb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>Projects</span></div>
+					<div class="body">Window title, 15px rows, a heavy diffuse shadow and 12px corners —
+						macOS chrome on a Windows document.</div>
+				</div>
+				<small>Traffic lights on the left, vibrancy gray, a large soft window shadow and oversized
+					type: every platform cue points the wrong way. Windows chrome is gray, caption buttons
+					live right, shadows stay shallow, corners stay 8px.</small>
+			</div>
+			<div class="cmp cmp-on">
+				<p style="font-size:13px;color:var(--color-muted)">See the cover window: same content, correct
+					chrome — title left, <b style="font-size:13px;color:var(--color-surface-foreground)">─ ▢ ✕</b> right,
+					hairline-spined command and address bars, flyout as the only floating surface.</p>
+				<small>The chrome reads as one quiet instrument panel: three grays, one hairline, one blue
+					command, and nothing colored that isn't content.</small>
+			</div>
+		</div>
+		<div class="compare">
+			<div class="cmp cmp-off" style="background:var(--color-card)">
+				<div class="acrylic-off">
+					<div class="sample">A "card" built from 35% acrylic + blur(6px) — blurry, low-contrast,
+						and floating over nothing.</div>
+				</div>
+				<small>Acrylic on persistent content is noise: it muddies text, wastes the blur budget and
+					feels like a translucent sticker over the content it should sit above.</small>
+			</div>
+			<div class="cmp cmp-on">
+				<div style="border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-card);padding:14px;font-size:13px">A real card: white fill, hairline stroke,
+					zero shadow — content that sits <i>in</i> the layer stack, not over it.</div>
+				<small>Cards are opaque and stroke-separated; acrylic is only for the flyout that floats
+					above them. Layering stays legible because each material has one job.</small>
+			</div>
+		</div>
+		<p class="note">Also out: pill buttons, corners above 8px on controls, colored window chrome, more
+			than one accent-filled command per view, and shadows doing the hairline's job.</p>
+	</section>
+
+</div>
+</body>
+</html>

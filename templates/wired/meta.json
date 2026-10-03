@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "wired",
+	"name": "Wired",
+	"version": "1.0.0",
+	"order": 218,
+	"category": "editorial",
+	"vibe": "light",
+	"tags": [
+		"editorial",
+		"light"
+	],
+	"blurb": "Tech-magazine punch: a stark black-on-white duet, oversized high-contrast serif headlines, hairline-divided story rows and a dense black link-matrix footer.",
+	"tagline": {
+		"en": "Loud type, sharp grids",
+		"zh": "大字号、硬网格的科技杂志"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,31 @@
+/* Memphis — eighties geometric rebellion: flat clashing color blocks, squiggles,
+   polka dots and hard-edged shapes on white. Original curated spec for this
+   collection (MIT). */
+@theme {
+	--color-primary: #ff6b6b; /* coral red — the loudest block: hero fills, primary chips */
+	--color-primary-foreground: #ffffff; /* white labels on coral, always large & bold */
+	--color-surface: #ffffff; /* the clean white stage — confetti needs a white ground */
+	--color-surface-foreground: #17171c; /* near-black ink for text, patterns, outlines */
+	--color-surface-raised: #fff9f0; /* warm cream for panels that must sit back */
+	--color-muted: #7a7a85; /* cool gray for secondary text only */
+	--color-accent: #00c2c7; /* teal — the clash partner: blocks, links, highlights */
+	--color-danger: #e5484d;
+	--color-border: #17171c; /* ink — outlines on interactive pieces, pattern strokes */
+	/* The second pair of clashing tints. Both are fills, never text colors. */
+	--color-mustard: #ffce4f;
+	--color-violet-pop: #9b5de5;
+
+	/* Mixed on purpose: blocks stay hard (0), chips get slightly round (6–16) —
+	   blocky geometry with a few soft corners, never pill-round everything. */
+	--radius-sm: 0px;
+	--radius-md: 6px;
+	--radius-lg: 10px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	/* Hard flat ink offsets with zero blur — the "sticker" depth for interactive
+	   and tilted pieces. Static color blocks stay completely flat. */
+	--shadow-sm: 3px 3px 0 #17171c;
+	--shadow-md: 5px 5px 0 #17171c;
+	--shadow-lg: 8px 8px 0 #17171c;
+}

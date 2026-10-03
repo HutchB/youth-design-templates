@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel 8-bit — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #92cc41;
+		--color-primary-foreground: #212529;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #212529;
+		--color-surface-raised: #f8f8f8;
+		--color-muted: #999999;
+		--color-accent: #f7d51d;
+		--color-danger: #e76e55;
+		--color-border: #212529;
+
+		--color-blue: #209cee;
+		--color-bevel: #adafbc;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 0px;
+		--radius-xl: 0px;
+		--radius-2xl: 0px;
+
+		--shadow-sm: 2px 2px 0 #212529, 2px 0 0 #212529, 0 2px 0 #212529;
+		--shadow-md: 4px 4px 0 #212529, 4px 0 0 #212529, 0 4px 0 #212529;
+		--shadow-lg: 8px 8px 0 #212529, 8px 0 0 #212529, 0 8px 0 #212529;
+		--shadow-pressed: 0 0 0 #212529;
+
+		--mono: ui-monospace, "Courier New", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--mono);
+		font-size: 15px;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.n { font-weight: 400; }
+	.wrap { max-width: 960px; margin: 0 auto; padding: 26px 16px 56px; }
+	.muted { color: var(--color-muted); }
+
+	/* ── Panels: white box, thick ink border ─────────────────────── */
+	.px-panel { background: var(--color-surface-raised); border: 4px solid var(--color-border); padding: 14px; }
+	.px-panel.white { background: var(--color-surface); }
+
+	/* ── Buttons: cartridge fill, 4px ink border, block shadow ───── */
+	.px-btn {
+		font: 700 14px/1 var(--mono);
+		text-transform: uppercase; letter-spacing: 0.03em;
+		color: var(--color-primary-foreground);
+		background: var(--color-surface);
+		border: 4px solid var(--color-border);
+		padding: 11px 18px;
+		cursor: pointer;
+		box-shadow: var(--shadow-md);
+	}
+	.px-btn:hover { background: var(--color-surface-raised); }
+	.px-btn:active { box-shadow: var(--shadow-pressed); transform: translate(4px, 4px); }
+	.px-btn.green { background: var(--color-primary); }
+	.px-btn.green:hover { filter: brightness(1.08); }
+	.px-btn.red { background: var(--color-danger); }
+	.px-btn.red:hover { filter: brightness(1.08); }
+	.px-btn.blue { background: var(--color-blue); }
+	.px-btn.blue:hover { filter: brightness(1.08); }
+	.px-btn[disabled] { color: var(--color-muted); background: var(--color-surface-raised); cursor: default; box-shadow: var(--shadow-sm); }
+
+	/* ── HUD readout cells ───────────────────────────────────────── */
+	.hud { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+	.hud .cell { border: 4px solid var(--color-border); background: var(--color-surface-raised); padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+	.hud b { font-size: 16px; }
+	.hud .lbl { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Bars: bordered track of hard segments ───────────────────── */
+	.bar { display: inline-flex; gap: 2px; border: 3px solid var(--color-border); padding: 2px; background: var(--color-surface); }
+	.bar i { width: 12px; height: 12px; display: block; }
+	.bar.hp i { background: var(--color-primary); }
+	.bar.hp i.empty { background: var(--color-surface-raised); }
+	.bar.hp i.hurt { background: var(--color-danger); }
+	.bar.mp i { background: var(--color-accent); }
+	.bar.mp i.empty { background: var(--color-surface-raised); }
+
+	/* ── Command menu with ▶ cursor ──────────────────────────────── */
+	.menu { display: grid; gap: 0; border: 4px solid var(--color-border); background: var(--color-surface); }
+	.menu div { padding: 10px 12px; border-bottom: 2px solid var(--color-border); }
+	.menu div:last-child { border-bottom: 0; }
+	.menu .sel { background: var(--color-primary); }
+	.menu .sel::before { content: "▶ "; }
+
+	/* ── Inventory slots ─────────────────────────────────────────── */
+	.slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+	.slot {
+		aspect-ratio: 1; border: 4px solid var(--color-border);
+		background: var(--color-surface-raised);
+		display: grid; place-items: center;
+		font-size: 20px; position: relative;
+	}
+	.slot .cnt { position: absolute; right: 3px; bottom: 1px; font-size: 11px; }
+	.slot.sel { background: var(--color-primary); box-shadow: inset 0 0 0 3px var(--color-surface-raised); }
+	.slot.empty { background: var(--color-surface); }
+
+	/* ── Dialog bubble: panel + staircase tail in ink box-shadows ── */
+	.bubble { position: relative; margin-bottom: 18px; }
+	.bubble::after {
+		content: "";
+		position: absolute; left: 28px; bottom: -12px;
+		width: 4px; height: 4px;
+		background: var(--color-border);
+		box-shadow: 4px -4px var(--color-border), 8px -8px var(--color-border),
+			0 0 var(--color-border), 8px -4px var(--color-border), 4px -8px var(--color-border);
+	}
+	.blink { animation: px-blink 0.9s steps(1) infinite; }
+	@keyframes px-blink { 50% { visibility: hidden; } }
+
+	/* ── Badges ──────────────────────────────────────────────────── */
+	.px-badge { display: inline-block; border: 3px solid var(--color-border); background: var(--color-accent); color: var(--color-primary-foreground); font-size: 12px; text-transform: uppercase; padding: 4px 8px; box-shadow: var(--shadow-sm); }
+	.px-badge.green { background: var(--color-primary); }
+	.px-badge.blue { background: var(--color-blue); }
+	.px-badge.red { background: var(--color-danger); }
+
+	/* ── Sections ────────────────────────────────────────────────── */
+	.sec-head { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }
+	.sec-head .n { background: var(--color-accent); border: 3px solid var(--color-border); padding: 2px 8px; font-size: 13px; box-shadow: var(--shadow-sm); }
+	.sec-head h2 { font-size: 20px; }
+	.lede { color: var(--color-surface-foreground); font-weight: 400; max-width: 76ch; margin-bottom: 16px; }
+	.rule { display: flex; align-items: center; gap: 8px; margin: 30px 0 14px; text-transform: uppercase; font-size: 13px; letter-spacing: 0.08em; color: var(--color-muted); }
+	.rule::before, .rule::after { content: ""; flex: 1; border-top: 4px solid var(--color-border); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 40px; border: 4px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; margin-top: 6px; text-transform: uppercase; }
+	.sw span { font-size: 12px; color: var(--color-muted); font-weight: 400; }
+
+	/* ── Mobile: the phone IS the handheld ───────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+	@media (min-width: 820px) { .mobile { grid-template-columns: 300px 1fr; gap: 30px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		background: var(--color-surface-raised);
+		border: 4px solid var(--color-border);
+		box-shadow: var(--shadow-lg);
+		padding: 12px;
+	}
+	.m-hud { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+	.m-hud .cell { border: 3px solid var(--color-border); background: var(--color-surface); padding: 6px 8px; font-size: 11px; }
+	.m-menu { margin-top: 10px; }
+	.m-menu div { padding: 14px 12px; font-size: 14px; }
+	.m-dialog { margin-top: 10px; padding: 12px; font-size: 13px; font-weight: 400; }
+
+	.rules { margin: 0; padding: 0; list-style: none; border-top: 4px solid var(--color-border); }
+	.rules li { padding: 12px 0; border-bottom: 2px solid var(--color-border); font-weight: 400; }
+	.rules b { display: block; font-weight: 700; text-transform: uppercase; font-size: 14px; }
+	.rules span { font-size: 13px; color: var(--color-muted); }
+
+	/* ── Off-style ───────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 8px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 20px; border-radius: 16px;
+		background: #f8fafc; color: #334155;
+		border: 1px solid #e2e8f0;
+		box-shadow: 0 14px 30px rgb(15 23 42 / 0.16);
+		font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+		font-weight: 400;
+	}
+	.cmp-off b { color: #0f172a; }
+	.cmp-off small { display: block; margin-top: 8px; color: #64748b; font-size: 12px; }
+	.cmp-on { padding: 20px; }
+	.cmp-on small { display: block; margin-top: 8px; color: var(--color-muted); font-size: 12px; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<!-- COVER — an RPG battle screen: HUD strip, command menu with ▶ cursor,
+     segmented HP/MP bars, dialog with a staircase tail, inventory slots. -->
+<div class="wrap">
+	<div class="hud" style="margin-bottom:14px">
+		<div class="cell"><span class="lbl">HERO</span><b>ARIN</b></div>
+		<div class="cell"><span class="lbl">LV</span><b>12</b></div>
+		<div class="cell"><span class="lbl">HP</span>
+			<span class="bar hp"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="hurt"></i><i class="empty"></i><i class="empty"></i></span>
+		</div>
+		<div class="cell"><span class="lbl">MP</span>
+			<span class="bar mp"><i></i><i></i><i></i><i></i><i class="empty"></i><i class="empty"></i></span>
+		</div>
+		<div class="cell"><span class="lbl">GOLD</span><b>1,250</b></div>
+	</div>
+
+	<div class="px-panel white bubble">
+		<p>A wild <b>GLOOM KNIGHT</b> blocks the bridge!<br>
+		It radiates an aura of unshipped features.<span class="blink"> ▼</span></p>
+	</div>
+
+	<div class="row" style="align-items:flex-start;gap:14px">
+		<div class="menu" style="flex:1;min-width:220px">
+			<div class="sel">ATTACK</div>
+			<div>MAGIC</div>
+			<div>ITEM</div>
+			<div>RUN</div>
+		</div>
+		<div class="px-panel" style="flex:1;min-width:220px">
+			<p style="font-size:13px;margin-bottom:8px">ITEMS <span class="n muted">(3/8)</span></p>
+			<div class="slots">
+				<div class="slot sel">⚔<span class="cnt">1</span></div>
+				<div class="slot">🧪<span class="cnt">4</span></div>
+				<div class="slot">🔑</div>
+				<div class="slot empty"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 01 -->
+	<div class="rule">01 · Controls &amp; bars</div>
+	<div class="sec-head"><span class="n">01</span><h2>Cartridge controls</h2></div>
+	<p class="lede">Every control is a flat cartridge fill with a 4px ink border and a solid
+		block shadow. Pressing translates the element onto its shadow and collapses it —
+		the sprite flattens into the page. Bars are bordered tracks of hard segments; menus
+		select with a ▶ cursor glyph, never a floating highlight.</p>
+
+	<div class="px-panel white">
+		<div class="row">
+			<button class="px-btn green">Confirm</button>
+			<button class="px-btn">Cancel</button>
+			<button class="px-btn blue">Info</button>
+			<button class="px-btn red">Flee</button>
+			<button class="px-btn" disabled>Locked</button>
+		</div>
+		<div class="row" style="margin-top:16px">
+			<span class="px-badge">NEW!</span>
+			<span class="px-badge green blink">EQPPD</span>
+			<span class="px-badge blue">LV UP</span>
+			<span class="px-badge red">-32 HP</span>
+			<span class="bar hp"><i></i><i></i><i></i><i class="hurt"></i><i class="hurt"></i><i class="empty"></i><i class="empty"></i></span>
+			<span class="n muted">segmented damage</span>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><b>primary</b><span>#92cc41 green</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><b>accent</b><span>#f7d51d yellow</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><b>danger</b><span>#e76e55 red</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-blue)"></div><b>blue</b><span>#209cee secondary</span></div>
+		</div>
+	</div>
+</div>
+
+<!-- 02 MOBILE -->
+<div class="wrap">
+	<div class="rule">02 · Mobile</div>
+	<div class="sec-head"><span class="n">02</span><h2>The phone is the handheld</h2></div>
+	<p class="lede">On a phone the RPG screen stops pretending to be a desktop window and
+		becomes the console: the HUD compresses to a 2×2 grid, the command list becomes
+		thumb-sized full-width rows, and the dialog hugs the bottom of the screen like a
+		text box in a portable game.</p>
+	<div class="mobile">
+		<div class="phone">
+			<div class="m-hud">
+				<div class="cell"><b>ARIN</b> <span class="n muted">LV12</span></div>
+				<div class="cell"><span class="n muted">GOLD</span> <b>1250</b></div>
+				<div class="cell"><span class="n muted">HP</span> <span class="bar hp"><i></i><i></i><i></i><i class="empty"></i></span></div>
+				<div class="cell"><span class="n muted">MP</span> <span class="bar mp"><i></i><i class="empty"></i><i class="empty"></i></span></div>
+			</div>
+			<div class="menu m-menu">
+				<div class="sel">ATTACK</div>
+				<div>MAGIC</div>
+				<div>ITEM</div>
+			</div>
+			<div class="px-panel m-dialog">A wild GLOOM KNIGHT blocks the bridge!<span class="blink"> ▼</span></div>
+		</div>
+		<ul class="rules">
+			<li><b>HUD compresses, never hides</b><span>Five readouts fold into a 2×2 grid of 3px-bordered cells at 11–13px type. HP/MP bars drop to 4 segments each but keep hard segment boundaries — the bar never becomes a smooth fill.</span></li>
+			<li><b>Menu rows become targets</b><span>Command rows grow from 38px to 44–48px tall, stay full-width bordered strips, and keep the ▶ cursor glyph. The selection is also the pressed state on touch.</span></li>
+			<li><b>Dialog sits at the bottom</b><span>The staircase tail flips upward and the box pins under the menu, holding two short lines at 13px. Text never scrolls — pages advance on tap with the blinking ▼.</span></li>
+			<li><b>Press replaces hover</b><span>Hover fill-swaps move to :active, and the translate-onto-shadow press stays — flattening the button under the thumb is the whole tactile joke, so it survives on touch.</span></li>
+			<li><b>Borders thin one step only</b><span>Panels drop from 4px to 3px borders to win back space; nothing goes below 3px, and the shadow blocks stay solid ink at 2–4px.</span></li>
+			<li><b>Slots grid stays square</b><span>The inventory keeps its 4-across square grid down to 320px, then 3-across. Slot counts stay corner digits; slots never stretch into rectangles.</span></li>
+		</ul>
+	</div>
+</div>
+
+<!-- 03 DON'T -->
+<div class="wrap" style="padding-bottom:56px">
+	<div class="rule">03 · Off-style, for contrast</div>
+	<div class="sec-head"><span class="n">03</span><h2>What breaks the cartridge</h2></div>
+	<div class="compare">
+		<div class="cmp-off"><b>Modern soft card</b>
+			<p style="margin-top:6px; font-size:13px">16px rounded corners, hairline gray
+				border, blurred 30px shadow, pastel gradient pill button, proportional
+				sans type.</p>
+			<small>Curves on the grid, light doing depth's job, and a typeface with no
+				pixels in its past — the sprite becomes a sticker.</small>
+		</div>
+		<div class="px-panel cmp-on"><b style="font-size:14px">Same card, on-style</b>
+			<p class="n" style="margin-top:6px; font-size:13px">square corners, 4px ink border,
+				solid block shadow, flat cartridge fill, bold mono uppercase.</p>
+			<small>Flat fill or ink, block or nothing — the grid stays honest and the
+				buttons still feel like they want to be pressed.</small>
+		</div>
+	</div>
+	<p class="lede" style="margin-top:16px">Also out: gradients, blur, fades and tweens; white text on cartridge
+		fills; 1px hairlines; gray borders; more than three cartridge colors per screen; and
+		any smooth easing that makes a sprite act like it has a physics engine.</p>
+</div>
+
+</body>
+</html>

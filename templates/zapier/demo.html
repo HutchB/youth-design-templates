@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zapier — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #ff4f00;
+		--color-primary-foreground: #fffefb;
+		--color-surface: #fffefb;
+		--color-surface-foreground: #201515;
+		--color-surface-raised: #f8f4f0;
+		--color-muted: #605d52;
+		--color-accent: #201515;
+		--color-danger: #d0342c;
+		--color-border: #c5c0b1;
+
+		--radius-sm: 6px;
+		--radius-md: 12px;
+		--radius-lg: 16px;
+		--radius-xl: 24px;
+		--radius-2xl: 32px;
+
+		--shadow-sm: 0 1px 2px rgb(32 21 21 / 0.05);
+		--shadow-md: 0 6px 16px rgb(32 21 21 / 0.07);
+		--shadow-lg: 0 16px 40px rgb(32 21 21 / 0.12);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 15px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; }
+	p { margin: 0; }
+	::selection { background: rgb(255 79 0 / 0.22); }
+	.spacer { flex: 1; }
+	.num { font-variant-numeric: tabular-nums; }
+
+	.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 768px) { .wrap { padding: 0 28px; } }
+
+	/* ── Chrome: warm cream nav ───────────────────────────────────── */
+	.topbar { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; min-height: 64px; }
+	.brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+	.mark { width: 26px; height: 26px; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-primary-foreground); display: grid; place-items: center; font-size: 14px; font-weight: 800; flex: none; }
+	.topnav { display: none; gap: 20px; font-size: 15px; color: var(--color-muted); }
+	@media (min-width: 860px) { .topnav { display: flex; } }
+	.topnav .is-active { color: var(--color-surface-foreground); font-weight: 600; }
+
+	/* ── Editor header ────────────────────────────────────────────── */
+	.edhead { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 22px 0 18px; border-top: 1px solid var(--color-border); }
+	.edhead h1 { font-size: 22px; font-weight: 600; }
+	.edhead .zapmeta { font-size: 13px; color: var(--color-muted); margin-top: 3px; }
+	.switch { width: 44px; height: 26px; border-radius: 9999px; background: var(--color-border); position: relative; flex: none; transition: background-color 140ms ease; }
+	.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); }
+	.switch.on { background: var(--color-primary); }
+	.switch.on::after { left: auto; right: 3px; }
+	.liveword { font-size: 13px; font-weight: 600; color: var(--color-muted); }
+
+	/* ── Editor canvas ────────────────────────────────────────────── */
+	.canvas { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-bottom: 40px; align-items: start; }
+	@media (min-width: 940px) { .canvas { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } }
+	.step {
+		background: var(--color-surface); border: 1px solid var(--color-surface-foreground);
+		border-radius: var(--radius-md); padding: 16px 18px; max-width: 520px;
+	}
+	.step .role { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); }
+	.step .approw { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+	.app { width: 38px; height: 38px; border-radius: var(--radius-sm); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 15px; flex: none; }
+	.step .approw b { display: block; font-weight: 600; font-size: 15.5px; }
+	.step .approw span { display: block; font-size: 13px; color: var(--color-muted); margin-top: 1px; }
+	.step .acct { margin-top: 10px; font-size: 12.5px; color: var(--color-muted); border-top: 1px dashed var(--color-border); padding-top: 9px; }
+	.connector { display: flex; align-items: center; gap: 10px; max-width: 520px; padding: 6px 0 6px 24px; }
+	.connector .vline { width: 0; height: 30px; border-left: 2px dashed var(--color-surface-foreground); opacity: 0.55; }
+	.connector .add { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--color-surface-foreground); display: grid; place-items: center; font-size: 14px; font-weight: 600; background: var(--color-surface); }
+	.connector .ctxt { font-size: 12.5px; color: var(--color-muted); }
+	.fieldlabel { font-size: 13px; font-weight: 600; margin: 0 0 6px; max-width: 520px; }
+
+	/* ── Run history ──────────────────────────────────────────────── */
+	.hist { background: var(--color-surface-raised); border-radius: var(--radius-md); padding: 16px 18px; min-width: 0; }
+	.hist h2 { font-size: 16px; font-weight: 600; }
+	.hist .sub { font-size: 13px; color: var(--color-muted); margin: 2px 0 6px; }
+	.run { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--color-border); font-size: 13px; }
+	.run .st { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+	.run .st.ok { background: #2c8c66; }
+	.run .st.warn { background: #d0342c; }
+	.run code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+	.run .meta { margin-left: auto; color: var(--color-muted); flex: none; }
+
+	/* ── Buttons ──────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 15px; font-weight: 600; height: 46px; padding: 0 22px;
+		border: 0; border-radius: var(--radius-md);
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: filter 140ms ease;
+	}
+	.btn:hover { filter: brightness(1.06); }
+	.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(32 21 21 / 0.3); }
+	.btn-ink { background: var(--color-surface-foreground); color: var(--color-surface-raised); }
+	.btn-ink:hover { background: #2f2a26; filter: none; }
+	.btn-outline { background: var(--color-surface); color: var(--color-surface-foreground); border: 1px solid var(--color-surface-foreground); }
+	.btn-outline:hover { background: var(--color-surface-raised); }
+	.btn-auto { width: auto; }
+	.btn-sm { height: 38px; padding: 0 16px; font-size: 14px; }
+
+	/* ── Templates ────────────────────────────────────────────────── */
+	.tpls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+	@media (min-width: 900px) { .tpls { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+	.tpl { background: var(--color-surface-raised); border-radius: var(--radius-md); padding: 18px; min-width: 0; }
+	.tpl .pair { display: flex; align-items: center; gap: 6px; }
+	.tpl .pair .app { width: 30px; height: 30px; font-size: 12px; }
+	.tpl .pair .join { width: 16px; height: 0; border-top: 2px dashed var(--color-surface-foreground); opacity: 0.5; }
+	.tpl h3 { font-size: 15px; font-weight: 600; margin-top: 12px; }
+	.tpl .meta { font-size: 12.5px; color: var(--color-muted); margin-top: 6px; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section { padding: 46px 0; border-top: 1px solid var(--color-border); }
+	@media (min-width: 768px) { .section { padding: 62px 0; } }
+	.section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 12px; }
+	.section h2 { font-size: clamp(24px, 4vw, 34px); font-weight: 500; letter-spacing: -0.02em; }
+	.lede { color: var(--color-muted); margin-top: 12px; max-width: 62ch; font-size: 15.5px; }
+	.note { margin-top: 16px; font-size: 13.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 58px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 600; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 26px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 44px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 28px;
+		overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 11px 18px 4px; font-size: 10px; color: var(--color-muted); }
+	.phone-body { padding: 8px 14px 4px; }
+	.p-head { display: flex; align-items: center; gap: 8px; padding: 4px 0 12px; }
+	.p-head .mark { width: 20px; height: 20px; border-radius: 6px; font-size: 11px; }
+	.p-head b { font-size: 14px; font-weight: 800; letter-spacing: -0.02em; }
+	.p-step { background: var(--color-surface); border: 1px solid var(--color-surface-foreground); border-radius: 10px; padding: 11px 12px; }
+	.p-step .role { font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); }
+	.p-step .approw { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+	.p-step .approw b { font-size: 12.5px; font-weight: 600; display: block; }
+	.p-step .approw span { font-size: 10.5px; color: var(--color-muted); display: block; }
+	.p-conn { display: flex; align-items: center; gap: 8px; padding: 5px 0 5px 16px; }
+	.p-conn .vline { width: 0; height: 18px; border-left: 2px dashed var(--color-surface-foreground); opacity: 0.5; }
+	.p-conn .add { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--color-surface-foreground); display: grid; place-items: center; font-size: 11px; background: var(--color-surface); }
+	.p-cta { display: flex; align-items: center; gap: 10px; padding: 14px 0 6px; }
+	.p-tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 12px; }
+	.p-tabbar div { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 9px 0 12px; }
+	.p-tabbar .is-active { color: var(--color-surface-foreground); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off { padding: 22px; border-radius: 9999px; background: #ffffff; border: 1px solid #e4e2ea; box-shadow: 0 14px 34px rgb(32 21 21 / 0.16); font-size: 16px; font-weight: 600; }
+	.cmp-off .fake-btn { display: inline-block; margin-top: 12px; background: #5f4fcf; color: #fff; border-radius: 9999px; padding: 9px 18px; font-size: 13px; font-weight: 700; }
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 10px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-radius: var(--radius-md); background: var(--color-surface-raised); font-size: 16px; font-weight: 600; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 10px; line-height: 1.6; }
+
+	footer { border-top: 1px solid var(--color-border); padding: 32px 0 56px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the Zap editor. Trigger card, dashed connectors, action cards,
+     a live toggle and one orange publish button on warm cream. -->
+<div class="wrap">
+	<div class="topbar">
+		<span class="brand"><span class="mark">_</span>vetta</span>
+		<nav class="topnav"><span class="is-active">My zaps</span><span>Templates</span><span>Connections</span><span>History</span></nav>
+		<span class="spacer"></span>
+		<button class="btn btn-sm btn-auto">Make a zap</button>
+	</div>
+
+	<div class="edhead">
+		<div>
+			<h1>New order row → Slack + Airtable</h1>
+			<div class="zapmeta num">Edited 4 minutes ago · 3 steps · runs every 2 min</div>
+		</div>
+		<span class="spacer"></span>
+		<span class="switch on"></span><span class="liveword">Live</span>
+		<button class="btn btn-auto">Publish update</button>
+	</div>
+
+	<div class="canvas">
+		<div>
+			<p class="fieldlabel">When this happens…</p>
+			<div class="step">
+				<div class="role">Trigger</div>
+				<div class="approw">
+					<span class="app" style="background:#0f9d58">S</span>
+					<span><b>New spreadsheet row</b><span>Google Sheets · worksheet <span class="num">Orders 2026</span></span></span>
+				</div>
+				<div class="acct">Account: studio@vetta.co · polls every 2 min</div>
+			</div>
+
+			<div class="connector"><span class="vline"></span><span class="add">＋</span><span class="ctxt">add a step</span></div>
+
+			<p class="fieldlabel">Do this…</p>
+			<div class="step">
+				<div class="role">Action 1</div>
+				<div class="approw">
+					<span class="app" style="background:#4a154b">#</span>
+					<span><b>Send channel message</b><span>Slack · <span class="num">#ops-orders</span></span></span>
+				</div>
+				<div class="acct">Message text pulled from step 1 · bot name “Vetta”</div>
+			</div>
+
+			<div class="connector"><span class="vline"></span><span class="add">＋</span><span class="ctxt">add a step</span></div>
+
+			<div class="step">
+				<div class="role">Action 2</div>
+				<div class="approw">
+					<span class="app" style="background:#f7b500; color:#201515">A</span>
+					<span><b>Create record</b><span>Airtable · base <span class="num">Fulfillment</span></span></span>
+				</div>
+				<div class="acct">Maps 6 fields from steps 1–2</div>
+			</div>
+		</div>
+
+		<div class="hist">
+			<h2>Run history</h2>
+			<p class="sub num">2,148 runs · 99.7% success</p>
+			<div class="run"><span class="st ok"></span><code>14:02:11</code><span>3 steps · 1.2s</span><span class="meta num">success</span></div>
+			<div class="run"><span class="st ok"></span><code>14:00:07</code><span>3 steps · 0.9s</span><span class="meta num">success</span></div>
+			<div class="run"><span class="st ok"></span><code>13:58:04</code><span>3 steps · 1.4s</span><span class="meta num">success</span></div>
+			<div class="run"><span class="st warn"></span><code>13:56:02</code><span>2 steps · error</span><span class="meta" style="color:var(--color-danger)">failed · retried</span></div>
+			<div class="run"><span class="st ok"></span><code>13:54:01</code><span>3 steps · 1.1s</span><span class="meta num">success</span></div>
+			<button class="btn btn-outline btn-sm" style="margin-top:12px">View full history</button>
+		</div>
+	</div>
+
+	<div style="padding-bottom: 48px;">
+		<p class="section-label" style="margin-bottom:14px">Start from a template</p>
+		<div class="tpls">
+			<div class="tpl">
+				<div class="pair"><span class="app" style="background:#0f9d58">S</span><span class="join"></span><span class="app" style="background:#4a154b">#</span></div>
+				<h3>Sheet rows to Slack</h3>
+				<div class="meta num">2 steps · most used</div>
+			</div>
+			<div class="tpl">
+				<div class="pair"><span class="app" style="background:#ff4f00">G</span><span class="join"></span><span class="app" style="background:#201515">@</span></div>
+				<h3>New Gmail → Notion</h3>
+				<div class="meta num">2 steps · free</div>
+			</div>
+			<div class="tpl">
+				<div class="pair"><span class="app" style="background:#111111">T</span><span class="join"></span><span class="app" style="background:#f7b500; color:#201515">A</span></div>
+				<h3>Tickets to Airtable</h3>
+				<div class="meta num">5 steps · free</div>
+			</div>
+			<div class="tpl">
+				<div class="pair"><span class="app" style="background:#0061ff">C</span><span class="join"></span><span class="app" style="background:#611f69">M</span></div>
+				<h3>Calendar to Meeting</h3>
+				<div class="meta num">3 steps · free</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — Color</p>
+		<h2>One orange, everything else coffee</h2>
+		<p class="lede">Orange carries exactly two jobs: the primary CTA and the live toggle. Secondary
+			actions fall to ink-filled or outlined buttons; there is no second accent hue in the system.
+			App icons — sheets, chats, bases — are the only multicolor moments, and they always sit inside
+			neutral cards.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#ff4f00 · CTA + live</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><b>surface</b><span>#fffefb · warm cream</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><b>raised</b><span>#f8f4f0 · cards, wells</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-foreground)"></div><b>ink</b><span>#201515 · coffee text + fills</span></div>
+		</div>
+		<div class="row" style="margin-top: 24px;">
+			<button class="btn btn-auto">Publish update</button>
+			<button class="btn btn-ink btn-auto">Export history</button>
+			<button class="btn btn-outline btn-auto">Test step</button>
+			<span class="switch on"></span><span class="note" style="margin:0">the live switch shares the orange duty</span>
+		</div>
+		<p class="note">Failed runs take a warm red, never orange-red confusion: danger is #d0342c and lives
+			in status contexts only.</p>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Shape</p>
+		<h2>The confident middle radius</h2>
+		<p class="lede">Buttons and cards land at 12px — friendlier than a square, more grounded than a pill.
+			Inputs and chips step down to 6px, badges stay fully round, and the important containers draw a
+			full-strength ink border: an editor step card is something you are about to edit, and it looks
+			the part.</p>
+		<div class="row" style="margin-top: 22px;">
+			<span style="width:84px;height:52px;border-radius:var(--radius-sm);background:var(--color-surface);border:1px solid var(--color-surface-foreground);display:inline-grid;place-items:center;font-size:12px;font-weight:600">6px input</span>
+			<span style="width:84px;height:52px;border-radius:var(--radius-md);background:var(--color-surface);border:1px solid var(--color-surface-foreground);display:inline-grid;place-items:center;font-size:12px;font-weight:600">12px card</span>
+			<span style="width:84px;height:52px;border-radius:var(--radius-md);background:var(--color-surface-raised);display:inline-grid;place-items:center;font-size:12px;font-weight:600">well</span>
+			<span style="border-radius:9999px;background:var(--color-surface-raised);padding:7px 14px;font-size:12px;font-weight:600;display:inline-block">pill badge</span>
+		</div>
+		<p class="note">Connectors between steps are dashed ink lines with a circular add button — the line
+			itself explains the product: steps flow down, linked by you.</p>
+	</section>
+
+	<!-- 03 MOBILE -->
+	<section class="section">
+		<p class="section-label">03 — Mobile</p>
+		<h2>The editor folds into a story</h2>
+		<p class="lede">On a phone the zap becomes a vertical story: trigger, connector, actions, with the
+			history panel tucked behind the header. The publish button and live toggle stay pinned where
+			thumbs land.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>5G ▮</span></div>
+				<div class="phone-body">
+					<div class="p-head"><span class="mark">_</span><b>vetta</b><span class="spacer"></span><span class="switch on"></span></div>
+					<div class="p-step">
+						<div class="role">Trigger</div>
+						<div class="approw"><span class="app" style="background:#0f9d58;width:26px;height:26px;font-size:11px">S</span><span><b>New spreadsheet row</b><span>Google Sheets</span></span></div>
+					</div>
+					<div class="p-conn"><span class="vline"></span><span class="add">＋</span></div>
+					<div class="p-step">
+						<div class="role">Action 1</div>
+						<div class="approw"><span class="app" style="background:#4a154b;width:26px;height:26px;font-size:11px">#</span><span><b>Send channel message</b><span>Slack · #ops-orders</span></span></div>
+					</div>
+					<div class="p-conn"><span class="vline"></span><span class="add">＋</span></div>
+					<div class="p-step">
+						<div class="role">Action 2</div>
+						<div class="approw"><span class="app" style="background:#f7b500;color:#201515;width:26px;height:26px;font-size:11px">A</span><span><b>Create record</b><span>Airtable · Fulfillment</span></span></div>
+					</div>
+					<div class="p-cta"><button class="btn btn-sm" style="flex:1">Publish update</button><button class="btn btn-outline btn-sm">Test</button></div>
+				</div>
+				<div class="p-tabbar">
+					<div class="is-active">Editor</div><div>Templates</div><div>History</div><div>Account</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Step cards</b>Padding tightens from 16px to 11px and the icon tile shrinks with it; the ink border never thins — the card must stay clearly editable.</li>
+				<li><b>Connectors</b>The dashed line and add button survive at two-thirds scale; they are the product's mental model and are never dropped.</li>
+				<li><b>Header</b>Title truncates to one line and the meta moves into the history panel; the live toggle replaces the word “Live”.</li>
+				<li><b>Actions</b>Publish keeps its 12px radius and orange fill at full width; Test sits beside it as an outline — never two orange buttons.</li>
+				<li><b>History</b>The run panel becomes a route; rows keep dots, mono timestamps and step counts.</li>
+				<li><b>Templates</b>The 4-up grid falls to 2-up, then 1-up; cream wells need no border to separate at any width.</li>
+				<li><b>Touch</b>Rows and connectors extend to 44px tap targets; the add button is the largest hit area on the canvas.</li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 04 DON'T -->
+	<section class="section">
+		<p class="section-label">04 — Off-style, for contrast</p>
+		<h2>What reads as “not zapier”</h2>
+		<div class="compare">
+			<div class="cmp-off">Pill button, second accent
+				<small>Pure-white card · fully rounded button · a purple CTA competing with orange · cool gray
+				shadow. The temperature, the middle radius and the single-accent rule all break at once.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Cream well at 12px radius, ink or orange actions, warm shadow. One saturated color does
+				the converting; the neutrals stay warm and quiet.</small></div>
+		</div>
+		<p class="note">Also out: pure-white pages, pure-black ink, square-cornered CTAs, orange used as
+			decoration or link color, and cool-gray neutrals anywhere.</p>
+	</section>
+</div>
+
+<footer><div class="wrap">Vetta design reference — zapier · warm cream, coffee ink, one orange action.</div></footer>
+</body>
+</html>

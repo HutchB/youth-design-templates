@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "nintendo-2001",
+	"name": "Nintendo 2001",
+	"version": "1.0.0",
+	"order": 215,
+	"category": "retro",
+	"vibe": "light",
+	"tags": [
+		"retro",
+		"light"
+	],
+	"blurb": "Early-2000s console-chrome web: brushed periwinkle metal plates, carbon-navy command slabs, red logo pill, orange forward cues and beveled, chamfered panels.",
+	"tagline": {
+		"en": "Game corner energy, 2001 web",
+		"zh": "2001 年的游戏角能量"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

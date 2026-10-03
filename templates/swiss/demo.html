@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swiss Grid — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #e32636;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #111111;
+		--color-surface-raised: #f7f7f7;
+		--color-muted: #6b6b6b;
+		--color-accent: #111111;
+		--color-danger: #cc2b1d;
+		--color-border: #111111;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 0px;
+		--radius-xl: 0px;
+		--radius-2xl: 0px;
+
+		--shadow-sm: none;
+		--shadow-md: none;
+		--shadow-lg: none;
+
+		--sans: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 17px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 900; line-height: 0.94; letter-spacing: -0.02em; text-transform: uppercase; }
+	p { margin: 0; }
+	::selection { background: rgb(227 38 54 / 0.22); }
+	.spacer { flex: 1; }
+
+	/* The drawn grid: a faint fixed skeleton the whole page sits on. */
+	.grid-skel {
+		position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+		width: 100%; max-width: 1120px; padding: 0 24px;
+		display: grid; grid-template-columns: repeat(12, 1fr);
+		pointer-events: none; z-index: 0;
+	}
+	.grid-skel i { border-left: 1px solid rgb(17 17 17 / 0.07); }
+	.grid-skel i:last-child { border-right: 1px solid rgb(17 17 17 / 0.07); }
+
+	.wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+	.meta { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+	.meta.red { color: var(--color-primary); font-weight: 700; }
+	.meta.dim { color: var(--color-muted); }
+
+	/* ── Cover: exhibition poster ─────────────────────────────────── */
+	.topbar { border-top: 2px solid var(--color-border); }
+	.topbar-in { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--color-border); }
+	.topbar .sq { width: 10px; height: 10px; background: var(--color-primary); flex: none; }
+
+	.hero { display: grid; grid-template-columns: 1fr; gap: 36px; padding: 56px 0 48px; }
+	@media (min-width: 920px) { .hero { grid-template-columns: repeat(12, 1fr); gap: 0; padding: 84px 0 72px; } }
+	.hero-main { grid-column: 1 / -1; }
+	@media (min-width: 920px) { .hero-main { grid-column: 1 / span 8; padding-right: 48px; } }
+	.hero h1 { font-size: clamp(58px, 11vw, 124px); margin: 18px 0 0; }
+	.hero h1 em { font-style: normal; color: var(--color-primary); }
+	.hero-side { grid-column: 1 / -1; }
+	@media (min-width: 920px) { .hero-side { grid-column: 9 / span 4; align-self: end; } }
+	.fact { display: flex; align-items: baseline; gap: 12px; padding: 11px 0; border-top: 1px solid var(--color-border); }
+	.fact:last-child { border-bottom: 1px solid var(--color-border); }
+	.fact .no { color: var(--color-primary); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; }
+	.fact .k { color: var(--color-muted); }
+	.fact .v { margin-left: auto; font-weight: 700; font-size: 13px; text-align: right; }
+
+	/* ── Works index: hairline rows, red numerals ─────────────────── */
+	.rule { border-top: 1px solid var(--color-border); }
+	.index { padding: 34px 0 48px; }
+	.idx-row { display: flex; align-items: baseline; gap: 16px; padding: 15px 0; border-bottom: 1px solid var(--color-border); }
+	.idx-row .no { flex: none; width: 34px; color: var(--color-primary); font-weight: 700; font-size: 13px; letter-spacing: 0.08em; }
+	.idx-row .t { font-weight: 900; font-size: 19px; text-transform: uppercase; letter-spacing: -0.01em; }
+	.idx-row .m { margin-left: auto; color: var(--color-muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-align: right; }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 820px; margin: 0 auto; padding: 0 24px 96px; }
+	.section { border-top: 1px solid var(--color-border); margin-top: 56px; padding-top: 14px; }
+	.section-label { font-size: 12px; font-weight: 700; color: var(--color-primary); letter-spacing: 0.14em; text-transform: uppercase; }
+	.section h2 { font-size: 34px; margin: 10px 0 12px; }
+	.lede { color: var(--color-muted); font-size: 15px; line-height: 1.6; max-width: 62ch; }
+
+	/* Specimen rows */
+	.spec { display: flex; align-items: baseline; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+	.spec .no { flex: none; width: 34px; color: var(--color-primary); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; }
+	.spec .glyph { font-size: 64px; font-weight: 900; line-height: 0.9; letter-spacing: -0.02em; }
+	.spec .glyph.w7 { font-size: 34px; font-weight: 700; }
+	.spec .glyph.w4 { font-size: 17px; font-weight: 400; letter-spacing: 0; }
+	.spec .glyph.cap { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+	.spec .tag { margin-left: auto; color: var(--color-muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+
+	/* Visible grid demo */
+	.gdemo { margin-top: 24px; border: 1px solid var(--color-border); padding: 18px; }
+	.gdemo-cols { display: grid; grid-template-columns: repeat(12, 1fr); }
+	.gdemo-cols b { border-left: 1px solid var(--color-border); padding: 2px 0 8px; color: var(--color-primary); font-size: 10px; font-weight: 700; text-align: right; }
+	.gdemo-cols b:last-child { border-right: 1px solid var(--color-border); }
+	.gdemo-canvas { display: grid; grid-template-columns: repeat(12, 1fr); border-top: 1px solid var(--color-border); }
+	.gdemo-canvas .blk { height: 64px; background: var(--color-surface-raised); border-left: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+	.gdemo-canvas .blk.red { background: var(--color-primary); border-color: var(--color-primary); }
+	.c1 { grid-column: 1 / span 1; } .c2 { grid-column: 2 / span 1; } .c3 { grid-column: 3 / span 1; }
+	.c4 { grid-column: 4 / span 1; } .c5 { grid-column: 5 / span 1; } .c6 { grid-column: 6 / span 1; }
+	.c7 { grid-column: 7 / span 1; } .c8 { grid-column: 8 / span 1; } .c9 { grid-column: 9 / span 1; }
+	.c10 { grid-column: 10 / span 1; } .c11 { grid-column: 11 / span 1; } .c12 { grid-column: 12 / span 1; }
+	.c28 { grid-column: 2 / span 7; } .c10x { grid-column: 10 / span 3; }
+
+	/* Color: flat squares, no radius, no shadow */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 64px; border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* Controls: sharp rectangles, instant hover swaps */
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+	.btn {
+		font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+		height: 42px; padding: 0 24px; border: 1px solid var(--color-surface-foreground);
+		background: var(--color-surface); color: var(--color-surface-foreground); cursor: pointer;
+		transition: background-color 80ms linear, color 80ms linear;
+	}
+	.btn:hover { background: var(--color-surface-foreground); color: var(--color-surface); }
+	.btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+	.btn-red { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-red:hover { background: var(--color-surface); border-color: var(--color-primary); color: var(--color-primary); }
+	.btn-outline:hover { background: var(--color-surface-foreground); }
+	.link { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-surface-foreground); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; cursor: pointer; }
+	.link:hover { color: var(--color-primary); }
+	.input {
+		font-family: var(--sans); font-size: 15px; width: 100%; max-width: 300px; height: 42px; padding: 0 2px;
+		background: transparent; border: 0; border-bottom: 1px solid var(--color-surface-foreground); border-radius: 0;
+		color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: var(--color-muted); text-transform: uppercase; font-size: 12px; letter-spacing: 0.12em; }
+	.input:focus { outline: none; border-bottom: 2px solid var(--color-primary); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 40px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); overflow: hidden; background: var(--color-surface);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 8px 16px 2px; font-size: 10px; color: var(--color-muted); letter-spacing: 0.1em; }
+	.phone-top { display: flex; align-items: center; gap: 8px; margin: 8px 16px 0; padding: 8px 0; border-top: 2px solid var(--color-border); border-bottom: 1px solid var(--color-border); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; }
+	.phone-top .sq { width: 7px; height: 7px; background: var(--color-primary); }
+	.phone-body { padding: 14px 16px 16px; }
+	.phone-body .kick { color: var(--color-primary); font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
+	.phone-body h6 { margin: 8px 0 0; font-weight: 900; font-size: 30px; line-height: 0.94; letter-spacing: -0.02em; text-transform: uppercase; }
+	.phone-body h6 em { font-style: normal; color: var(--color-primary); }
+	.phone-facts { margin-top: 14px; }
+	.phone-fact { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 8px 0; border-top: 1px solid var(--color-border); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+	.phone-fact .k { color: var(--color-muted); }
+	.phone-fact .v { font-weight: 700; }
+	.phone-foot { border-top: 1px solid var(--color-border); padding: 12px 16px 16px; }
+	.phone-foot .btn { width: 100%; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 14px 0; border-bottom: 1px solid var(--color-border); font-size: 15px; color: var(--color-muted); line-height: 1.55; }
+	.rules b { display: block; font-size: 16px; font-weight: 700; color: var(--color-surface-foreground); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.02em; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 28px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+		border-radius: 20px; background: linear-gradient(150deg, #eef2ff, #fdf2f8);
+		box-shadow: 0 16px 36px rgb(15 23 42 / 0.16);
+		font-weight: 800; font-size: 19px; color: #334155;
+	}
+	.cmp-off small { font-weight: 400; font-size: 13px; color: #64748b; line-height: 1.6; }
+	.cmp-off .pill { display: inline-block; padding: 9px 22px; border-radius: 9999px; background: linear-gradient(90deg, #6366f1, #ec4899); color: #fff; font-size: 12px; font-weight: 700; }
+	.cmp-on { border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 4px 0 14px; }
+	.cmp-on .no { color: var(--color-primary); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; }
+	.cmp-on h4 { margin: 6px 0 0; font-weight: 900; font-size: 26px; text-transform: uppercase; letter-spacing: -0.02em; }
+	.cmp-on .m { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+	.note-plain { margin-top: 20px; font-size: 14px; color: var(--color-muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- The drawn grid: faint 12-column skeleton behind everything. -->
+<div class="grid-skel" aria-hidden="true">
+	<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+
+<!-- COVER — the exhibition poster itself: ink top rule, meta bar, 900-weight
+     display flush-left, hairline fact column, red used as a stamp. -->
+<div class="wrap">
+	<div class="topbar">
+		<div class="topbar-in meta">
+			<span class="sq" aria-hidden="true"></span>
+			<span>Kunsthalle Zürich</span>
+			<span class="spacer"></span>
+			<span class="red">Poster &amp; Print</span>
+			<span class="dim">14 Nov — 03 Dec 2026</span>
+		</div>
+	</div>
+
+	<header class="hero">
+		<div class="hero-main">
+			<p class="meta red">Exhibition 26 — Hall 1–3</p>
+			<h1>The Grid<br>Is the<br>Design<em>.</em></h1>
+		</div>
+		<aside class="hero-side">
+			<div class="fact"><span class="no">01</span><span class="k meta">Curated by</span><span class="v">E. Brunner</span></div>
+			<div class="fact"><span class="no">02</span><span class="k meta">Works shown</span><span class="v">148 Posters</span></div>
+			<div class="fact"><span class="no">03</span><span class="k meta">Catalogue</span><span class="v">CHF 38</span></div>
+			<div class="fact"><span class="no">04</span><span class="k meta">Open daily</span><span class="v">10–18 H</span></div>
+		</aside>
+	</header>
+
+	<!-- Index rows: the workhorse list pattern. -->
+	<section class="index">
+		<div class="rule"></div>
+		<div class="idx-row"><span class="no">A1</span><span class="t">Müller-Brockmann, Rear Window</span><span class="m">1957 · Hall 1</span></div>
+		<div class="idx-row"><span class="no">A2</span><span class="t">Flückiger, Zurich Tonhalle</span><span class="m">1955 · Hall 1</span></div>
+		<div class="idx-row"><span class="no">B1</span><span class="t">Ruder, Typographic Studies</span><span class="m">1961 · Hall 2</span></div>
+		<div class="idx-row"><span class="no">B2</span><span class="t">Gerstner, New Programs</span><span class="m">1964 · Hall 2</span></div>
+		<div class="idx-row"><span class="no">C1</span><span class="t">New Swiss Poster, Now</span><span class="m">2024–26 · Hall 3</span></div>
+	</section>
+
+	<div class="ref">
+		<!-- 01 -->
+		<section class="section">
+			<p class="section-label">01 — Typography</p>
+			<h2>One sans, four voices</h2>
+			<p class="lede">A single grotesque carries everything: 900 for display, 700 for
+				structure, 400 for prose, and a tracked uppercase layer for meta. Flush left,
+				ragged right; the red numeral does the pointing.</p>
+			<div class="spec" style="margin-top:22px"><span class="no">1.1</span><span class="glyph">Aa</span><span class="tag">Display 900 · 96–124 · ls −0.02em</span></div>
+			<div class="spec"><span class="no">1.2</span><span class="glyph w7">Section Aa</span><span class="tag">Headline 700 · 30–34</span></div>
+			<div class="spec"><span class="no">1.3</span><span class="glyph w4">Body text stays between 55 and 70 characters per line, ragged right.</span><span class="tag">Body 400 · 16–17</span></div>
+			<div class="spec"><span class="no">1.4</span><span class="glyph cap">Meta Layer 11</span><span class="tag">Meta 700 · caps · ls 0.12em</span></div>
+		</section>
+
+		<!-- 02 -->
+		<section class="section">
+			<p class="section-label">02 — The grid</p>
+			<h2>Structure you can see</h2>
+			<p class="lede">The 12-column skeleton may be drawn: faint ink columns behind the
+				page, red numerals on the edges. Content snaps to column edges or gutters —
+				the 8/4 split below is exact, never decorative.</p>
+			<div class="gdemo">
+				<div class="gdemo-cols meta"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b><b>10</b><b>11</b><b>12</b></div>
+				<div class="gdemo-canvas">
+					<div class="blk c28"></div>
+					<div class="blk red c10x"></div>
+					<div class="blk c2"></div>
+					<div class="blk c1"></div>
+					<div class="blk c3"></div>
+					<div class="blk c1"></div>
+					<div class="blk c12"></div>
+				</div>
+			</div>
+			<p class="lede" style="margin-top:16px">Asymmetric but aligned: the red block lands
+				on columns 10–12 because that is where the grid puts it, not because it looks
+				neat. A dropped column beats a stretched one.</p>
+		</section>
+
+		<!-- 03 -->
+		<section class="section">
+			<p class="section-label">03 — Color &amp; controls</p>
+			<h2>Ink, white, one red</h2>
+			<p class="lede">White is the ground, ink does the work, red is the stamp. Controls
+				are sharp rectangles that swap fill on contact — no fades, no lifts, no depth.</p>
+			<div class="swatches">
+				<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><b>Red</b><span>primary · the only color</span></div>
+				<div class="sw"><div class="fill" style="background:var(--color-surface-foreground)"></div><b>Ink</b><span>foreground &amp; border</span></div>
+				<div class="sw"><div class="fill" style="background:var(--color-surface)"></div><b>White</b><span>surface · the ground</span></div>
+				<div class="sw"><div class="fill" style="background:var(--color-surface-raised)"></div><b>Plate</b><span>raised · image panels</span></div>
+			</div>
+			<div class="row" style="margin-top:26px">
+				<button class="btn btn-red">Tickets</button>
+				<button class="btn btn-outline">Catalogue</button>
+				<button class="link">Programme →</button>
+			</div>
+			<div class="row" style="margin-top:20px">
+				<input class="input" placeholder="Search 148 works">
+				<button class="btn">Search</button>
+			</div>
+			<p class="note-plain">The accent token is ink by design: the grid and the display
+				type are the accent. A second hue would dilute the single voice red has.</p>
+		</section>
+
+		<!-- 04 -->
+		<section class="section">
+			<p class="section-label">04 — Mobile</p>
+			<h2>The poster folds, the grid stays</h2>
+			<p class="lede">Twelve columns collapse to four, the display headline steps down
+				without changing its voice, and the fact column becomes hairline rows under
+				the headline. Nothing centers; nothing rounds.</p>
+			<div class="mobile">
+				<div class="phone">
+					<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+					<div class="phone-top"><span class="sq"></span><span class="spacer"></span><span>Kunsthalle Zürich</span><span class="spacer"></span><span style="color:var(--color-primary);font-weight:700">26</span></div>
+					<div class="phone-body">
+						<p class="kick">Exhibition 26 — Hall 1–3</p>
+						<h6>The Grid<br>Is the<br>Design<em>.</em></h6>
+						<div class="phone-facts">
+							<div class="phone-fact"><span class="k">Curated by</span><span class="v">E. Brunner</span></div>
+							<div class="phone-fact"><span class="k">Works shown</span><span class="v">148</span></div>
+							<div class="phone-fact"><span class="k">14 Nov — 03 Dec</span><span class="v">10–18 H</span></div>
+						</div>
+					</div>
+					<div class="phone-foot"><button class="btn btn-red">Tickets</button></div>
+				</div>
+				<ul class="rules">
+					<li><b>Columns 12 → 4</b><span>The skeleton redraws at four columns; the faint lines and the red edge numerals survive, so the structure stays visible at any width.</span></li>
+					<li><b>Display steps, never swaps</b><span>The headline goes 124px → 30–34px and keeps 900 weight, uppercase, tight leading and flush-left alignment. Centering it "for mobile" ends the system.</span></li>
+					<li><b>Fact column becomes rows</b><span>The 8/4 hero split stacks: hairline fact rows move under the headline in the same order, red indices intact.</span></li>
+					<li><b>Index rows go full-width</b><span>Row titles wrap to two lines rather than truncating; the red numeral holds its 34px column so the rag stays aligned.</span></li>
+					<li><b>Targets grow, rules stay 1px</b><span>Buttons rise to 44px full-width; hairlines stay exactly 1px ink and radii stay exactly 0.</span></li>
+					<li><b>Hover becomes tap</b><span>The instant fill swap reads as a press on touch; nothing on the page depends on hover to be operable.</span></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- 05 -->
+		<section class="section">
+			<p class="section-label">05 — Off-style, for contrast</p>
+			<h2>What breaks the discipline</h2>
+			<div class="compare">
+				<div class="cmp-off">Centered gradient card
+					<small>20px radius · pastel gradient · blurred drop shadow · centered
+						type · pill button. Soft, symmetrical and decorative — everything
+						this system refuses to be.</small>
+					<span class="pill">Learn more</span>
+				</div>
+				<div class="cmp-on">
+					<span class="no">A1 — 1957</span>
+					<h4>Rear Window</h4>
+					<div class="m"><span>Müller-Brockmann</span><span>Hall 1</span></div>
+					<p style="margin-top:12px;font-size:14px;color:var(--color-muted);line-height:1.6">Same content, on-style: flush-left 900 display, hairline rows,
+						red index, zero radius, zero shadow.</p>
+				</div>
+			</div>
+			<p class="note-plain">Also out: serifs, soft gray rules, red body text, red as a
+				tint, justified prose, icons where a numeral will do, and any corner with a
+				radius above 0.</p>
+		</section>
+	</div>
+</div>
+
+</body>
+</html>

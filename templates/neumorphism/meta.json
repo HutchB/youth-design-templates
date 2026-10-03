@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "neumorphism",
+	"name": "Neumorphism",
+	"version": "1.0.0",
+	"order": 103,
+	"category": "premium",
+	"vibe": "light",
+	"tags": [
+		"premium",
+		"light"
+	],
+	"blurb": "Soft-extruded same-surface UI: one clay-gray background, dual light shadows pressing forms gently out of the surface.",
+	"tagline": {
+		"en": "Shapes pressed into clay",
+		"zh": "同色软浮雕"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://neumorphism.io/",
+		"note": "Original spec written for this collection; dual-shadow convention checked against neumorphism.io. No upstream code included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

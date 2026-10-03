@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "liquid-glass",
+	"name": "Liquid Glass",
+	"version": "1.0.0",
+	"order": 157,
+	"category": "premium",
+	"vibe": "dark",
+	"tags": [
+		"premium",
+		"dark"
+	],
+	"blurb": "Apple's Liquid Glass language: tinted translucent layers with specular edge highlights, floating over vivid fluid backgrounds.",
+	"tagline": {
+		"en": "Glass that bends light",
+		"zh": "折射光线的液态玻璃"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing Apple's Liquid Glass material language (iOS 26 / macOS 26) as publicly presented; no Apple assets included. Not affiliated with or endorsed by Apple Inc."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

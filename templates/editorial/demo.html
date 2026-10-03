@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editorial Print — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #c8402f;
+		--color-primary-foreground: #faf7f0;
+		--color-surface: #faf7f0;
+		--color-surface-foreground: #141414;
+		--color-surface-raised: #ffffff;
+		--color-muted: #6b6459;
+		--color-accent: #141414;
+		--color-danger: #b3261e;
+		--color-border: #e2dcd0;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 2px;
+		--radius-xl: 2px;
+		--radius-2xl: 2px;
+
+		--shadow-sm: none;
+		--shadow-md: none;
+		--shadow-lg: none;
+
+		--display: "Didot", "Bodoni MT", "Times New Roman", ui-serif, Georgia, serif;
+		--serif: ui-serif, Georgia, "Times New Roman", serif;
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--serif);
+		font-size: 18px;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 700; line-height: 1.02; letter-spacing: -0.015em; }
+	p { margin: 0; }
+	::selection { background: rgb(200 64 47 / 0.25); }
+	.spacer { flex: 1; }
+
+	/* Caption sans: folios, kickers, captions, buttons. Never serif. */
+	.cap { font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+
+	/* ── Rules: thin + thick ink double rule under the masthead only ── */
+	.rule-mast { border-top: 1px solid var(--color-surface-foreground); border-bottom: 3px solid var(--color-surface-foreground); height: 6px; }
+	.rule { border-top: 1px solid var(--color-border); }
+
+	/* ── Folio line + masthead ────────────────────────────────────── */
+	.folio { max-width: 1120px; margin: 0 auto; padding: 12px 24px; display: flex; gap: 14px; color: var(--color-muted); border-bottom: 1px solid var(--color-border); }
+	.mast { max-width: 1120px; margin: 0 auto; padding: 30px 24px 18px; display: flex; align-items: center; gap: 24px; }
+	.wordmark { font-family: var(--display); font-size: clamp(58px, 11vw, 118px); font-weight: 700; line-height: 0.95; letter-spacing: 0.01em; }
+	.stamp {
+		flex: none; width: 76px; height: 76px; border: 2px solid var(--color-primary);
+		color: var(--color-primary); display: grid; place-items: center; text-align: center;
+		font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+		line-height: 1.3; transform: rotate(-4deg);
+	}
+	nav.sections { max-width: 1120px; margin: 0 auto; padding: 0 24px 12px; display: flex; gap: 22px; flex-wrap: wrap; }
+	nav.sections span { color: var(--color-muted); }
+	nav.sections span:first-child { color: var(--color-primary); font-weight: 600; }
+	nav.sections span:hover { color: var(--color-surface-foreground); }
+
+	/* ── Feature: display band + plate ────────────────────────────── */
+	.feature { max-width: 1120px; margin: 0 auto; padding: 34px 24px 0; display: grid; grid-template-columns: 1fr; gap: 28px; }
+	@media (min-width: 960px) { .feature { grid-template-columns: 7fr 5fr; gap: 44px; } }
+	.feature .kicker { color: var(--color-primary); font-weight: 600; }
+	.feature h1 { font-size: clamp(44px, 6.5vw, 84px); margin-top: 14px; max-width: 12ch; }
+	.standfirst { margin-top: 18px; font-size: 20px; line-height: 1.5; color: var(--color-muted); font-style: italic; max-width: 48ch; }
+	.byline { margin-top: 22px; padding-top: 10px; border-top: 2px solid var(--color-primary); display: flex; gap: 12px; color: var(--color-muted); align-items: baseline; flex-wrap: wrap; }
+	.byline b { color: var(--color-surface-foreground); font-weight: 600; }
+	.plate { background: var(--color-surface-raised); border: 1px solid var(--color-border); padding: 10px; }
+	.halftone {
+		height: 300px;
+		background-color: #efe9dc;
+		background-image: radial-gradient(circle, rgb(20 20 20 / 0.6) 1px, transparent 1.4px);
+		background-size: 8px 8px;
+	}
+	.plate figcaption { margin-top: 10px; color: var(--color-muted); display: flex; gap: 8px; }
+	.plate figcaption b { color: var(--color-surface-foreground); font-weight: 600; }
+
+	/* ── Columns: the body is set in ruled columns ────────────────── */
+	.body { max-width: 780px; margin: 0 auto; padding: 44px 24px 8px; columns: 1; column-gap: 44px; column-rule: 1px solid var(--color-border); }
+	@media (min-width: 820px) { .body { columns: 2; } }
+	.body p { margin-bottom: 18px; font-size: 17px; break-inside: avoid-column; }
+	.dropcap::first-letter { float: left; font-family: var(--display); font-size: 74px; line-height: 0.8; padding: 6px 10px 0 0; font-weight: 700; }
+	.pull {
+		break-inside: avoid; margin: 8px 0 22px; padding: 18px 0 14px;
+		border-top: 1px solid var(--color-surface-foreground); border-bottom: 1px solid var(--color-surface-foreground);
+		font-family: var(--display); font-style: italic; font-size: 24px; line-height: 1.3; text-align: center;
+	}
+	.pull::before { content: "¶"; display: block; color: var(--color-primary); font-size: 16px; font-style: normal; margin-bottom: 8px; }
+
+	/* ── Contents: hairline rows, red folios, dotted leaders ──────── */
+	.contents { max-width: 780px; margin: 0 auto; padding: 8px 24px 64px; }
+	.contents-head { display: flex; align-items: baseline; gap: 14px; margin: 34px 0 8px; }
+	.contents-head h2 { font-size: 28px; }
+	.contents-head .cap { color: var(--color-primary); font-weight: 600; }
+	.toc-row { display: flex; align-items: baseline; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--color-border); }
+	.toc-row .no { flex: none; width: 30px; color: var(--color-primary); font-weight: 700; }
+	.toc-row h4 { margin: 0; font-family: var(--display); font-size: 20px; font-weight: 700; }
+	.toc-row .lead { flex: 1; border-bottom: 1px dotted var(--color-border); transform: translateY(-4px); }
+	.toc-row .pg { flex: none; color: var(--color-muted); }
+	.toc-row small { display: block; margin-top: 3px; color: var(--color-muted); }
+
+	/* ── Controls: ink rectangles, red only for the ask ───────────── */
+	.btn {
+		font-family: var(--sans); font-size: 12px; font-weight: 600;
+		letter-spacing: 0.12em; text-transform: uppercase;
+		height: 40px; padding: 0 22px;
+		border: 1px solid var(--color-surface-foreground); border-radius: var(--radius-lg);
+		background: var(--color-surface-foreground); color: var(--color-surface);
+		cursor: pointer; transition: background-color 150ms ease, color 150ms ease;
+	}
+	.btn:hover { background: var(--color-surface); color: var(--color-surface-foreground); }
+	.btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+	.btn-red { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-red:hover { background: #a83324; }
+	.btn-outline { background: transparent; color: var(--color-surface-foreground); }
+	.btn-outline:hover { background: var(--color-surface-foreground); color: var(--color-surface); }
+	.btn-quiet { background: transparent; border-color: transparent; color: var(--color-muted); padding: 0 6px; text-decoration: underline; text-underline-offset: 4px; }
+	.btn-quiet:hover { color: var(--color-surface-foreground); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	.input {
+		font-family: var(--serif); font-size: 17px; width: 100%; max-width: 320px; height: 40px; padding: 0 2px;
+		background: transparent; border: 0; border-bottom: 1px solid var(--color-surface-foreground); border-radius: 0;
+		color: var(--color-surface-foreground);
+	}
+	.input::placeholder { color: var(--color-muted); font-style: italic; }
+	.input:focus { outline: none; border-bottom: 2px solid var(--color-primary); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 780px; margin: 0 auto; padding: 0 24px 96px; }
+	.section { padding-top: 52px; border-top: 1px solid var(--color-border); margin-top: 52px; }
+	.section-label { font-size: 12px; color: var(--color-primary); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
+	.section h2 { font-size: 34px; }
+	.lede { color: var(--color-muted); margin-top: 12px; font-size: 16px; line-height: 1.6; }
+	.note-plain { margin-top: 18px; font-size: 14px; color: var(--color-muted); line-height: 1.6; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 58px; border: 1px solid var(--color-border); }
+	.sw b { display: block; font-size: 13px; font-weight: 600; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 40px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-surface-foreground); border-radius: var(--radius-xl);
+		overflow: hidden; background: var(--color-surface);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 8px 16px 2px; font-size: 10px; color: var(--color-muted); }
+	.phone-mast { display: flex; align-items: center; gap: 10px; padding: 8px 16px 10px; border-bottom: 3px solid var(--color-surface-foreground); }
+	.phone-mast .wm { font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1; }
+	.phone-mast .no { margin-left: auto; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-family: var(--sans); font-size: 10px; font-weight: 700; padding: 3px 7px; transform: rotate(-4deg); }
+	.phone-kicker { padding: 14px 16px 0; color: var(--color-primary); }
+	.phone-body { padding: 0 16px 16px; }
+	.phone-body h6 { margin: 8px 0 0; font-family: var(--display); font-size: 30px; line-height: 1.05; }
+	.phone-body .sf { margin-top: 10px; font-size: 14px; font-style: italic; color: var(--color-muted); line-height: 1.5; }
+	.phone-body .dc::first-letter { float: left; font-family: var(--display); font-size: 46px; line-height: 0.82; padding: 4px 7px 0 0; font-weight: 700; }
+	.phone-body p.bb { margin-top: 12px; font-size: 14px; }
+	.phone-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--color-border); }
+	.phone-bar .mini { height: 34px; padding: 0 16px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 14px 0; border-bottom: 1px solid var(--color-border); font-size: 15px; color: var(--color-muted); line-height: 1.55; }
+	.rules b { display: block; font-size: 17px; font-weight: 700; color: var(--color-surface-foreground); margin-bottom: 3px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 26px; border-radius: 18px;
+		background: linear-gradient(150deg, #eef2ff, #fdf2f8);
+		box-shadow: 0 14px 34px rgb(15 23 42 / 0.16);
+		font-family: var(--sans); font-size: 18px; font-weight: 700; color: #475569;
+	}
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: #64748b; margin-top: 10px; line-height: 1.6; }
+	.cmp-off .pill { display: inline-block; margin-top: 14px; padding: 8px 20px; border-radius: 9999px; background: linear-gradient(90deg, #6366f1, #ec4899); color: #fff; font-size: 12px; font-weight: 600; }
+	.cmp-on { padding: 4px 0; border-top: 1px solid var(--color-surface-foreground); border-bottom: 1px solid var(--color-surface-foreground); }
+	.cmp-on .kicker { color: var(--color-primary); }
+	.cmp-on h4 { margin: 8px 0 0; font-family: var(--display); font-size: 28px; line-height: 1.05; }
+	.cmp-on small { display: block; margin-top: 12px; color: var(--color-muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- COVER — a magazine front page: folio line, oversized wordmark, red issue
+     stamp, display band and a ruled two-column body. No shadows anywhere. -->
+<div class="folio cap">
+	<span>No. 47 · October 2026</span>
+	<span>·</span>
+	<span>Dispatches on print &amp; screens</span>
+	<span class="spacer"></span>
+	<span>£6 / $9</span>
+</div>
+
+<header class="mast">
+	<span class="wordmark">MARGIN</span>
+	<span class="spacer"></span>
+	<span class="stamp">Nº 47<br>OCT</span>
+</header>
+<div class="rule-mast"></div>
+<nav class="sections cap">
+	<span>Front</span><span>World</span><span>Culture</span><span>Typography</span><span>Letters</span><span>Archive</span>
+</nav>
+
+<section class="feature">
+	<div>
+		<p class="kicker cap">Cover Story · Typography</p>
+		<h1>Ink Is a Technology</h1>
+		<p class="standfirst">Five centuries before the interface, the printed page solved
+			hierarchy, rhythm and restraint. The screens that replaced it are still catching up.</p>
+		<div class="byline cap">
+			<span>By <b>Ada Vane</b></span>
+			<span>·</span>
+			<span>Plates by R. Okafor</span>
+			<span>·</span>
+			<span>18 min read</span>
+		</div>
+	</div>
+	<figure class="plate" style="margin:0">
+		<div class="halftone"></div>
+		<figcaption class="cap"><b>Plate I.</b><span>The composing stone, Aldergate Press — photographed at rest.</span></figcaption>
+	</figure>
+</section>
+
+<!-- The body: ruled columns, a drop cap, a pulled quote that breaks the column. -->
+<div class="body">
+	<p class="dropcap">A page of body text is a machine for reading. The printer knew this
+		before the designer did: measure the line to sixty-some characters, set the leading a
+		little loose, and let the columns do the talking. Everything on this page — the drop
+		cap, the rule between columns, the pulled quote — is that machine, uncovered.</p>
+	<p>The grid is not a cage; it is the score the page plays. Twelve columns on the
+		features, two on the essays, one on the editorial — and a hairline wherever two
+		things must not be mistaken for each other.</p>
+	<blockquote class="pull">White space is not empty. It is the paper, holding its ground
+		against the ink.</blockquote>
+	<p>Red appears exactly where the reader&rsquo;s eye needs a handle: the issue stamp, the
+		section kicker, the folio number, the byline rule. Four appearances, one meaning —
+		<i>start here</i>.</p>
+	<p>And the shadows? There are none. Print has no light source, so the page earns its
+		depth from alignment alone. If an element needs a shadow to be found, it has already
+		failed the composition.</p>
+</div>
+
+<!-- Contents: hairline rows, red numerals, dotted leaders. -->
+<section class="contents">
+	<div class="contents-head">
+		<h2>In This Issue</h2>
+		<span class="cap">Contents</span>
+	</div>
+	<div class="toc-row">
+		<span class="no">01</span>
+		<div><h4>Ink Is a Technology</h4><small>Ada Vane on what the screen never learned from the press.</small></div>
+		<span class="lead"></span>
+		<span class="pg cap">p. 1</span>
+	</div>
+	<div class="toc-row">
+		<span class="no">02</span>
+		<div><h4>The Hairline Grid</h4><small>Why one pixel of ink organizes better than a box ever will.</small></div>
+		<span class="lead"></span>
+		<span class="pg cap">p. 34</span>
+	</div>
+	<div class="toc-row">
+		<span class="no">03</span>
+		<div><h4>Letters to the Compositor</h4><small>Readers argue about justification. The compositor wins.</small></div>
+		<span class="lead"></span>
+		<span class="pg cap">p. 61</span>
+	</div>
+</section>
+
+<div class="ref">
+	<!-- 01 -->
+	<section class="section" style="border-top:0;margin-top:0;padding-top:0">
+		<p class="section-label">01 — Controls</p>
+		<h2>Ink rectangles, red asks</h2>
+		<p class="lede">Buttons are square-cornered ink rectangles with caption-sans labels;
+			the seal-red one is the page&rsquo;s only real ask. Inputs are a single underline on
+			paper, never a box, and focus turns the rule red.</p>
+		<div class="row" style="margin-top: 22px;">
+			<button class="btn btn-red">Subscribe</button>
+			<button class="btn btn-outline">Browse the archive</button>
+			<button class="btn btn-quiet">Gift a copy</button>
+			<button class="btn" disabled>Sold out</button>
+		</div>
+		<div class="row" style="margin-top: 20px;">
+			<input class="input" placeholder="Search forty-six back issues…">
+			<button class="btn">Search</button>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#c8402f · seal red</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-foreground)"></div><b>ink</b><span>#141414 · type &amp; rules</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><b>surface</b><span>#faf7f0 · paper</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-muted)"></div><b>muted</b><span>#6b6459 · captions</span></div>
+		</div>
+		<p class="note-plain">The accent token is ink black by design — in a print system the
+			accent is the ink itself, and keeping it black leaves red as the only color the
+			eye can be steered by.</p>
+	</section>
+
+	<!-- 02 MOBILE -->
+	<section class="section">
+		<p class="section-label">02 — Mobile</p>
+		<h2>The page folds to a single column</h2>
+		<p class="lede">A broadsheet in a coat pocket: columns collapse to one, the display
+			headline steps down but stays display serif, and the hairlines that organized the
+			grid become the rhythm of the stack.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-mast">
+					<span class="wm">MARGIN</span>
+					<span class="no">Nº 47</span>
+				</div>
+				<div class="phone-body">
+					<p class="kicker cap phone-kicker">Cover Story</p>
+					<h6>Ink Is a Technology</h6>
+					<p class="sf">The printed page solved hierarchy, rhythm and restraint first.</p>
+					<p class="bb dc">A page of body text is a machine for reading, and the columns
+						are its moving parts. Everything else is paper.</p>
+				</div>
+				<div class="phone-bar">
+					<span class="cap" style="color:var(--color-muted)">18 min read</span>
+					<button class="btn btn-red mini">Continue</button>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Columns fold to one</b><span>The two-column body with its column rule becomes a single 68-character column. The hairline survives as the rule between stacked sections — it is the last piece of the grid standing.</span></li>
+				<li><b>Headlines step, never swap</b><span>Display headlines go 84px → 30–34px and stay in the display serif at tight leading. Switching to sans "for small screens" ends the identity right there.</span></li>
+				<li><b>The masthead compresses</b><span>The wordmark scales down and keeps the 3px ink rule beneath it; the red stamp shrinks into a rotated chip at the right of the bar so the issue is still stamped on every scroll top.</span></li>
+				<li><b>Drop cap trimmed, kept</b><span>The display drop cap goes from 74px to ~46px. It costs nothing on touch and is the strongest "you are reading a magazine" signal the page has.</span></li>
+				<li><b>Captions under plates, always</b><span>Plates keep their white sheet, square corners and "Plate n." caption below; on a narrow column the caption wraps to two lines rather than truncating.</span></li>
+				<li><b>Targets grow, rules stay 1px</b><span>Contents rows become ≥52px tall and the continue button rises to 34px. Hairlines stay exactly 1px and shadows stay exactly none.</span></li>
+				<li><b>Hover becomes tap</b><span>Nav highlights and quiet underlined links are pointer affordances; on touch, the red kicker and the stamped bar carry the state. Nothing on the page depends on hover to be operable.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 03 DON'T -->
+	<section class="section">
+		<p class="section-label">03 — Off-style, for contrast</p>
+		<h2>What breaks the print discipline</h2>
+		<div class="compare">
+			<div class="cmp-off">Rounded SaaS feature card
+				<small>18px radius · pastel gradient · blurred drop shadow · geometric sans ·
+					pill button. Every one of these belongs to a screen-first product, not a page.</small>
+				<span class="pill">Learn more</span>
+			</div>
+			<div class="cmp-on">
+				<p class="kicker cap">Culture</p>
+				<h4>The Hairline Grid</h4>
+				<small class="cap" style="margin-top:6px">By J. Okonkwo · p. 34</small>
+				<small>Same content, on-style: ink hairlines above and below, display serif
+					headline, red kicker, caption sans folio — no box, no shadow, no radius.</small>
+			</div>
+		</div>
+		<p class="note-plain">Also out: centered body text, red as a fill, more than one display
+			face, justified columns under 50 characters, and any elevation idiom — the page has
+			no light source.</p>
+	</section>
+</div>
+
+</body>
+</html>

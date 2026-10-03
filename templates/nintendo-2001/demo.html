@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nintendo 2001 — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #e60012;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #dedede;
+		--color-surface-foreground: #21242e;
+		--color-surface-raised: #ffffff;
+		--color-muted: #60619c;
+		--color-accent: #f68d1f;
+		--color-danger: #e60012;
+		--color-border: #3d4f97;
+		--color-chrome: #7a8aba;
+		--color-carbon: #21242e;
+
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 10px;
+		--radius-xl: 12px;
+		--radius-2xl: 16px;
+
+		--shadow-sm: 2px 2px 0 rgb(33 36 46 / 0.3);
+		--shadow-md: 3px 3px 0 rgb(33 36 46 / 0.35);
+		--shadow-lg: 4px 4px 0 rgb(33 36 46 / 0.4);
+
+		/* System extras used across the chrome. */
+		--nav-gold: #e48600;
+		--amber: #ecab37;
+		--pale-sky: #9fbee7;
+		--periwinkle: #8ba1d4;
+		--lavender: #acace7;
+		--hairline: #5a5f8c;
+		--edge-light: #b8c6e4;
+		--sans: Arial, Helvetica, "Segoe UI", sans-serif;
+		--black: "Arial Black", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-chrome);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 12px;
+		line-height: 1.4;
+		padding: 14px 10px 60px;
+	}
+	/* Chrome voice: bold uppercase with a half-pixel of tracking. */
+	h1, h2, h3, h4 { margin: 0; }
+	p { margin: 0; }
+	a { text-decoration: none; }
+	.spacer { flex: 1; }
+
+	.canvas { max-width: 820px; margin: 0 auto; }
+
+	/* ── Masthead: logo pill + mascot bubble + search ─────────────── */
+	.masthead { display: flex; align-items: center; gap: 12px; padding: 0 2px 10px; flex-wrap: wrap; }
+	.logo-pill {
+		display: inline-flex; align-items: center; justify-content: center;
+		background: var(--color-surface-raised); border: 2px solid var(--color-border);
+		border-radius: 9999px; padding: 5px 18px;
+		font-family: var(--black); font-style: italic; font-weight: 900;
+		font-size: 20px; color: var(--color-primary); letter-spacing: -0.5px;
+	}
+	.bubble {
+		position: relative; background: var(--color-surface-raised);
+		border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+		padding: 7px 10px; font-size: 10px; max-width: 180px;
+	}
+	.bubble::before {
+		content: ""; position: absolute; left: -7px; top: 12px;
+		border: 6px solid transparent; border-right-color: var(--color-border);
+	}
+	.bubble::after {
+		content: ""; position: absolute; left: -5px; top: 14px;
+		border: 4px solid transparent; border-right-color: var(--color-surface-raised);
+	}
+	.mascot {
+		width: 34px; height: 40px; flex: none;
+		background:
+			linear-gradient(#d92b2b, #d92b2b) 0 0 / 100% 40% no-repeat,
+			linear-gradient(#2b52d9, #2b52d9) 0 100% / 100% 30% no-repeat,
+			linear-gradient(#f2c9a0, #f2c9a0) 0 40% / 100% 30% no-repeat;
+		border: 2px solid var(--color-carbon);
+	}
+	.search { display: flex; gap: 4px; }
+	.search input {
+		font-family: var(--sans); font-size: 12px; width: 130px; padding: 3px 6px;
+		background: var(--color-surface-raised); border: 1px solid var(--hairline);
+		border-radius: var(--radius-sm);
+	}
+
+	/* ── Dual nav: carbon slab with gold words, then pale strip ───── */
+	.navbar {
+		display: flex; align-items: center; gap: 16px;
+		background:
+			radial-gradient(rgb(255 255 255 / 0.13) 1px, transparent 1.3px) 0 0 / 6px 6px,
+			var(--color-carbon);
+		padding: 6px 10px; min-height: 30px;
+	}
+	.navbar a { font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--nav-gold); }
+	.chip {
+		font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+		color: var(--color-carbon); background: var(--amber);
+		border-radius: var(--radius-sm); padding: 2px 7px;
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 1px 2px 0 rgb(0 0 0 / 0.55);
+	}
+	.subnav {
+		display: flex; gap: 0; align-items: center; flex-wrap: wrap;
+		background: var(--pale-sky); border-bottom: 2px solid var(--color-border);
+		padding: 3px 10px; font-size: 11px; font-weight: 700;
+	}
+	.subnav span { padding: 2px 8px; border-right: 1px solid rgb(61 79 151 / 0.35); }
+
+	/* ── Plates: edge-lit top, indigo shadow line beneath ─────────── */
+	.plate {
+		background: var(--color-surface);
+		border-top: 2px solid var(--edge-light);
+		border-bottom: 2px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+	.plate.chamfer { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
+
+	/* ── Hero: page-tinted field + outlined box-art wordmark ──────── */
+	.hero {
+		position: relative; margin-top: 10px; padding: 22px 18px 20px;
+		background:
+			linear-gradient(rgba(172 172 231 / 0.25), rgba(172 172 231 / 0.25)),
+			repeating-linear-gradient(45deg, #9d9de0 0 14px, #a5a5e6 14px 28px),
+			var(--lavender);
+		border: 2px solid var(--color-border); border-radius: var(--radius-md);
+	}
+	.hero .kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--color-carbon); }
+	.hero h1 {
+		font-family: var(--black); font-style: italic; font-weight: 900;
+		font-size: 38px; line-height: 1; color: #fff; margin: 8px 0 6px;
+		text-shadow:
+			-2px -2px 0 var(--color-carbon), 2px -2px 0 var(--color-carbon),
+			-2px 2px 0 var(--color-carbon), 2px 2px 0 var(--color-carbon),
+			5px 5px 0 rgb(33 36 46 / 0.9);
+	}
+	.hero .tagline { font-size: 15px; font-weight: 700; color: #fff; text-shadow: 1px 1px 0 rgb(33 36 46 / 0.8); }
+	.arrow-disc {
+		position: absolute; right: 16px; bottom: 16px;
+		width: 22px; height: 22px; border-radius: 9999px; background: var(--color-accent);
+		color: #fff; display: grid; place-items: center; font-size: 11px;
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 2px 2px 0 rgb(33 36 46 / 0.6);
+	}
+
+	/* ── Two-thirds content + one-third rail ──────────────────────── */
+	.split { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+	@media (min-width: 700px) { .split { grid-template-columns: 2fr 1fr; } }
+
+	.labelbar {
+		display: flex; align-items: center; gap: 8px;
+		background: var(--color-chrome); border-bottom: 2px solid var(--color-border);
+		padding: 5px 10px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;
+		text-transform: uppercase; border-radius: var(--radius-md) var(--radius-md) 0 0;
+	}
+	.labelbar .glyph { width: 12px; height: 12px; border: 2px solid var(--color-carbon); }
+
+	.newslist { padding: 8px; display: grid; gap: 6px; }
+	.newsrow {
+		display: flex; align-items: center; gap: 8px;
+		background: var(--color-surface); border: 1px solid var(--hairline);
+		border-radius: var(--radius-sm); padding: 6px 8px;
+	}
+	.newsrow b { font-size: 12px; color: var(--color-muted); flex: 1; }
+	.newsrow .cat {
+		font-size: 10px; font-weight: 700; color: var(--color-surface-raised);
+		background: var(--color-muted); border-radius: var(--radius-sm); padding: 1px 5px; flex: none;
+	}
+	.chev {
+		width: 18px; height: 18px; flex: none; border-radius: var(--radius-sm);
+		background: var(--color-accent); color: #fff; display: grid; place-items: center;
+		font-size: 11px; font-weight: 700;
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 1px 2px 0 rgb(33 36 46 / 0.55);
+	}
+
+	.sites { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; }
+	.site { border: 2px solid var(--color-carbon); border-radius: var(--radius-sm); overflow: hidden; background: #fff; }
+	.site .shot { height: 52px; background: linear-gradient(135deg, #35508f, #7a9bd6 60%, #c9d8ef); }
+	.site .shot.alt { background: linear-gradient(135deg, #7d2f4f, #c46a92 60%, #ecd3e0); }
+	.site .url { font-size: 9px; padding: 3px 5px; color: var(--color-muted); border-top: 1px solid var(--hairline); }
+
+	/* ── Rail: carbon buttons, info box, poll, promo, starburst ───── */
+	.rail { display: grid; gap: 12px; align-content: start; position: relative; }
+	.railbtn {
+		display: flex; align-items: center; gap: 8px;
+		background:
+			radial-gradient(rgb(255 255 255 / 0.12) 1px, transparent 1.3px) 0 0 / 6px 6px,
+			var(--color-carbon);
+		color: #fff; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+		padding: 7px 10px; border-radius: 0;
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 2px 2px 0 rgb(33 36 46 / 0.55);
+	}
+	.railbtn .g { color: var(--amber); }
+	.infobox { border-radius: var(--radius-sm); overflow: hidden; background: var(--color-surface-raised); }
+	.infobox .tab {
+		background: var(--amber); color: var(--color-carbon);
+		font-weight: 700; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+		padding: 4px 8px; border-bottom: 2px solid var(--color-border);
+	}
+	.infobox .txt { padding: 8px 10px; font-size: 12px; }
+	.poll { background: var(--periwinkle); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px; }
+	.poll h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+	.radio { display: flex; align-items: center; gap: 7px; padding: 3px 0; font-size: 12px; }
+	.radio .dot { width: 12px; height: 12px; flex: none; border-radius: 9999px; background: #fff; border: 1px solid var(--hairline); }
+	.radio.on .dot { background: radial-gradient(circle, var(--color-carbon) 3px, #fff 4px); }
+	.burst {
+		position: absolute; top: -14px; right: -8px; z-index: 3;
+		width: 62px; height: 62px; display: grid; place-items: center;
+		background: var(--amber); color: var(--color-carbon);
+		font-family: var(--black); font-weight: 900; font-size: 13px;
+		transform: rotate(12deg);
+		clip-path: polygon(50% 0%, 59% 12%, 72% 5%, 75% 20%, 90% 18%, 86% 32%, 100% 35%, 90% 46%, 98% 58%, 84% 62%, 86% 77%, 72% 74%, 68% 88%, 56% 80%, 50% 94%, 44% 80%, 32% 88%, 28% 74%, 14% 77%, 16% 62%, 2% 58%, 10% 46%, 0% 35%, 14% 32%, 10% 18%, 25% 20%, 28% 5%, 41% 12%);
+	}
+	.promo {
+		background: var(--lavender); border: 2px solid var(--color-border);
+		border-radius: var(--radius-sm); padding: 10px; text-align: center;
+	}
+	.promo .word {
+		font-family: var(--black); font-style: italic; font-weight: 900; font-size: 16px; color: #fff;
+		text-shadow: -1px -1px 0 var(--color-carbon), 1px -1px 0 var(--color-carbon), -1px 1px 0 var(--color-carbon), 2px 2px 0 var(--color-carbon);
+	}
+	.promo .render { height: 46px; margin-top: 8px; background: linear-gradient(160deg, #5f3a8f, #9b6fd0 70%, #d9c6ef); border: 2px solid var(--color-carbon); border-radius: 3px; }
+
+	/* ── Footer: chamfered carbon slab ────────────────────────────── */
+	.footer {
+		margin-top: 14px; padding: 12px 16px;
+		background:
+			radial-gradient(rgb(255 255 255 / 0.1) 1px, transparent 1.3px) 0 0 / 6px 6px,
+			var(--color-carbon);
+		color: var(--pale-sky); font-size: 10px; border-radius: 0;
+		clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 20px) 100%, 0 100%);
+		display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+	}
+	.esrb { background: var(--amber); color: var(--color-carbon); font-weight: 700; font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); }
+	.footer a { color: var(--pale-sky); text-decoration: underline; }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.ref { max-width: 820px; margin: 26px auto 0; }
+	.pagehead {
+		background: var(--color-carbon); color: var(--pale-sky);
+		font-weight: 700; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+		padding: 6px 12px; border-radius: var(--radius-md) var(--radius-md) 0 0;
+		border-bottom: 2px solid var(--color-border);
+	}
+	.panel {
+		background: var(--color-surface);
+		border-top: 2px solid var(--edge-light); border-left: 2px solid var(--edge-light);
+		border-bottom: 2px solid var(--color-border); border-right: 2px solid var(--color-border);
+		padding: 16px 14px 20px;
+	}
+	.panel h2 { font-family: var(--black); font-weight: 900; font-size: 22px; margin-bottom: 6px; }
+	.lede { max-width: 76ch; }
+	.note { margin-top: 12px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+
+	.btn {
+		font-family: var(--sans); font-weight: 700; font-size: 11px; letter-spacing: 0.5px;
+		text-transform: uppercase; border: 0; cursor: pointer;
+		background: var(--amber); color: var(--color-carbon);
+		border-radius: var(--radius-sm); padding: 8px 14px;
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 2px 2px 0 rgb(33 36 46 / 0.5);
+	}
+	.btn.go { background: var(--color-accent); color: #fff; }
+	.btn.carbon { background: var(--color-carbon); color: #fff; border-radius: 0; }
+	.btn.pressed { background: var(--nav-gold); box-shadow: none; transform: translate(1px, 1px); }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 40px; border: 2px solid var(--color-border); border-radius: var(--radius-sm); }
+	.sw b { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Mobile: stack the rail, merge the nav bars ───────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 280px 1fr; gap: 26px; } }
+	.phone {
+		width: 280px; max-width: 100%; margin: 0 auto; background: var(--color-chrome);
+		border: 2px solid var(--color-border); padding: 6px;
+	}
+	.p-nav {
+		display: flex; align-items: center; gap: 8px;
+		background: radial-gradient(rgb(255 255 255 / 0.12) 1px, transparent 1.3px) 0 0 / 6px 6px, var(--color-carbon);
+		padding: 6px 8px;
+	}
+	.p-nav .logo-pill { font-size: 11px; padding: 2px 10px; border-width: 1px; }
+	.p-nav .menu { color: var(--nav-gold); font-weight: 700; font-size: 11px; }
+	.p-hero {
+		background: repeating-linear-gradient(45deg, #9d9de0 0 12px, #a5a5e6 12px 24px);
+		border-bottom: 2px solid var(--color-border); padding: 12px 10px 16px;
+		clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+	}
+	.p-hero h4 {
+		font-family: var(--black); font-style: italic; font-weight: 900; font-size: 20px; color: #fff; line-height: 1.05;
+		text-shadow: -1px -1px 0 var(--color-carbon), 2px -1px 0 var(--color-carbon), -1px 2px 0 var(--color-carbon), 2px 2px 0 var(--color-carbon), 3px 3px 0 rgb(33 36 46 / 0.9);
+	}
+	.p-news { padding: 6px; display: grid; gap: 5px; }
+	.p-news .newsrow b { font-size: 11px; }
+	.p-railrow { display: flex; gap: 6px; padding: 6px; overflow: hidden; }
+	.p-railrow .railbtn { flex: 1; justify-content: center; font-size: 9px; padding: 6px 4px; }
+	.p-foot { background: var(--color-carbon); color: var(--pale-sky); font-size: 9px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 8px 0; border-bottom: 1px dotted var(--color-muted); font-size: 13px; color: var(--color-muted); }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 13px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 16px; border-radius: 16px; background: #f2f5fb;
+		box-shadow: 0 12px 30px rgb(30 41 59 / 0.18); color: #4b5568; font-size: 13px;
+	}
+	.cmp-off small { display: block; margin-top: 8px; color: #6b7788; }
+	.cmp-on {
+		padding: 16px; background: var(--color-surface);
+		border-top: 2px solid var(--edge-light); border-left: 2px solid var(--edge-light);
+		border-bottom: 2px solid var(--color-border); border-right: 2px solid var(--color-border);
+		font-size: 13px;
+	}
+	.cmp-on small { display: block; margin-top: 8px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the console faceplate: dual nav bars, chamfered hero with an
+     outlined box-art wordmark, packed panels, carbon slabs, one orange "go". -->
+<div class="canvas">
+	<div class="masthead">
+		<span class="logo-pill">NINTENDO</span>
+		<span class="mascot"></span>
+		<span class="bubble">Welcome to Nintendo.com! The N64 is waiting — this fall's lineup is our biggest yet.</span>
+		<span class="spacer"></span>
+		<span class="search">
+			<input placeholder="Search the site">
+			<span class="chip">GO</span>
+		</span>
+	</div>
+
+	<div class="navbar">
+		<a href="#games">Games</a><a href="#systems">Systems</a><a href="#news">News</a><a href="#nsider">Nsider</a><a href="#downloads">Downloads</a>
+		<span class="spacer"></span>
+		<span class="chip">Code Bank</span><span class="chip">Game Finder</span>
+	</div>
+	<div class="subnav">
+		<span>Parents</span><span>Customer Service</span><span>Corporate</span><span>Global</span><span>Store</span><span>Contact Us</span>
+	</div>
+
+	<div class="hero chamfer">
+		<div class="kicker">Now playing · Nintendo 64</div>
+		<h1>TURBO KART RALLY 64</h1>
+		<div class="tagline">Four-player split screen. Sixteen tracks. Zero mercy.</div>
+		<span class="arrow-disc">▶</span>
+	</div>
+
+	<div class="split">
+		<div>
+			<div class="plate">
+				<div class="labelbar"><span class="glyph"></span>Official News</div>
+				<div class="newslist">
+					<div class="newsrow"><span class="cat">N64</span><b>Turbo Kart Rally 64 ships November 19 — pre-order bonus revealed</b><span class="chev">›</span></div>
+					<div class="newsrow"><span class="cat">GBA</span><b>Launch-window handheld lineup grows to nine titles</b><span class="chev">›</span></div>
+					<div class="newsrow"><span class="cat">NSIDER</span><b>Chat recap: the physics behind power-slide boosting</b><span class="chev">›</span></div>
+					<div class="newsrow"><span class="cat">EVENT</span><b>Roadshow tour hits six more malls this holiday season</b><span class="chev">›</span></div>
+				</div>
+			</div>
+
+			<div class="plate" style="margin-top:12px">
+				<div class="labelbar"><span class="glyph"></span>Featured Sites</div>
+				<div class="sites">
+					<div class="site"><div class="shot"></div><div class="url">www.turbokart64.com</div></div>
+					<div class="site"><div class="shot alt"></div><div class="url">www.stardrifter-gba.com</div></div>
+					<div class="site"><div class="shot alt"></div><div class="url">www.dungeonclub64.com</div></div>
+					<div class="site"><div class="shot"></div><div class="url">www.nsider-forums.com</div></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rail">
+			<span class="burst">NEW!</span>
+			<div class="railbtn"><span class="g">▸</span>Log In</div>
+			<div class="railbtn"><span class="g">✚</span>Subscribe</div>
+			<div class="railbtn"><span class="g">✉</span>Newsletter</div>
+			<div class="railbtn"><span class="g">?</span>Help</div>
+
+			<div class="infobox">
+				<div class="tab">What Is — Game Finder</div>
+				<div class="txt">Answer three questions and the Game Finder builds a shortlist of titles
+					matched to your players' ages and the number of controllers you own.</div>
+			</div>
+
+			<div class="poll">
+				<h4>Player's Poll</h4>
+				<div class="radio on"><span class="dot"></span>Split-screen with friends</div>
+				<div class="radio"><span class="dot"></span>Time trials alone</div>
+				<div class="radio"><span class="dot"></span>Battle mode, always</div>
+				<div class="row" style="margin-top:8px"><span class="btn go" style="padding:5px 12px">Submit</span></div>
+			</div>
+
+			<div class="promo">
+				<div class="word">GAME BOY ADVANCE</div>
+				<div class="render"></div>
+				<div style="font-size:10px;margin-top:6px"> widescreen · 32-bit · this June</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<span>©1998–2001 Nintendo. The Nintendo name and characters are trademarks of Nintendo.</span>
+		<span class="spacer"></span>
+		<span class="esrb">ESRB · Privacy Certified</span>
+		<a href="#privacy">Privacy policy</a>
+	</div>
+</div>
+
+<div class="ref">
+
+<!-- 01 -->
+<div class="plate" style="max-width:820px;margin:26px auto 0">
+	<div class="pagehead">01 — Warm means go</div>
+	<div class="panel">
+		<h2>Ration the warmth, keep the chrome cool</h2>
+		<p class="lede">The periwinkle chassis and carbon slabs never carry action color. Gold words
+			light the nav, amber fills tools and badges, and signal orange marks every forward cue —
+			arrow discs, chevron chips and Submit. If a panel is warm, it wants a click.</p>
+		<div class="row">
+			<span class="btn">Code Bank</span>
+			<span class="btn go">Submit</span>
+			<span class="btn pressed">Go</span>
+			<span class="btn carbon">Log In</span>
+			<span class="chev" style="margin-left:4px">›</span>
+			<span class="arrow-disc" style="position:static">▶</span>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-chrome)"></div><b>chrome</b><span>#7a8aba · machine body</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-carbon)"></div><b>carbon</b><span>#21242e · command slab</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><b>accent</b><span>#f68d1f · forward cues</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#e60012 · logo + alerts</span></div>
+		</div>
+		<p class="note">Depth is a lighter top edge against an indigo shadow line, plus hard 2–3px
+			offsets on chips. The carbon slabs carry a halftone dot texture; nothing blurs.</p>
+	</div>
+</div>
+
+<!-- 02 MOBILE -->
+<div class="plate" style="max-width:820px;margin:14px auto 0">
+	<div class="pagehead">02 — Mobile</div>
+	<div class="panel">
+		<h2>One nav bar, the rail becomes a row</h2>
+		<p class="lede">The fixed desktop canvas was authored for a single window, so a phone port
+			picks the era's own logic: merge the dual nav bars into one carbon slab with a menu
+			disclosure, stack the panels, and turn the action rail into a horizontal chip row.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="p-nav">
+					<span class="logo-pill">NINTENDO</span>
+					<span class="spacer"></span>
+					<span class="menu">☰ GAMES</span>
+				</div>
+				<div class="p-hero">
+					<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Now playing · N64</div>
+					<h4>TURBO KART<br>RALLY 64</h4>
+					<div style="font-size:10px;font-weight:700;color:#fff;text-shadow:1px 1px 0 rgb(33 36 46 / 0.8)">Four-player split screen. Zero mercy.</div>
+				</div>
+				<div class="p-news">
+					<div class="newsrow"><span class="cat">N64</span><b>Kart Rally ships November 19</b><span class="chev">›</span></div>
+					<div class="newsrow"><span class="cat">GBA</span><b>Handheld lineup grows to nine</b><span class="chev">›</span></div>
+					<div class="newsrow"><span class="cat">NSIDER</span><b>Chat recap: power-slide physics</b><span class="chev">›</span></div>
+				</div>
+				<div class="p-railrow">
+					<span class="railbtn">Log In</span><span class="railbtn">Subscribe</span><span class="railbtn">Help</span>
+				</div>
+				<div class="p-foot"><span class="esrb">ESRB</span><span>©1998–2001 Nintendo · <a href="#privacy" style="color:var(--pale-sky);text-decoration:underline">privacy</a></span></div>
+			</div>
+			<ul class="rules">
+				<li><b>Navs merge</b><span>The carbon bar and pale strip collapse into a single slab with a disclosure menu; the gold word color survives as the active-tab cue.</span></li>
+				<li><b>Hero keeps its outline</b><span>The box-art wordmark scales 38px → 20px and keeps the outline, hard shadow and chamfered corner — flat text would break the reference.</span></li>
+				<li><b>Rail becomes a row</b><span>Login / Subscribe / Help sit in a horizontal strip of carbon chips below the news; the poll moves under them, radios grow to 44px targets.</span></li>
+				<li><b>Bevels stay 2px</b><span>Edge light on top, indigo line beneath — the smallest structural pair the system has, never thinned or blurred.</span></li>
+				<li><b>Density holds</b><span>12px body stays 11–12px; the packed control-panel feel is the brand, so whitespace does not inflate on small screens.</span></li>
+				<li><b>Warm stays rationed</b><span>One orange cue per viewport on touch: the row's Submit disc replaces the hover chevrons rather than joining them.</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- 03 DON'T -->
+<div class="plate" style="max-width:820px;margin:14px auto 0">
+	<div class="pagehead">03 — Off-style, for contrast</div>
+	<div class="panel">
+		<h2>What breaks the faceplate</h2>
+		<div class="compare">
+			<div class="cmp-off">Modern soft card
+				<small>16px radius everywhere · blurred drop shadow · pale gray wash · orange used as
+					decoration. The machine disappears into generic consumer-tech.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Edge-lit plate with an indigo seam · hard offset shadow · platinum fill · orange
+					reserved for the submit cue. Sharp plates, few pills.</small></div>
+		</div>
+		<p class="note">Also out: extra hues beyond the page-tint heroes, flat unoutlined display
+			type, airy whitespace where seams belong, and a single merged nav bar on desktop.</p>
+	</div>
+</div>
+
+</div>
+
+</body>
+</html>

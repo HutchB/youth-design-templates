@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "framer",
+	"name": "Framer",
+	"version": "1.0.0",
+	"order": 227,
+	"category": "creative",
+	"vibe": "dark",
+	"tags": [
+		"creative",
+		"dark"
+	],
+	"blurb": "Near-black artboard system: poster display type, white pill CTAs, violet gradient spotlight tiles; blue is reserved for selection and links.",
+	"tagline": {
+		"en": "Black artboard, poster type, one blue signal",
+		"zh": "近黑画布，海报级排版，唯一的蓝色信号"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMW M — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #ffffff;
+		--color-primary-foreground: #000000;
+		--color-surface: #000000;
+		--color-surface-foreground: #ffffff;
+		--color-surface-raised: #1a1a1a;
+		--color-muted: #7e7e7e;
+		--color-accent: #e22718;
+		--color-danger: #e22718;
+		--color-border: #3c3c3c;
+		--color-m-red: #e22718;
+		--color-m-blue: #0066b1;
+		--color-m-blue-dark: #1c69d4;
+
+		--radius-sm: 0px;
+		--radius-md: 2px;
+		--radius-lg: 4px;
+		--radius-xl: 6px;
+		--radius-2xl: 8px;
+
+		--shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+		--shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);
+		--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.6);
+
+		--body-gray: #bbbbbb;
+		--cell: #0d0d0d;
+		--sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+		--carbon: repeating-linear-gradient(115deg, #0a0a0a 0 3px, #060606 3px 6px);
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 16px;
+		font-weight: 300;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	/* Display is 700 uppercase at zero tracking; body stays Light. */
+	h1, h2, h3 { margin: 0; font-weight: 700; line-height: 1.05; letter-spacing: 0; text-transform: uppercase; }
+	p { margin: 0; }
+	a { color: inherit; text-decoration: none; }
+	::selection { background: var(--color-m-blue); color: #fff; }
+	.spacer { flex: 1; }
+	.muted { color: var(--color-muted); }
+
+	/* ── Machined label: uppercase 700 with 1.5px tracking ────────── */
+	.label {
+		font-weight: 700; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase;
+	}
+	.tlink { display: inline-flex; align-items: center; gap: 8px; }
+	.tlink::after { content: "→"; font-weight: 700; }
+
+	/* ── Top nav: 64px black bar ──────────────────────────────────── */
+	.nav { display: flex; align-items: center; gap: 24px; height: 64px; padding: 0 32px; }
+	.navlinks { display: none; gap: 22px; font-weight: 400; font-size: 14px; letter-spacing: 0.5px; }
+	@media (min-width: 900px) { .navlinks { display: flex; } }
+	.navlinks a:hover { color: var(--color-muted); }
+	.roundel {
+		width: 34px; height: 34px; border-radius: 50%; flex: none;
+		border: 2px solid #2b2b2b;
+		background: conic-gradient(#fff 0 90deg, var(--color-m-blue-dark) 90deg 180deg, #fff 180deg 270deg, var(--color-m-blue-dark) 270deg 360deg);
+	}
+	.mmark { display: flex; align-items: center; gap: 8px; }
+	.mmark .stripes { display: flex; transform: skewX(-18deg); }
+	.mmark .stripes i { width: 7px; height: 22px; }
+	.mmark .stripes i:nth-child(1) { background: var(--color-m-blue); }
+	.mmark .stripes i:nth-child(2) { background: var(--color-m-blue-dark); }
+	.mmark .stripes i:nth-child(3) { background: var(--color-m-red); }
+	.mmark b { font-weight: 700; font-size: 20px; }
+
+	/* ── M stripe divider: 4px, always 4px ────────────────────────── */
+	.mstripe { height: 4px; background: linear-gradient(90deg, var(--color-m-blue) 0 33.4%, var(--color-m-blue-dark) 33.4% 66.7%, var(--color-m-red) 66.7% 100%); }
+
+	/* ── Hero: display over a geometric stand-in for the car shot ─── */
+	.hero { position: relative; padding: 64px 32px; background: var(--carbon); overflow: hidden; }
+	.hero .stage {
+		position: absolute; inset: 0; opacity: 0.9;
+		background:
+			linear-gradient(115deg, transparent 42%, rgb(230 34 24 / 0.16) 58%, transparent 70%),
+			radial-gradient(90% 70% at 72% 78%, rgb(28 105 212 / 0.22), transparent 62%),
+			linear-gradient(180deg, #060606 8%, #101010 60%, #040404 100%);
+	}
+	.hero .car {
+		position: absolute; right: 4%; bottom: 10%; width: min(52%, 520px); aspect-ratio: 21 / 7;
+		background: linear-gradient(180deg, #3a3a3f 0%, #17171a 55%, #0b0b0d 100%);
+		clip-path: polygon(0 68%, 7% 62%, 20% 58%, 32% 34%, 46% 30%, 60% 34%, 70% 30%, 84% 44%, 100% 54%, 100% 78%, 0 78%);
+	}
+	.hero .car::after {
+		content: ""; position: absolute; left: 6%; right: 4%; top: 18%; height: 3px;
+		background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+	}
+	.hero .inner { position: relative; max-width: 1440px; }
+	.hero h1 { font-size: 44px; margin-bottom: 14px; }
+	@media (min-width: 900px) { .hero h1 { font-size: 72px; } }
+	.hero .sub { color: var(--body-gray); max-width: 52ch; font-size: 17px; }
+	.hero-actions { display: flex; gap: 18px; margin-top: 28px; align-items: center; flex-wrap: wrap; }
+
+	/* The button is the outline; transparent fill, white border, razor corners. */
+	.btn {
+		display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+		height: 48px; padding: 0 32px; cursor: pointer;
+		font-family: var(--sans); font-weight: 700; font-size: 14px; letter-spacing: 1.5px;
+		text-transform: uppercase; border-radius: 0;
+		border: 1px solid #fff; background: transparent; color: #fff;
+	}
+	.btn.solid { background: #fff; color: #000; border-color: #fff; }
+	.btn.icon { width: 48px; height: 48px; padding: 0; border-radius: 9999px; border-color: var(--color-border); background: var(--color-surface-raised); }
+
+	/* ── Spec cells: value 32/700 over an uppercase label ─────────── */
+	.band { max-width: 1440px; margin: 0 auto; padding: 72px 32px; }
+	@media (min-width: 1100px) { .band { padding: 96px 32px; } }
+	.specs { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 32px; }
+	@media (min-width: 640px) { .specs { grid-template-columns: repeat(2, 1fr); } }
+	@media (min-width: 1024px) { .specs { grid-template-columns: repeat(4, 1fr); } }
+	.cell { background: var(--cell); padding: 24px; }
+	.cell b { display: block; font-size: 32px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+	.cell b small { font-size: 16px; font-weight: 700; color: var(--body-gray); margin-left: 4px; }
+	.cell span { display: block; margin-top: 10px; color: var(--color-muted); font-weight: 700; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; }
+	.cell .unit { color: var(--body-gray); }
+
+	/* ── Model cards: photo on black, no card surface ─────────────── */
+	.models { display: grid; grid-template-columns: 1fr; gap: 32px; margin-top: 32px; }
+	@media (min-width: 768px) { .models { grid-template-columns: repeat(2, 1fr); } }
+	@media (min-width: 1100px) { .models { grid-template-columns: repeat(3, 1fr); } }
+	.mcard .shot { aspect-ratio: 16 / 10; position: relative; overflow: hidden; }
+	.mcard .shot.s1 { background: radial-gradient(120% 90% at 80% 80%, rgb(230 34 24 / 0.3), transparent 55%), linear-gradient(160deg, #202024, #050505 80%); }
+	.mcard .shot.s2 { background: radial-gradient(120% 90% at 20% 20%, rgb(0 102 177 / 0.35), transparent 55%), linear-gradient(160deg, #1a2027, #040507 80%); }
+	.mcard .shot.s3 { background: radial-gradient(120% 90% at 70% 15%, rgb(129 196 255 / 0.22), transparent 55%), linear-gradient(160deg, #17181c, #050506 80%); }
+	.mcard .shot .sil {
+		position: absolute; inset: 24% 10% 26%;
+		background: linear-gradient(180deg, #333338, #0d0d0f);
+		clip-path: polygon(0 72%, 6% 62%, 22% 56%, 34% 28%, 50% 24%, 64% 30%, 74% 26%, 88% 42%, 100% 52%, 100% 84%, 0 84%);
+	}
+	.mcard h3 { font-size: 30px; margin: 20px 0 6px; }
+	.mcard .line { color: var(--body-gray); font-size: 14px; font-weight: 300; }
+	.mcard .tlink { margin-top: 14px; display: inline-flex; }
+
+	/* ── Configurator strip: hairline panel, swatches, chips ──────── */
+	.config { border: 1px solid var(--color-border); padding: 24px; display: grid; gap: 24px; }
+	@media (min-width: 900px) { .config { grid-template-columns: 1fr 1fr; } }
+	.config h3 { font-size: 20px; margin-bottom: 12px; }
+	.swatch-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+	.swatch { width: 34px; height: 34px; border-radius: 9999px; border: 2px solid var(--color-border); }
+	.swatch.on { border-color: #fff; box-shadow: 0 0 0 2px #000, 0 0 0 3px #fff; }
+	.chiprow { display: flex; gap: 10px; flex-wrap: wrap; }
+	.chip {
+		padding: 10px 16px; border: 1px solid var(--color-border); cursor: pointer;
+		font-weight: 700; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase;
+		color: var(--body-gray); background: transparent;
+	}
+	.chip.on { color: #fff; border-color: #fff; }
+	.pricebox { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+	.pricebox .num { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+	/* ── CTA band + footer ────────────────────────────────────────── */
+	.cta { background: var(--carbon); padding: 80px 32px; text-align: center; }
+	.cta h2 { font-size: 34px; margin-bottom: 22px; }
+	.footer { border-top: 1px solid var(--color-border); padding: 64px 32px 40px; color: var(--body-gray); }
+	.footer .cols { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 24px; }
+	@media (min-width: 820px) { .footer .cols { grid-template-columns: repeat(4, 1fr); } }
+	.footer h4 { margin: 0 0 12px; font-weight: 700; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+	.footer a { display: block; padding: 5px 0; font-size: 14px; }
+	.footer a:hover { color: #fff; }
+	.footer .fine { max-width: 1440px; margin: 36px auto 0; font-size: 12px; letter-spacing: 0.5px; color: var(--color-muted); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px 90px; }
+	.section { padding-top: 56px; }
+	.section-label { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-muted); margin-bottom: 10px; }
+	.section h2 { font-size: 32px; }
+	.lede { color: var(--body-gray); margin-top: 12px; max-width: 64ch; font-weight: 300; }
+	.note { margin-top: 18px; font-size: 14px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 26px; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 26px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 60px; }
+	.sw b { display: block; font-size: 13px; font-weight: 700; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 286px 1fr; gap: 44px; } }
+	.phone { width: 286px; max-width: 100%; margin: 0 auto; background: #000; border: 1px solid var(--color-border); }
+	.p-nav { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--color-border); }
+	.p-hero { background: var(--carbon); padding: 20px 14px 22px; }
+	.p-hero h4 { margin: 0 0 8px; font-size: 26px; font-weight: 700; line-height: 1.05; text-transform: uppercase; }
+	.p-hero .sub { font-size: 13px; color: var(--body-gray); }
+	.p-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px; }
+	.p-specs .cell { padding: 12px; }
+	.p-specs .cell b { font-size: 20px; }
+	.p-specs .cell span { font-size: 10px; margin-top: 6px; }
+	.p-card { padding: 0 14px 16px; }
+	.p-card .shot { aspect-ratio: 16 / 9; }
+	.p-card h5 { margin: 10px 0 2px; font-size: 16px; font-weight: 700; text-transform: uppercase; }
+	.p-card .tlink { font-size: 11px; }
+	.p-foot { border-top: 1px solid var(--color-border); padding: 14px; font-size: 11px; color: var(--color-muted); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 14px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--body-gray); }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { display: block; color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 24px; border-radius: 16px; color: #e6e9ef; font-size: 15px;
+		background: linear-gradient(140deg, #14161c, #2a2f3a 130%);
+		box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
+	}
+	.cmp-off small { display: block; margin-top: 10px; font-size: 13px; color: #8b93a3; }
+	.cmp-on { padding: 24px; border: 1px solid var(--color-border); background: var(--cell); font-size: 15px; }
+	.cmp-on small { display: block; margin-top: 10px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the model page: uppercase display over a geometric car stand-in,
+     razor-edged spec cells, model grid, the 4px stripe as the only ornament. -->
+<div class="nav">
+	<span class="mmark">
+		<span class="roundel"></span>
+		<span class="stripes"><i></i><i></i><i></i></span>
+		<b>M</b>
+	</span>
+	<span class="spacer"></span>
+	<nav class="navlinks">
+		<a href="#models">Models</a><a href="#topics">Topics</a><a href="#magazine">Magazine</a><a href="#configurator">Configurator</a><a href="#fastlane">Fastlane</a>
+	</nav>
+	<span class="spacer"></span>
+	<span class="muted" style="font-size:14px;letter-spacing:0.5px">EN</span>
+	<span style="font-size:16px">⌕</span>
+	<span class="btn icon" style="width:34px;height:34px;font-size:14px;border-color:var(--color-border)">◍</span>
+</div>
+
+<div class="hero">
+	<div class="stage"></div>
+	<div class="car"></div>
+	<div class="inner">
+		<h1>THE M4 COMPETITION.</h1>
+		<p class="sub">510 hp, rear-wheel drive, and a chassis tuned on the Nordschleife.
+			Every number on this page exists because a lap time demanded it.</p>
+		<div class="hero-actions">
+			<button class="btn">Book a test drive</button>
+			<a class="label tlink" href="#models">View all models</a>
+		</div>
+	</div>
+</div>
+<div class="mstripe"></div>
+
+<div class="band">
+	<h2 style="font-size:32px">Track figures.</h2>
+	<div class="specs">
+		<div class="cell"><b>3.8<small>s</small></b><span>0–100 km/h</span></div>
+		<div class="cell"><b>510<small>hp</small></b><span>Max output</span></div>
+		<div class="cell"><b>290<small class="unit">km/h</small></b><span>Top speed · M Driver's Pkg</span></div>
+		<div class="cell"><b>1,625<small class="unit">kg</small></b><span>Curb weight</span></div>
+	</div>
+</div>
+
+<div class="band" style="padding-top:0">
+	<div class="mstripe" style="width:64px;margin-bottom:28px"></div>
+	<h2 style="font-size:32px">More new M models.</h2>
+	<div class="models">
+		<div class="mcard">
+			<div class="shot s1"><div class="sil"></div></div>
+			<h3>M3 Touring.</h3>
+			<p class="line">510 hp · 0–100 in 3.8 s · 1,630 kg</p>
+			<a class="label tlink" href="#m3">Explore this model</a>
+		</div>
+		<div class="mcard">
+			<div class="shot s2"><div class="sil"></div></div>
+			<h3>M2 Coupe.</h3>
+			<p class="line">480 hp · 0–100 in 3.9 s · 1,700 kg</p>
+			<a class="label tlink" href="#m2">Explore this model</a>
+		</div>
+		<div class="mcard">
+			<div class="shot s3"><div class="sil"></div></div>
+			<h3>X5 M.</h3>
+			<p class="line">625 hp · 0–100 in 3.8 s · 2,360 kg</p>
+			<a class="label tlink" href="#x5m">Explore this model</a>
+		</div>
+	</div>
+</div>
+
+<div class="band" style="padding-top:0">
+	<div class="config">
+		<div>
+			<h3>Exterior colour.</h3>
+			<div class="swatch-row">
+				<span class="swatch on" style="background:#f2f2f2"></span>
+				<span class="swatch" style="background:#0c0c0e"></span>
+				<span class="swatch" style="background:var(--color-m-red)"></span>
+				<span class="swatch" style="background:var(--color-m-blue)"></span>
+				<span class="swatch" style="background:var(--color-m-blue-dark)"></span>
+				<span class="swatch" style="background:#5c6670"></span>
+			</div>
+			<h3 style="margin-top:24px">Wheels.</h3>
+			<div class="chiprow">
+				<span class="chip">19″ M</span><span class="chip on">20″ M</span><span class="chip">20″ M Carbon</span>
+			</div>
+		</div>
+		<div>
+			<h3>Your M4 Competition.</h3>
+			<p style="color:var(--body-gray);font-size:14px">Alpine White · 20″ M wheels · M Carbon bucket seats</p>
+			<div class="pricebox" style="margin-top:18px">
+				<span class="num">$98,400</span>
+				<span class="spacer"></span>
+				<button class="btn solid">Start order</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="cta">
+	<h2>DRIVE AN M.</h2>
+	<button class="btn">Find your dealer</button>
+</div>
+<div class="mstripe"></div>
+
+<div class="footer">
+	<div class="cols">
+		<div><h4>M Models</h4><a href="#m2">M2 Coupe</a><a href="#m3">M3 Touring</a><a href="#m4">M4 Competition</a><a href="#x5m">X5 M</a></div>
+		<div><h4>Motor sport</h4><a href="#dtm">Circuit racing</a><a href="#endurance">Endurance</a><a href="#sim">Sim racing</a><a href="#academy">M Academy</a></div>
+		<div><h4>Owners</h4><a href="#service">Service</a><a href="#warranty">Warranty</a><a href="#parts">M Parts</a><a href="#app">M App</a></div>
+		<div><h4>Lifestyle</h4><a href="#collection">M Collection</a><a href="#watches">Watches</a><a href="#gear">Track gear</a><a href="#gifts">Gifts</a></div>
+	</div>
+	<div class="fine">©2026 reference layout for a motorsport design system · all figures and model names are illustrative placeholders.</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — The stripe rule</p>
+		<h2>White speaks, black holds, stripe signs</h2>
+		<p class="lede">The primary color is white and it arrives as type and as a 1px outline — the
+			outline is the button. The tricolor exists only to sign things: the 4px divider, the
+			wordmark, a badge. It never fills a surface or a call to action.</p>
+		<div class="row">
+			<button class="btn solid">Order now</button>
+			<button class="btn">Configure</button>
+			<button class="btn icon">›</button>
+			<a class="label tlink" href="#magazine">Read the story</a>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><b>surface</b><span>#000000 · the page floor</span></div>
+			<div class="sw"><div class="fill" style="background: linear-gradient(90deg, var(--color-m-blue), var(--color-m-blue-dark), var(--color-m-red))"></div><b>M tricolor</b><span>divider · badge · wordmark only</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><b>raised</b><span>#1a1a1a · cards, inputs</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#ffffff · type + outlines</span></div>
+		</div>
+		<p class="note">Uppercase 700 display at zero tracking, Light 300 body, and 1.5px tracking on
+			every machined label. Shadow stays off the chrome; photography does the depth.</p>
+	</section>
+
+	<!-- 02 MOBILE -->
+	<section class="section">
+		<p class="section-label">02 — Mobile</p>
+		<h2>Razor edges, stacked figures</h2>
+		<p class="lede">The band rhythm survives the phone with one change per element: the headline
+			scales, the spec grid drops to two-up keeping its 32px-style values, and photography
+			stays full-bleed instead of shrinking into margins.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="p-nav">
+					<span style="font-size:18px">≡</span>
+					<span class="mmark"><span class="stripes"><i style="width:5px;height:16px"></i><i style="width:5px;height:16px"></i><i style="width:5px;height:16px"></i></span><b style="font-size:16px">M</b></span>
+					<span class="spacer"></span>
+					<span style="font-size:14px">⌕</span>
+				</div>
+				<div class="p-hero">
+					<h4>THE M4<br>COMPETITION.</h4>
+					<p class="sub">510 hp · Nordschleife-tuned chassis</p>
+					<button class="btn" style="height:44px;padding:0 22px;font-size:12px;margin-top:16px">Test drive</button>
+				</div>
+				<div class="mstripe"></div>
+				<div class="p-specs">
+					<div class="cell"><b>3.8<small>s</small></b><span>0–100 km/h</span></div>
+					<div class="cell"><b>510<small>hp</small></b><span>Output</span></div>
+					<div class="cell"><b>290<small class="unit">km/h</small></b><span>Top speed</span></div>
+					<div class="cell"><b>1,625<small class="unit">kg</small></b><span>Curb weight</span></div>
+				</div>
+				<div class="p-card">
+					<div class="shot s1"><div class="sil"></div></div>
+					<h5>M3 Touring.</h5>
+					<p class="sub" style="font-size:12px">510 hp · 3.8 s</p>
+					<a class="label tlink" href="#m3" style="font-size:11px">Explore</a>
+				</div>
+				<div class="p-foot">©2026 · reference layout · figures illustrative</div>
+			</div>
+			<ul class="rules">
+				<li><b>Headline 80 → 26px</b><span>Still 700, still uppercase, still zero tracking. The hero keeps its geometric stage rather than trading it for a plain band.</span></li>
+				<li><b>Specs 4 → 2-up</b><span>The grid reflows before the type shrinks — a spec value never drops below ~20px, because the figure is the content.</span></li>
+				<li><b>Stripe stays 4px</b><span>The divider keeps its height at every breakpoint; only its width ever changes.</span></li>
+				<li><b>Buttons stay square</b><span>48px desktop becomes 44px touch height; radius stays 0 and tracking stays 1.5px. No pill ever appears.</span></li>
+				<li><b>Photos full-bleed</b><span>Model shots keep native aspect and bleed to the frame edge — never letterboxed into a card.</span></li>
+				<li><b>Footer folds to one column</b><span>Four link columns stack; the corporate disclaimer stays in caption gray at the very end.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 03 DON'T -->
+	<section class="section">
+		<p class="section-label">03 — Off-style, for contrast</p>
+		<h2>What breaks the precision</h2>
+		<div class="compare">
+			<div class="cmp-off">Consumer-tech panel
+				<small>16px radius · soft gradient wash · blurred shadow · bold body copy · stripe used
+					as a button fill. Instantly reads as a lifestyle app, not motorsport.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>0px corners · 1px hairline · flat #0d0d0d cell · Light body · stripe reserved for
+					the signature. The rectangle is the brand.</small></div>
+		</div>
+		<p class="note">Also out: hues beyond the tricolor, rounded buttons, sentence-case display,
+			and gradient backdrops behind hero type.</p>
+	</section>
+
+</div>
+
+</body>
+</html>

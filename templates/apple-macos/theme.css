@@ -1,0 +1,35 @@
+/* Apple macOS — the Mac desktop layer: translucent menu bar, vibrancy sidebar,
+   traffic-light windows and large soft window shadows. Factual macOS platform
+   conventions; color values are community-sampled (Apple publishes no fixed hex
+   for the user-configurable accent). Original descriptions. Not affiliated with
+   or endorsed by Apple Inc. */
+@theme {
+	--color-primary: #0a7cff; /* macOS accent blue, community-sampled — selection and the one filled control */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #ffffff; /* window content area */
+	--color-surface-foreground: #1d1d1f; /* label ink */
+	--color-surface-raised: #f0f0f2; /* sidebar / toolbar chrome gray */
+	--color-muted: #6e6e73; /* secondaryLabel */
+	--color-accent: #28cd41; /* macOS systemGreen — differs from iOS #34C759 */
+	--color-danger: #ff453a; /* systemRed — destructive only */
+	--color-border: #d5d5d7; /* chrome and row hairline */
+
+	/* Window chrome, and only there */
+	--color-traffic-close: #ff5f57;
+	--color-traffic-min: #febc2e;
+	--color-traffic-max: #28c840;
+	--color-menubar: rgb(246 246 248 / 0.72); /* translucent menu bar fill */
+	--color-sidebar: rgb(240 240 244 / 0.8); /* vibrancy sidebar fill */
+	--blur-vibrancy: 24px;
+
+	--radius-sm: 6px;  /* push buttons, inputs */
+	--radius-md: 8px;  /* rows, small cards */
+	--radius-lg: 12px; /* windows, large cards */
+	--radius-xl: 16px;
+	--radius-2xl: 20px;
+
+	/* Windows float high above the desktop: big, soft, diffuse. */
+	--shadow-sm: 0 1px 3px rgb(0 0 0 / 0.08);
+	--shadow-md: 0 8px 24px rgb(0 0 0 / 0.14);
+	--shadow-lg: 0 24px 64px rgb(0 0 0 / 0.22);
+}

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warp — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #f7f5f0;
+		--color-primary-foreground: #2b2622;
+		--color-surface: #2b2622;
+		--color-surface-foreground: #f7f5f0;
+		--color-surface-raised: #383330;
+		--color-muted: #aea69c;
+		--color-accent: #e0a458;
+		--color-danger: #fb7185;
+		--color-border: #3f3a36;
+
+		--radius-sm: 3px;
+		--radius-md: 4px;
+		--radius-lg: 6px;
+		--radius-xl: 8px;
+		--radius-2xl: 12px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+		--shadow-md: 0 4px 16px rgb(0 0 0 / 0.45);
+		--shadow-lg: 0 16px 48px rgb(0 0 0 / 0.55);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		--mono: "DM Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 400; letter-spacing: -0.02em; line-height: 1.25; }
+	p { margin: 0; }
+	::selection { background: rgb(247 245 240 / 0.22); }
+	.spacer { flex: 1; }
+
+	/* ── Terminal window: tabs on top, panes split by hairlines ───── */
+	.win { border-bottom: 1px solid var(--color-border); }
+	.tabbar { display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 10px; border-bottom: 1px solid var(--color-border); }
+	.wtab {
+		display: flex; align-items: center; gap: 7px;
+		height: 26px; padding: 0 10px;
+		border-radius: var(--radius-sm);
+		font-family: var(--mono); font-size: 11.5px; color: var(--color-muted);
+	}
+	.wtab.is-active { background: var(--color-surface-raised); color: var(--color-surface-foreground); }
+	.wtab i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+
+	.panes { display: grid; grid-template-columns: 1fr; }
+	@media (min-width: 1020px) { .panes { grid-template-columns: minmax(0, 1fr) 300px; } }
+
+	/* Blocks: every command + output is one raised card */
+	.stream { padding: 14px 16px 4px; min-width: 0; }
+	.block {
+		background: var(--color-surface-raised);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: 9px 12px 10px;
+		margin-bottom: 10px;
+		font-family: var(--mono); font-size: 12.5px; line-height: 1.5;
+	}
+	.block .cmd { display: flex; align-items: center; gap: 8px; color: var(--color-surface-foreground); }
+	.block .cmd .ps { color: var(--color-muted); flex: none; }
+	.block .out { margin-top: 7px; color: var(--color-muted); white-space: pre-wrap; }
+	.block .out b { color: #9fc9a2; font-weight: 400; }
+	.block .out .warnl { color: var(--color-accent); }
+	.block .out .errl { color: var(--color-danger); }
+	.block .meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--color-border); font-size: 10.5px; color: var(--color-muted); }
+	.block.is-running .meta .run { color: var(--color-accent); }
+	.dotrun { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); display: inline-block; margin-right: 5px; }
+
+	/* AI suggestion bar + input block with completion popover */
+	.suggest {
+		display: flex; align-items: center; gap: 9px;
+		margin: 2px 16px 10px;
+		padding: 8px 12px;
+		border: 1px dashed var(--color-accent);
+		border-radius: var(--radius-md);
+		font-family: var(--mono); font-size: 12px; color: var(--color-surface-foreground);
+		background: rgb(224 164 88 / 0.06);
+	}
+	.suggest .tag { color: var(--color-accent); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; flex: none; }
+	.suggest .acc { margin-left: auto; flex: none; color: var(--color-muted); font-size: 10.5px; }
+
+	.inputwrap { position: relative; margin: 0 16px 16px; }
+	.inputblock {
+		display: flex; align-items: center; gap: 8px;
+		background: var(--color-surface-raised);
+		border: 1px solid #56504a;
+		border-radius: var(--radius-md);
+		padding: 11px 12px;
+		font-family: var(--mono); font-size: 13px;
+	}
+	.inputblock .ps { color: var(--color-muted); }
+	.inputblock .caret { display: inline-block; width: 7px; height: 15px; background: var(--color-primary); vertical-align: middle; }
+	.inputblock .keys { margin-left: auto; color: var(--color-muted); font-size: 10.5px; font-family: var(--sans); }
+	.completion {
+		position: absolute; left: 0; right: 0; bottom: calc(100% + 6px);
+		background: var(--color-surface-raised);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.completion .chead { padding: 7px 12px; border-bottom: 1px solid var(--color-border); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); }
+	.crow { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-family: var(--mono); font-size: 12.5px; color: var(--color-muted); }
+	.crow.is-active { background: rgb(247 245 240 / 0.07); color: var(--color-surface-foreground); box-shadow: inset 2px 0 0 var(--color-accent); }
+	.crow .hint { margin-left: auto; font-family: var(--sans); font-size: 10.5px; color: var(--color-muted); }
+
+	/* Agent pane */
+	.agent { display: none; border-left: 1px solid var(--color-border); padding: 12px; }
+	@media (min-width: 1020px) { .agent { display: block; } }
+	.agent h3 { font-size: 12px; font-weight: 500; letter-spacing: 0.04em; }
+	.astep { display: flex; gap: 8px; padding: 8px 9px; margin-top: 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-raised); font-size: 12px; }
+	.astep .tick { color: var(--color-accent); flex: none; font-family: var(--mono); }
+	.astep .sub { display: block; color: var(--color-muted); font-size: 11px; margin-top: 2px; font-family: var(--mono); }
+	.abtn { margin-top: 12px; width: 100%; }
+
+	/* ── Controls ─────────────────────────────────────────────────── */
+	.btn {
+		font: inherit; font-size: 12.5px; font-weight: 500;
+		height: 30px; padding: 0 12px;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--color-border);
+		background: transparent; color: var(--color-surface-foreground);
+		cursor: pointer;
+		transition: background-color 120ms ease, border-color 120ms ease;
+	}
+	.btn:hover { background: var(--color-surface-raised); }
+	.btn:focus-visible { outline: none; border-color: var(--color-primary); }
+	.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-primary:hover { background: #ffffff; }
+	.btn-ghost { border-color: transparent; color: var(--color-muted); }
+	.btn-ghost:hover { color: var(--color-surface-foreground); }
+	.btn[disabled] { cursor: not-allowed; color: #6e675f; border-color: #35302c; }
+
+	kbd {
+		font-family: var(--mono); font-size: 11px; line-height: 17px;
+		min-width: 19px; padding: 0 5px; display: inline-block; text-align: center;
+		border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+		background: var(--color-surface-raised); color: var(--color-muted);
+	}
+	.statusline {
+		display: flex; align-items: center; gap: 14px;
+		height: 24px; padding: 0 14px; border-top: 1px solid var(--color-border);
+		font-family: var(--mono); font-size: 10.5px; color: var(--color-muted);
+	}
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+	@media (min-width: 768px) { .wrap { padding: 0 32px 112px; } }
+	.section { padding-top: 48px; }
+	@media (min-width: 768px) { .section { padding-top: 72px; } }
+	.section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px; }
+	.section h2 { font-size: 21px; }
+	@media (min-width: 768px) { .section h2 { font-size: 25px; } }
+	.lede { color: var(--color-muted); max-width: 62ch; margin-top: 8px; font-size: 13.5px; }
+	.note { margin-top: 16px; font-size: 12.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+	.panels { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 768px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+	.panel { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 14px 16px; }
+	.panel h3 { font-size: 13px; font-weight: 500; }
+	.panel p { margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 22px; letter-spacing: -0.02em; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 10px; background: var(--color-surface-raised); }
+	.sw b { font-family: var(--mono); font-size: 11px; font-weight: 400; display: block; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── Mobile: one column of blocks and a docked input ──────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		border-radius: 28px;
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.phone-head { display: flex; align-items: center; gap: 8px; padding: 4px 14px 8px; border-bottom: 1px solid var(--color-border); font-family: var(--mono); font-size: 11px; color: var(--color-muted); }
+	.m-block { margin: 10px 12px 0; background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 8px 10px; font-family: var(--mono); font-size: 11.5px; }
+	.m-block .cmd { color: var(--color-surface-foreground); }
+	.m-block .out { margin-top: 5px; color: var(--color-muted); font-size: 11px; }
+	.m-dock { display: flex; align-items: center; gap: 8px; margin: 12px; padding: 10px; border: 1px solid #56504a; border-radius: var(--radius-md); background: var(--color-surface-raised); font-family: var(--mono); font-size: 12px; color: var(--color-muted); }
+	.m-dock .sp { width: 26px; height: 26px; border-radius: var(--radius-sm); background: var(--color-primary); color: var(--color-primary-foreground); display: grid; place-items: center; font-size: 12px; flex: none; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 13px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 500; flex: none; width: 116px; font-size: 12px; font-family: var(--mono); }
+	@media (max-width: 520px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── Off-style comparison ─────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 24px; border-radius: 18px;
+		background: linear-gradient(150deg, #12060f, #3b0d3a 45%, #0a0f1e);
+		border: 1px solid #d946ef;
+		box-shadow: 0 0 28px rgb(217 70 239 / 0.4);
+		color: #e879f9; font-size: 19px; font-weight: 600;
+		font-family: var(--mono);
+	}
+	.cmp-off small { display: block; font-size: 12px; font-weight: 400; color: #8b93a7; margin-top: 8px; }
+	.cmp-on { padding: 14px 16px; border-radius: var(--radius-lg); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: 13.5px; }
+	.cmp-on small { display: block; font-size: 12px; color: var(--color-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the terminal itself: tabbed panes, command blocks with output,
+     an amber AI suggestion, the completion popover, and the agent column. -->
+<div class="win">
+	<div class="tabbar">
+		<span class="wtab is-active"><i></i>zsh · release-service</span>
+		<span class="wtab"><i></i>zsh · scratch</span>
+		<span class="wtab">+</span>
+		<span class="spacer"></span>
+		<kbd>⌘D</kbd>
+	</div>
+	<div class="panes">
+		<main>
+			<div class="stream">
+				<div class="block">
+					<div class="cmd"><span class="ps">~/oss/release-service</span>git status</div>
+					<div class="out">On branch <b>main</b>
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean</div>
+					<div class="meta"><span>exit 0</span><span>128ms</span><span class="spacer"></span><span>Block #4821</span></div>
+				</div>
+				<div class="block is-running">
+					<div class="cmd"><span class="ps">~/oss/release-service</span>cargo test --workspace</div>
+					<div class="out">running 214 tests
+test release::tags::serializes_monotonic ... <b>ok</b>
+test release::notes::renders breaking ... <span class="warnl">warn: slow (2.1s)</span></div>
+					<div class="meta"><span class="run"><span class="dotrun"></span>running</span><span>214 passed · 0 failed</span><span class="spacer"></span><span>⌘C interrupt</span></div>
+				</div>
+			</div>
+			<div class="suggest">
+				<span class="tag">Warp AI</span>
+				tests are slow — run only the release module?
+				<span class="acc"><kbd>⌘↵</kbd> run · <kbd>⌥↵</kbd> edit</span>
+			</div>
+			<div class="inputwrap">
+				<div class="completion">
+					<div class="chead">Suggestions</div>
+					<div class="crow is-active"><span>git rebase main --interactive</span><span class="hint">history</span></div>
+					<div class="crow"><span>git rebase --autosquash release/1.4</span><span class="hint">history</span></div>
+					<div class="crow"><span>git fetch --prune origin</span><span class="hint">workflow</span></div>
+				</div>
+				<div class="inputblock">
+					<span class="ps">❯</span>git rebase main<span class="caret"></span>
+					<span class="keys">↵ run · ⌘↵ insert · ⇥ complete</span>
+				</div>
+			</div>
+		</main>
+		<aside class="agent">
+			<h3>Warp Agent</h3>
+			<div class="astep"><span class="tick">✓</span><span>Read failing test output<span class="sub">cargo test --workspace</span></span></div>
+			<div class="astep"><span class="tick">✓</span><span>Located slow suite<span class="sub">release::notes</span></span></div>
+			<div class="astep"><span class="tick">●</span><span>Drafting fix<span class="sub">fixtures/notes.toml</span></span></div>
+			<button class="btn abtn">Open agent session</button>
+		</aside>
+	</div>
+	<div class="statusline">
+		<span>release-service</span>
+		<span> main</span>
+		<span>zsh</span>
+		<span class="spacer"></span>
+		<span>blocks: 4,821</span>
+		<span>UTF-8</span>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 BLOCKS -->
+	<section class="section">
+		<p class="section-label">01 — Blocks over grids</p>
+		<h2>Every command is a card with edges</h2>
+		<p class="lede">The classic terminal dumps characters into one scroll; this one groups each
+			command with its output into a raised block — 4px radius, 1px hairline, exit code and
+			duration in the footer. Warm charcoal never turns pure black, and every gray in the
+			system is brown-tinted.</p>
+		<div class="panels">
+			<div class="panel"><div class="metric">4px</div><p>Block radius. Buttons run 3px. The tightest corner vocabulary of any dark dev system here.</p></div>
+			<div class="panel"><div class="metric">#2b2622</div><p>The only page tone. Raised blocks sit one warm step above at #383330 — no other background exists.</p></div>
+			<div class="panel"><div class="metric">exit · ms</div><p>Every block footer reports its result. The block is a record, not a scroll position.</p></div>
+		</div>
+	</section>
+
+	<!-- 02 OFF-WHITE -->
+	<section class="section">
+		<p class="section-label">02 — The off-white voice</p>
+		<h2>Text and buttons share one color</h2>
+		<p class="lede">Warm off-white is simultaneously the type color and the only filled button.
+			Display type stays weight 400 — confidence comes from size and tracking, never from
+			bold. There is no chromatic brand accent; amber is not allowed near chrome.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><div class="meta"><b>primary</b><span>#f7f5f0 · text + CTA</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface)"></div><div class="meta"><b>surface</b><span>#2b2622 · warm charcoal</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-accent)"></div><div class="meta"><b>accent</b><span>#e0a458 · terminal only</span></div></div>
+			<div class="sw"><div class="fill" style="background: var(--color-danger)"></div><div class="meta"><b>danger</b><span>#fb7185 · failed commands</span></div></div>
+		</div>
+		<div class="row" style="margin-top: 24px;">
+			<button class="btn btn-primary">Download Warp</button>
+			<button class="btn">Documentation</button>
+			<button class="btn btn-ghost">Changelog</button>
+			<button class="btn" disabled>Installing…</button>
+		</div>
+		<p class="note">Buttons are 30px tall with 3px radius and a warm-dark label. A ghost button carries no border until hover.</p>
+	</section>
+
+	<!-- 03 TERMINAL SEMANTICS -->
+	<section class="section">
+		<p class="section-label">03 — Terminal semantics</p>
+		<h2>Amber is scoped; green and rose stay inside blocks</h2>
+		<p class="lede">Amber marks the terminal's own agency: the AI suggestion bar, running
+			states, slow-test warnings. It never touches buttons, tabs or headings. Success green
+			and error rose are output content — they appear inside blocks and nowhere else.</p>
+		<div class="row" style="margin-top: 20px; font-family: var(--mono); font-size: 12.5px;">
+			<span style="color:#9fc9a2">✓ 214 passed</span>
+			<span style="color:var(--color-accent)">● running</span>
+			<span style="color:var(--color-danger)">✕ build failed</span>
+		</div>
+		<div class="suggest" style="max-width: 460px;">
+			<span class="tag">Warp AI</span>
+			flaky test detected in release::notes
+			<span class="acc"><kbd>⌘↵</kbd> fix</span>
+		</div>
+		<p class="note">The suggestion bar is the one dashed border in the system — a soft invitation, not a control. Accepting it promotes the command into a real block.</p>
+	</section>
+
+	<!-- 04 COMPLETION -->
+	<section class="section">
+		<p class="section-label">04 — Completion</p>
+		<h2>The popover is the one place light floats</h2>
+		<p class="lede">Completions live in a raised popover above the input block — the only
+			element allowed a large shadow. Its active row gets a subtle off-white wash and an
+			amber left edge; history entries outrank workflow suggestions.</p>
+		<div class="inputwrap" style="max-width: 480px; position: relative;">
+			<div class="completion" style="position: static; margin-bottom: 10px;">
+				<div class="chead">Suggestions</div>
+				<div class="crow is-active"><span>git rebase main --interactive</span><span class="hint">history</span></div>
+				<div class="crow"><span>git rebase --autosquash release/1.4</span><span class="hint">history</span></div>
+				<div class="crow"><span>git fetch --prune origin</span><span class="hint">workflow</span></div>
+			</div>
+			<div class="inputblock">
+				<span class="ps">❯</span>git rebase main<span class="caret"></span>
+				<span class="keys">⇥ complete</span>
+			</div>
+		</div>
+		<p class="note">The input block's border brightens one step when focused — no glow, no ring. Keycap hints ride on the right edge in plain text.</p>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>One column of blocks and a docked prompt</h2>
+		<p class="lede">Panes collapse to a single stream; the agent column becomes a session
+			screen behind a header link. The prompt docks to the bottom like a composer — the
+			off-white run square is the only filled element on the screen.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="phone-head"><span>zsh · release-service</span><span class="spacer"></span><span>agent ›</span></div>
+				<div class="m-block">
+					<div class="cmd">❯ cargo test --workspace</div>
+					<div class="out"><span style="color:#9fc9a2">✓ 214 passed</span> · 2 slow · <span style="color:var(--color-accent)">running</span></div>
+				</div>
+				<div class="m-block">
+					<div class="cmd">❯ git status</div>
+					<div class="out">On branch main · clean</div>
+				</div>
+				<div class="m-dock">❯ git rebase main<span class="spacer"></span><span class="sp">↵</span></div>
+			</div>
+			<ul class="rules">
+				<li><b>&lt; 1020px</b><span>The agent pane closes first; its session opens full-screen from the header link. Panes become a swipeable tab strip.</span></li>
+				<li><b>Blocks</b><span>Keep their 4px radius and hairline but drop the meta footer; exit code merges into the output line as a colored summary.</span></li>
+				<li><b>Type floor</b><span>11.5px mono blocks, 10px status. Terminal text never scales up — legibility comes from contrast, not size.</span></li>
+				<li><b>Prompt</b><span>The input block docks to the bottom at 46px with a 26px off-white run square. Completion becomes an inline suggestion row.</span></li>
+				<li><b>Suggestions</b><span>The AI bar keeps its dashed amber border above the dock; on touch, ⌘↵ hints become a single "Run" tap.</span></li>
+				<li><b>Warmth</b><span>No breakpoint introduces cool gray or pure black — the charcoal-to-cream pair is the brand at every size.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the warmth</h2>
+		<div class="compare">
+			<div class="cmp-off">neon grid terminal.exe
+				<small>Cool black canvas, magenta glow border, gradient wash, mono display type — the "hacker aesthetic" this system exists to retire. Chromatic accents on chrome are the first sin.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Warm charcoal, 6px radius, hairline border, cream text at weight 400. The only color on the card is the amber tick of a running state.</small></div>
+		</div>
+		<p class="note">Also out: pill CTAs, radius above 8px on controls, pure black backgrounds, bold display weights, and terminal colors climbing into tabs or buttons.</p>
+	</section>
+
+</div>
+</body>
+</html>

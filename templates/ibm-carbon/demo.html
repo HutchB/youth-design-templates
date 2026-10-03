@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBM Carbon — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0f62fe;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #f4f4f4;
+		--color-surface-foreground: #161616;
+		--color-surface-raised: #ffffff;
+		--color-muted: #525252;
+		--color-accent: #42be65;
+		--color-danger: #da1e28;
+		--color-border: #e0e0e0;
+
+		--radius-sm: 0px;
+		--radius-md: 2px;
+		--radius-lg: 2px;
+		--radius-xl: 4px;
+		--radius-2xl: 4px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+		--shadow-md: 0 2px 6px rgb(0 0 0 / 0.1);
+		--shadow-lg: 0 4px 12px rgb(0 0 0 / 0.16);
+
+		--shell: #161616;
+		--shell-hover: #353535;
+		--sans: "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+		--mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.45;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 600; }
+	p { margin: 0; }
+	a { color: var(--color-primary); text-decoration: none; }
+	.spacer { flex: 1; }
+	.mono { font-family: var(--mono); }
+
+	/* ── COVER: the product — an ops console. Dark shell + dense page ── */
+	.shell { display: grid; grid-template-columns: 1fr; min-height: 420px; }
+	@media (min-width: 900px) { .shell { grid-template-columns: 208px 1fr; } }
+
+	.sidenav { display: none; background: var(--shell); color: #f4f4f4; padding-bottom: 16px; }
+	@media (min-width: 900px) { .sidenav { display: block; } }
+	.brand { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 16px; border-bottom: 1px solid #393939; font-size: 14px; font-weight: 600; }
+	.brand-cube { width: 16px; height: 16px; background: var(--color-primary); flex: none; }
+	.snav { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px; font-size: 14px; color: #c6c6c6; }
+	.snav:hover { background: var(--shell-hover); }
+	.snav.is-active { background: var(--shell-hover); color: #fff; box-shadow: inset 3px 0 0 var(--color-primary); }
+	.snav .count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: #8d8d8d; }
+
+	.pagehead { background: var(--color-surface-raised); border-bottom: 1px solid var(--color-border); }
+	.crumbs { padding: 10px 20px 0; font-size: 12px; color: var(--color-muted); }
+	.pagehead-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 20px 16px; }
+	.pagehead-row h1 { font-size: 20px; }
+
+	.content { padding: 20px; display: grid; gap: 16px; align-content: start; }
+
+	/* ── Notifications: 3px edge + tinted fill ────────────────────── */
+	.notif { position: relative; background: var(--color-surface-raised); border: 1px solid var(--color-border); border-left: 3px solid var(--color-accent); padding: 12px 40px 12px 16px; font-size: 14px; }
+	.notif b { display: block; font-weight: 600; }
+	.notif .close { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; display: grid; place-items: center; color: var(--color-muted); font-size: 16px; }
+	.notif.is-info { border-left-color: var(--color-primary); }
+	.notif.is-danger { border-left-color: var(--color-danger); }
+	.notif.is-success { background: #defbe6; }
+	.notif.is-info { background: #edf5ff; }
+	.notif.is-danger { background: #fff1f1; }
+
+	/* ── Tiles: white, 1px border, no shadow ──────────────────────── */
+	.tiles { display: grid; grid-template-columns: 1fr; gap: 12px; }
+	@media (min-width: 720px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+	.tile { background: var(--color-surface-raised); border: 1px solid var(--color-border); padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 6px; }
+	.tile-label { font-size: 12px; color: var(--color-muted); }
+	.metric { font-family: var(--mono); font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+	.metric small { font-size: 14px; font-weight: 400; color: var(--color-muted); }
+	.tile a { font-size: 13px; margin-top: 4px; }
+
+	/* ── The data table: 48px rows, checkbox, 3px selection edge ──── */
+	.tablewrap { background: var(--color-surface-raised); border: 1px solid var(--color-border); overflow-x: auto; }
+	table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+	th { text-align: left; font-size: 12px; font-weight: 600; color: var(--color-muted); padding: 10px 16px; border-bottom: 1px solid var(--color-border); }
+	td { padding: 12px 16px; border-bottom: 1px solid var(--color-border); }
+	tr:last-child td { border-bottom: 0; }
+	tbody tr:hover { background: #e5e5e5; }
+	tr.is-selected { background: #edf5ff; box-shadow: inset 3px 0 0 var(--color-primary); }
+	.num { text-align: right; }
+	.cb { width: 44px; }
+	.chk { display: inline-block; width: 16px; height: 16px; border: 1px solid var(--color-muted); background: var(--color-surface-raised); }
+	tr.is-selected .chk { background: var(--color-primary); border-color: var(--color-primary); position: relative; }
+	tr.is-selected .chk::after { content: "✓"; position: absolute; inset: 0; color: #fff; font-size: 12px; display: grid; place-items: center; }
+	.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+	.dot.ok { background: var(--color-accent); }
+	.dot.bad { background: var(--color-danger); }
+	.dot.warn { background: #f1c21b; }
+	@media (max-width: 640px) { .hide-sm { display: none; } }
+
+	/* ── Buttons: rectangles on the 2px radius ────────────────────── */
+	.btn { font: inherit; font-size: 14px; border-radius: var(--radius-md); padding: 10px 16px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-surface-foreground); }
+	.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-primary:hover { background: #0353e9; }
+	.btn-secondary { background: var(--color-surface-raised); border-color: var(--color-surface-foreground); }
+	.btn-ghost { border-color: var(--color-border); }
+	.btn-danger { background: var(--color-danger); border-color: var(--color-danger); color: #fff; }
+	.btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+	.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 88px; }
+	.section { padding-top: 48px; }
+	.section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 8px; }
+	.section h2 { font-size: 22px; }
+	.lede { margin-top: 8px; max-width: 66ch; color: var(--color-muted); font-size: 14px; }
+	.note { margin-top: 14px; font-size: 13px; color: var(--color-muted); }
+
+	/* ── 01 layering ──────────────────────────────────────────────── */
+	.layers { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .layers { grid-template-columns: repeat(3, 1fr); } }
+	.layer { padding: 18px 16px; border: 1px solid var(--color-border); font-size: 13px; min-height: 110px; display: flex; flex-direction: column; justify-content: flex-end; }
+	.layer b { font-size: 15px; }
+	.layer .mono { font-size: 11px; color: var(--color-muted); }
+	.layer.is-page { background: var(--color-surface); }
+	.layer.is-raised { background: var(--color-surface-raised); }
+	.layer.is-dark { background: var(--shell); border-color: var(--shell); color: #f4f4f4; }
+	.layer.is-dark .mono { color: #8d8d8d; }
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--color-surface-raised); border: 1px solid var(--color-border); }
+	.sw .fill { height: 48px; }
+	.sw .meta { padding: 8px 12px; }
+	.sw b { display: block; font-family: var(--mono); font-size: 12px; font-weight: 500; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── compact table for 03 ─────────────────────────────────────── */
+	table.dense td, table.dense th { padding: 6px 16px; }
+	table.dense td { font-size: 13px; }
+
+	/* ── 05 mobile ────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 28px;
+		background: var(--color-surface); box-shadow: var(--shadow-lg); overflow: hidden;
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 8px 16px 4px; font-family: var(--mono); font-size: 10px; color: var(--color-muted); }
+	.m-topbar { display: flex; align-items: center; gap: 10px; background: var(--shell); color: #f4f4f4; padding: 12px 14px; font-size: 14px; font-weight: 600; }
+	.m-burger { display: inline-grid; gap: 3px; }
+	.m-burger i { display: block; width: 14px; height: 2px; background: #f4f4f4; }
+	.m-content { padding: 12px; display: grid; gap: 10px; }
+	.m-tile { background: var(--color-surface-raised); border: 1px solid var(--color-border); padding: 12px 14px; }
+	.m-tile .metric { font-size: 24px; }
+	.m-rows { background: var(--color-surface-raised); border: 1px solid var(--color-border); }
+	.m-row { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 14px; font-size: 13px; border-bottom: 1px solid var(--color-border); }
+	.m-row:last-child { border-bottom: 0; }
+	.m-row .sub { display: block; font-family: var(--mono); font-size: 11px; color: var(--color-muted); }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 122px; font-size: 13px; font-family: var(--mono); }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 06 off-style ─────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { padding: 18px; font-size: 14px; }
+	.cmp small { display: block; margin-top: 8px; font-size: 13px; color: var(--color-muted); }
+	.cmp-off { border-radius: 14px; background: linear-gradient(135deg, #0f62fe, #7b3ff2); box-shadow: 0 16px 36px rgb(15 98 254 / 0.35); color: #fff; font-size: 18px; font-weight: 600; }
+	.cmp-on { background: var(--color-surface-raised); border: 1px solid var(--color-border); }
+	.deco-blue b { color: var(--color-primary); }
+	.deco-blue .bar { height: 8px; background: var(--color-primary); margin: 10px 0; border-radius: 999px; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the product surface: dark side nav, page header, dense table,
+     exactly one blue action. This is what the system is FOR. -->
+<div class="shell">
+	<aside class="sidenav">
+		<div class="brand"><span class="brand-cube"></span>Vetta Ops</div>
+		<div class="snav is-active">Dashboard</div>
+		<div class="snav">Clusters<span class="count">3</span></div>
+		<div class="snav">Deployments</div>
+		<div class="snav">Jobs<span class="count">7</span></div>
+		<div class="snav">Alerts<span class="count">2</span></div>
+		<div class="snav">Access (IAM)</div>
+		<div class="snav">Settings</div>
+	</aside>
+	<main>
+		<div class="pagehead">
+			<div class="crumbs">Home / Clusters / <b style="color:var(--color-surface-foreground)">prod-eu-1</b></div>
+			<div class="pagehead-row">
+				<h1>Cluster overview</h1>
+				<span class="spacer"></span>
+				<button class="btn btn-ghost" type="button">Refresh</button>
+				<button class="btn btn-secondary" type="button">Restart node</button>
+				<button class="btn btn-primary" type="button">Deploy</button>
+			</div>
+		</div>
+		<div class="content">
+			<div class="notif is-success"><b>Rollout finished</b>12 of 12 nodes updated to v2.14.1 with zero restarts.<span class="close">×</span></div>
+			<div class="tiles">
+				<div class="tile"><span class="tile-label">Nodes online</span><span class="metric">128<small> / 132</small></span><a href="#">View nodes →</a></div>
+				<div class="tile"><span class="tile-label">CPU utilization</span><span class="metric">63%</span><a href="#">Open monitor →</a></div>
+				<div class="tile"><span class="tile-label">Pending jobs</span><span class="metric">7</span><a href="#">View queue →</a></div>
+			</div>
+			<div class="tablewrap">
+				<table>
+					<thead>
+						<tr><th class="cb"></th><th>Node</th><th>Status</th><th class="num">vCPU</th><th class="num hide-sm">Memory</th><th class="hide-sm">Zone</th><th class="hide-sm">Updated</th></tr>
+					</thead>
+					<tbody>
+						<tr><td class="cb"><span class="chk"></span></td><td class="mono">node-a1</td><td><span class="dot ok"></span>Healthy</td><td class="num mono">32</td><td class="num mono hide-sm">128 GB</td><td class="hide-sm">eu-de-2</td><td class="mono hide-sm">2h ago</td></tr>
+						<tr class="is-selected"><td class="cb"><span class="chk"></span></td><td class="mono">node-a2</td><td><span class="dot ok"></span>Healthy</td><td class="num mono">32</td><td class="num mono hide-sm">128 GB</td><td class="hide-sm">eu-de-2</td><td class="mono hide-sm">2h ago</td></tr>
+						<tr><td class="cb"><span class="chk"></span></td><td class="mono">node-b1</td><td><span class="dot warn"></span>Cordoned</td><td class="num mono">64</td><td class="num mono hide-sm">256 GB</td><td class="hide-sm">eu-de-1</td><td class="mono hide-sm">1d ago</td></tr>
+						<tr><td class="cb"><span class="chk"></span></td><td class="mono">node-c3</td><td><span class="dot bad"></span>Degraded</td><td class="num mono">16</td><td class="num mono hide-sm">64 GB</td><td class="hide-sm">eu-de-3</td><td class="mono hide-sm">6h ago</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 LAYERING -->
+	<section class="section">
+		<p class="section-label">01 — Layering</p>
+		<h2>Three grays and a dark shell</h2>
+		<p class="lede">The page is Gray 10, every working surface on it is white with a 1px Gray 20
+			border, and the shell inverts to ink #161616. Depth reads from these flat steps and their
+			hairlines — shadows are held back for dropdowns and modals.</p>
+		<div class="layers">
+			<div class="layer is-page"><b>Page</b><span class="mono">surface · #f4f4f4 (Gray 10)</span></div>
+			<div class="layer is-raised"><b>Raised tile / table</b><span class="mono">surface-raised · #ffffff + 1px #e0e0e0</span></div>
+			<div class="layer is-dark"><b>Dark shell &amp; overlay</b><span class="mono">#161616 · hover layer #353535</span></div>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>Blue 60 · one action</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>Green 40 · healthy</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>Red 60 · failure</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-muted)"></div><div class="meta"><b>muted</b><span>Gray 70 · helper text</span></div></div>
+		</div>
+		<p class="note">Selection states may also spend Blue 60 — a selected row is the one place a
+			second blue fill is legitimate. Hover is a one-step gray (#e5e5e5), never colored.</p>
+	</section>
+
+	<!-- 02 TABLE -->
+	<section class="section">
+		<p class="section-label">02 — Data table</p>
+		<h2>32px dense rows, checkbox, 3px selection edge</h2>
+		<p class="lede">Headers are 12px Gray 70, never all-caps sentences. Numbers are tabular mono and
+			right-aligned. The selected row takes the Blue 10 tint and a 3px blue left edge — structure
+			comes from the grid, emphasis from a single hairline of color.</p>
+		<div class="tablewrap">
+			<table class="dense">
+				<thead><tr><th class="cb"></th><th>Job ID ↑</th><th>Queue</th><th>Status</th><th class="num">Duration</th></tr></thead>
+				<tbody>
+					<tr class="is-selected"><td class="cb"><span class="chk"></span></td><td class="mono">jb-20461</td><td>build-eu</td><td><span class="dot ok"></span>Succeeded</td><td class="num mono">4m 12s</td></tr>
+					<tr><td class="cb"><span class="chk"></span></td><td class="mono">jb-20460</td><td>build-eu</td><td><span class="dot ok"></span>Succeeded</td><td class="num mono">3m 58s</td></tr>
+					<tr><td class="cb"><span class="chk"></span></td><td class="mono">jb-20459</td><td>test-eu</td><td><span class="dot bad"></span>Failed</td><td class="num mono">1m 04s</td></tr>
+					<tr><td class="cb"><span class="chk"></span></td><td class="mono">jb-20458</td><td>index-eu</td><td><span class="dot warn"></span>Queued</td><td class="num mono">—</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="note">Default rows are 48px; the 32px compact scale is for scanning screens like this
+			one. Sorting is a text arrow in the header — not a floating dropdown.</p>
+	</section>
+
+	<!-- 03 FEEDBACK -->
+	<section class="section">
+		<p class="section-label">03 — Feedback &amp; actions</p>
+		<h2>Rectangles, one fill, tinted receipts</h2>
+		<p class="lede">Buttons stay rectangles on the 2px radius: one filled blue per view, outlined
+			secondary, ghost for the rest. Inline notifications answer the user with a 3px edge and a
+			tinted background — success green, info blue, danger red.</p>
+		<div class="notif is-danger" style="margin-top:20px"><b>Deployment blocked</b>Node node-c3 is degraded. Drain it or force the rollout.<span class="close">×</span></div>
+		<div class="notif is-info"><b>Maintenance window</b>Zone eu-de-3 reboots Sunday 02:00–02:30 UTC.<span class="close">×</span></div>
+		<div class="row" style="margin-top:16px">
+			<button class="btn btn-primary" type="button">Deploy</button>
+			<button class="btn btn-secondary" type="button">Restart node</button>
+			<button class="btn btn-ghost" type="button">View logs</button>
+			<button class="btn btn-danger" type="button">Drain cluster</button>
+			<button class="btn" disabled style="color:#c6c6c6;cursor:not-allowed">Cancel</button>
+		</div>
+		<p class="note">Red appears once: the destructive action. If the page already shows a red
+			notification, the red button waits — two reds compete and both lose meaning.</p>
+	</section>
+
+	<!-- 04 MOBILE -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>The shell becomes a drawer, the grid keeps its corners</h2>
+		<p class="lede">Small screens drop chrome, not discipline: the dark nav folds into an overlay
+			drawer, tiles stack full-width, and the table either scrolls in its wrapper or degrades to
+			stacked rows. Corners stay 2px, type stays 14px, and blue stays an action color.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>LTE ▮</span></div>
+				<div class="m-topbar"><span class="m-burger"><i></i><i></i><i></i></span>Vetta Ops<span class="spacer"></span><span style="color:#8d8d8d">⌕</span></div>
+				<div class="m-content">
+					<div class="m-tile"><span class="tile-label">Nodes online</span><span class="metric">128<small> / 132</small></span></div>
+					<div class="m-tile"><span class="tile-label">Pending jobs</span><span class="metric">7</span></div>
+					<div class="m-rows">
+						<div class="m-row"><span class="dot ok"></span><span>node-a1<span class="sub">32 vCPU · eu-de-2 · 2h</span></span><span class="spacer"></span><span style="color:var(--color-muted)">›</span></div>
+						<div class="m-row"><span class="dot bad"></span><span>node-c3<span class="sub">16 vCPU · eu-de-3 · 6h</span></span><span class="spacer"></span><span style="color:var(--color-muted)">›</span></div>
+					</div>
+					<button class="btn btn-primary" type="button" style="width:100%">Deploy</button>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Side nav</b><span>Collapses into an overlay drawer that slides over a dimmed page; the page header keeps its breadcrumbs and hides secondary buttons into an overflow menu.</span></li>
+				<li><b>Table</b><span>Read-only tables keep their header and scroll horizontally inside the tile; task tables degrade to stacked rows — name, status dot, and one mono meta line. The header row goes first, never the columns' meaning.</span></li>
+				<li><b>Row height</b><span>48px becomes the floor on touch; the checkbox grows a padded 44px target zone while its visible box stays 16px.</span></li>
+				<li><b>Tiles</b><span>Stack full-width with the same 1px border. Metrics keep their 30px mono size — data legibility is not traded for layout comfort.</span></li>
+				<li><b>Buttons</b><span>Primary goes full-width; secondary actions move behind an overflow icon. Corners, weight and the one-blue rule do not change.</span></li>
+				<li><b>Hover</b><span>The #e5e5e5 hover step has no touch equivalent; pressed rows and tiles darken for the duration of the press, exactly like the desktop's active state.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>What breaks the engineering voice</h2>
+		<div class="compare">
+			<div class="cmp cmp-off">Rounded gradient card
+				<small>14px corners, a blue-to-purple gradient, a glowing colored shadow, display-size
+					type. Any one of these turns a working console into a brochure.</small></div>
+			<div class="cmp cmp-on">Same content, on-style
+				<small>2px corners, white fill, 1px Gray 20 border, 14px body. The surface is supposed
+					to be quiet — the data is the loudest thing on screen.</small></div>
+		</div>
+		<div class="compare">
+			<div class="cmp cmp-off deco-blue"><b>Blue as decoration</b>
+				<div class="bar"></div>
+				<b>Blue headers, blue bars, blue everything</b>
+				<small>When Blue 60 decorates instead of pointing, the one real action loses its
+					pointer.</small></div>
+			<div class="cmp cmp-on"><b>Blue as a verb</b>
+				<small>Headers stay ink, structure stays gray, and the single filled button is the only
+					wide blue area. Selection may share the tint — decoration never does.</small></div>
+		</div>
+		<p class="note">Also out: serif or downloaded fonts, soft shadows inside the page, colorful
+			hover states, and any corner rounder than 4px.</p>
+	</section>
+
+</div>
+</body>
+</html>

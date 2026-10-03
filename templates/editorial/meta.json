@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "editorial",
+	"name": "Editorial Print",
+	"version": "1.0.0",
+	"order": 135,
+	"category": "editorial",
+	"vibe": "light",
+	"tags": [
+		"editorial",
+		"light"
+	],
+	"blurb": "Magazine print discipline on screen: paper white, ink black, one seal-red accent, oversized serif headlines and strict hairline grids.",
+	"tagline": {
+		"en": "Ink on paper, set with intent",
+		"zh": "纸上的墨，排过的版"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing print-editorial web conventions (oversized serif display, hairline grids, seal-red accents)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

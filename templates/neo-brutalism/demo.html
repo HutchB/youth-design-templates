@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neo Brutalism — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #ffdc58;
+		--color-primary-foreground: #111111;
+		--color-surface: #fffdf5;
+		--color-surface-foreground: #111111;
+		--color-surface-raised: #ffffff;
+		--color-muted: #52525b;
+		--color-accent: #ffb3c7;
+		--color-danger: #ff5d5d;
+		--color-border: #111111;
+
+		--color-cyan: #a5f3fc;
+		--color-lime: #b8f35a;
+
+		--radius-sm: 0px;
+		--radius-md: 4px;
+		--radius-lg: 6px;
+		--radius-xl: 6px;
+		--radius-2xl: 6px;
+		--radius-full: 9999px;
+
+		--shadow-sm: 2px 2px 0 #111111;
+		--shadow-md: 4px 4px 0 #111111;
+		--shadow-lg: 8px 8px 0 #111111;
+		--shadow-hover: 6px 6px 0 #111111;
+		--shadow-active: 0 0 0 #111111;
+
+		--sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 16px;
+		line-height: 1.5;
+	}
+	h1, h2, h3 { margin: 0; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+	/* ── The 2px ink outline + hard offset shadow IS the whole system ── */
+	.nb-card {
+		background: var(--color-surface-raised);
+		border: 2px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-md);
+	}
+	.nb-btn {
+		display: inline-block;
+		font: 700 14px/1 var(--sans);
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+		color: var(--color-primary-foreground);
+		background: var(--color-primary);
+		border: 2px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		box-shadow: var(--shadow-md);
+		padding: 13px 20px;
+		cursor: pointer;
+	}
+	.nb-btn:hover { box-shadow: var(--shadow-hover); transform: translate(-1px, -1px); }
+	.nb-btn:active { box-shadow: var(--shadow-active); transform: translate(4px, 4px); }
+	.nb-btn.white { background: var(--color-surface-raised); }
+	.nb-btn.pink { background: var(--color-accent); }
+	.nb-btn.cyan { background: var(--color-cyan); }
+	.nb-btn.danger { background: var(--color-danger); }
+
+	.nb-badge {
+		display: inline-block;
+		font: 800 12px/1 var(--sans);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		padding: 6px 10px;
+		border: 2px solid var(--color-border);
+		border-radius: var(--radius-full);
+		box-shadow: var(--shadow-sm);
+		background: var(--color-surface-raised);
+	}
+	.nb-badge.yellow { background: var(--color-primary); }
+	.nb-badge.pink { background: var(--color-accent); }
+	.nb-badge.cyan { background: var(--color-cyan); }
+	.nb-badge.lime { background: var(--color-lime); }
+	.tilt { transform: rotate(-3deg); }
+
+	/* ── Cover: a neo-brutalist SaaS landing for a task app ────────── */
+	.nb-nav {
+		display: flex; align-items: center; gap: 18px;
+		background: var(--color-surface-raised);
+		border-bottom: 2px solid var(--color-border);
+		padding: 14px 24px;
+	}
+	.nb-logo {
+		font: 900 18px/1 var(--sans); text-transform: uppercase;
+		background: var(--color-primary);
+		border: 2px solid var(--color-border); box-shadow: var(--shadow-sm);
+		padding: 8px 10px;
+	}
+	.nb-nav a { color: var(--color-surface-foreground); font: 700 13px/1 var(--sans); text-transform: uppercase; text-decoration: none; }
+	.nb-hero { display: grid; grid-template-columns: 1fr; gap: 32px; padding: 56px 24px; max-width: 1100px; margin: 0 auto; align-items: center; }
+	@media (min-width: 860px) { .nb-hero { grid-template-columns: 1.15fr 0.85fr; } }
+	.nb-hero h1 { font-size: clamp(40px, 6vw, 64px); font-weight: 900; }
+	.nb-hero h1 em { font-style: normal; background: var(--color-primary); box-shadow: var(--shadow-md); border: 2px solid var(--color-border); padding: 0 10px; display: inline-block; }
+	.nb-hero .sub { margin: 20px 0 26px; font-size: 18px; max-width: 46ch; color: var(--color-surface-foreground); }
+	.nb-cta-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+	.nb-hero-art {
+		background: var(--color-cyan);
+		border: 2px solid var(--color-border); box-shadow: var(--shadow-lg);
+		border-radius: var(--radius-lg); padding: 16px;
+		transform: rotate(1.5deg);
+	}
+	.nb-kanban { display: grid; gap: 12px; }
+	.nb-kcard {
+		background: var(--color-surface-raised); border: 2px solid var(--color-border);
+		border-radius: var(--radius-md); padding: 10px 12px;
+		font: 700 13px/1.3 var(--sans);
+		box-shadow: var(--shadow-sm);
+	}
+	.nb-kcard small { display: block; font: 700 11px/1 var(--sans); text-transform: uppercase; color: var(--color-muted); margin-top: 6px; }
+	.nb-kcard .tag { display: inline-block; margin-top: 8px; font: 800 10px/1 var(--sans); text-transform: uppercase; border: 2px solid var(--color-border); padding: 3px 6px; border-radius: var(--radius-full); }
+	/* Marquee stripe: the signature section divider. */
+	.nb-marquee {
+		background: var(--color-primary); border-top: 2px solid var(--color-border); border-bottom: 2px solid var(--color-border);
+		padding: 10px 0; overflow: hidden; white-space: nowrap;
+		font: 900 15px/1 var(--sans); text-transform: uppercase;
+	}
+	.nb-marquee span { padding: 0 14px; }
+	.nb-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+	@media (min-width: 860px) { .nb-grid { grid-template-columns: repeat(3, 1fr); } }
+	.nb-grid h2 { grid-column: 1 / -1; font-size: 32px; font-weight: 900; }
+	.nb-feature { padding: 20px; }
+	.nb-feature .blk { width: 44px; height: 44px; border: 2px solid var(--color-border); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+	.nb-feature h3 { font-size: 17px; margin-bottom: 8px; }
+	.nb-feature p { font-size: 14px; color: var(--color-surface-foreground); }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+	.section-title .num { font: 900 14px/1 var(--sans); background: var(--color-primary); border: 2px solid var(--color-border); box-shadow: var(--shadow-sm); padding: 6px 8px; }
+	.section-title h2 { font-size: 26px; font-weight: 900; }
+	.lede { max-width: 74ch; margin-bottom: 18px; color: var(--color-muted); }
+	.wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+	.row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+	.block-panel { padding: 22px; margin-top: 18px; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 16px; }
+	@media (min-width: 640px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 48px; border: 2px solid var(--color-border); box-shadow: var(--shadow-sm); }
+	.sw b { display: block; font: 800 13px/1.3 var(--sans); text-transform: uppercase; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	.nb-input {
+		font: 700 14px/1 var(--sans);
+		padding: 12px; width: 100%; max-width: 280px;
+		background: var(--color-surface-raised); color: var(--color-surface-foreground);
+		border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+	}
+	.nb-input:focus { outline: 2px solid var(--color-border); outline-offset: 2px; }
+	.nb-progress { display: flex; gap: 4px; border: 2px solid var(--color-border); box-shadow: var(--shadow-sm); padding: 4px; width: 100%; max-width: 320px; background: var(--color-surface-raised); }
+	.nb-progress i { height: 18px; flex: 1; background: var(--color-primary); }
+	.nb-progress i.off { background: var(--color-surface); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+	@media (min-width: 820px) { .mobile { grid-template-columns: 300px 1fr; gap: 32px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		background: var(--color-surface);
+		border: 2px solid var(--color-border); box-shadow: var(--shadow-lg);
+		border-radius: 18px; padding: 10px;
+	}
+	.phone-status { display: flex; justify-content: space-between; font: 700 11px/1 var(--sans); padding: 4px 6px 10px; }
+	.m-nav { display: flex; align-items: center; gap: 10px; background: var(--color-surface-raised); border: 2px solid var(--color-border); box-shadow: var(--shadow-sm); padding: 8px; margin-bottom: 12px; }
+	.m-nav .burger { margin-left: auto; width: 34px; height: 30px; border: 2px solid var(--color-border); background: var(--color-primary); box-shadow: var(--shadow-sm); display: grid; place-items: center; font: 900 13px/1 var(--sans); }
+	.m-card { padding: 14px; margin-bottom: 14px; }
+	.m-card h3 { font-size: 15px; }
+	.m-card p { font-size: 12px; margin-top: 6px; }
+	.m-cta { display: block; width: 100%; text-align: center; padding: 15px 20px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--color-border); }
+	.rules li { padding: 12px 0; border-bottom: 2px solid var(--color-border); }
+	.rules b { display: block; font: 800 14px/1.3 var(--sans); text-transform: uppercase; }
+	.rules span { font-size: 13px; color: var(--color-muted); }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 8px; }
+	@media (min-width: 640px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 22px; border-radius: 16px;
+		background: linear-gradient(150deg, #f8fafc, #e2e8f0);
+		box-shadow: 0 12px 28px rgb(15 23 42 / 0.15);
+		border: 1px solid rgb(15 23 42 / 0.08);
+		color: #475569; font-size: 14px;
+	}
+	.cmp-off b { color: #0f172a; }
+	.cmp-off small { display: block; margin-top: 10px; color: #64748b; }
+	.cmp-on { padding: 22px; }
+	.cmp-on small { display: block; margin-top: 10px; color: var(--color-muted); }
+	.cmp-on b { text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- COVER — an indie SaaS landing for a task app. Flat blocks, 2px ink outlines,
+     hard offset shadows, uppercase 900 type. First glance: a poster, not a panel. -->
+<header class="nb-nav">
+	<span class="nb-logo">TASKSLAM</span>
+	<a href="#">Features</a><a href="#">Pricing</a><a href="#">Manifesto</a>
+	<span class="spacer"></span>
+	<a href="#" class="nb-btn" style="padding:10px 16px">Get the app</a>
+</header>
+
+<section class="nb-hero">
+	<div>
+		<span class="nb-badge yellow tilt">v2.0 — now shouting</span>
+		<h1 style="margin-top:18px">Tasks that <em>hit back</em></h1>
+		<p class="sub">TaskSlam is the loudest to-do app on the internet. No soft shadows, no
+			whispering notifications — just blocks, borders and a hard deadline.</p>
+		<div class="nb-cta-row">
+			<a href="#" class="nb-btn">Start free</a>
+			<a href="#" class="nb-btn white">See it work</a>
+		</div>
+		<div class="row" style="margin-top:22px">
+			<span class="nb-badge pink">No credit card</span>
+			<span class="nb-badge cyan">4.9 ★ rating</span>
+			<span class="nb-badge lime">12k teams</span>
+		</div>
+	</div>
+	<div class="nb-hero-art">
+		<div class="nb-kcard">Ship the landing page<span class="tag" style="background:var(--color-primary)">TODAY</span></div>
+		<div class="nb-kcard">Yell at the roadmap<span class="tag" style="background:var(--color-accent)">REVIEW</span></div>
+		<div class="nb-kcard">Answer 43 pings<span class="tag" style="background:var(--color-cyan)">INBOX</span></div>
+		<div class="nb-kcard">Touch grass (scheduled)<span class="tag" style="background:var(--color-lime)">16:00</span></div>
+	</div>
+</section>
+
+<div class="nb-marquee">HARD EDGES <span>■</span> HARD SHADOWS <span>■</span> ZERO POLISH <span>■</span> HARD EDGES <span>■</span> HARD SHADOWS <span>■</span> ZERO POLISH</div>
+
+<section class="nb-grid">
+	<h2>Built like a brick, works like a dream</h2>
+	<div class="nb-card nb-feature">
+		<div class="blk" style="background:var(--color-primary)"></div>
+		<h3>Boards that slam</h3>
+		<p>Drag a card and it lands with an 8px thud. Every column is a flat block with a
+			border you can see from across the room.</p>
+	</div>
+	<div class="nb-card nb-feature">
+		<div class="blk" style="background:var(--color-accent)"></div>
+		<h3>Deadlines, loud</h3>
+		<p>Due dates arrive as sticker badges. Overdue ones rotate 3 degrees and turn coral.
+			Subtle was never on the roadmap.</p>
+	</div>
+	<div class="nb-card nb-feature">
+		<div class="blk" style="background:var(--color-cyan)"></div>
+		<h3>Zero blur budget</h3>
+		<p>We spent the entire design budget on ink. There is nothing left for gradients,
+			soft shadows or tasteful gray-on-gray.</p>
+	</div>
+</section>
+
+<!-- 01 -->
+<div class="wrap">
+	<div class="section-title"><span class="num">01</span><h2>Blocks, borders &amp; hard shadows</h2></div>
+	<p class="lede">One outline color (ink), one shadow recipe (offset down-right, zero blur), one
+		label color on fills (near-black). If an element has color, it has a 2px border;
+		if it has elevation, the shadow moves on hover and slams flat on press.</p>
+
+	<div class="nb-card block-panel">
+		<div class="row">
+			<button class="nb-btn">Primary</button>
+			<button class="nb-btn white">Secondary</button>
+			<button class="nb-btn pink">Accent</button>
+			<button class="nb-btn danger">Delete</button>
+			<span class="nb-badge yellow">New</span>
+			<span class="nb-badge tilt">Milestone</span>
+		</div>
+		<div class="row" style="margin-top:18px">
+			<input class="nb-input" value="SHOUT YOUR TASK">
+			<div class="nb-progress"><i></i><i></i><i></i><i></i><i></i><i class="off"></i><i class="off"></i></div>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><b>primary</b><span>#ffdc58 yellow</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><b>accent</b><span>#ffb3c7 pink</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-cyan)"></div><b>cyan</b><span>#a5f3fc sticker</span></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><b>danger</b><span>#ff5d5d coral</span></div>
+		</div>
+	</div>
+	<p class="lede" style="margin-top:14px">Yellow fills the one primary action and hero blocks. Pink, cyan and lime are
+		sticker colors for badges — two or three per screen, never all at once. Shadows are
+		pure ink at 2/4/8px; the 8px tier belongs to the single loudest element on screen.</p>
+</div>
+
+<!-- 02 MOBILE -->
+<div class="wrap">
+	<div class="section-title"><span class="num">02</span><h2>Mobile</h2></div>
+	<p class="lede">Brutalism travels well: flat blocks stack, borders stay 2px, shadows stay hard.
+		The phone version trades the multi-column poster for one loud column and makes every
+		target a slab you can hit with a thumb.</p>
+	<div class="mobile">
+		<div class="phone">
+			<div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
+			<div class="m-nav">
+				<span class="nb-logo" style="font-size:14px;padding:6px 8px">TASKSLAM</span>
+				<span class="burger">≡</span>
+			</div>
+			<div class="nb-card m-card">
+				<span class="nb-badge yellow" style="font-size:10px">Today</span>
+				<h3 style="margin-top:10px">Ship the landing page</h3>
+				<p>Review copy, compress the stickers, push before the standup.</p>
+			</div>
+			<div class="nb-card m-card">
+				<h3>Yell at the roadmap</h3>
+				<p>Q3 planning — bring opinions, leave politeness.</p>
+			</div>
+			<button class="nb-btn m-cta">Add a task</button>
+		</div>
+		<ul class="rules">
+			<li><b>One column, full bleed blocks</b><span>The three-up feature grid collapses to a single stack; cards keep their 2px border and 4px shadow. The hero art panel drops its rotation to stop shadow-clipping at the edges.</span></li>
+			<li><b>Nav becomes logo + burger</b><span>The link row folds into a bordered hamburger block pinned right. The CTA moves to the bottom of the screen as a full-width yellow slab.</span></li>
+			<li><b>Targets grow, borders don't</b><span>Buttons go from 44px to 50–52px tall and badges keep 12px type. Padding grows; the outline stays exactly 2px and shadows stay pure ink.</span></li>
+			<li><b>Hover becomes press</b><span>Touch has no hover, so the shadow-push state moves to :active only — the block slams flat under the thumb and springs back on release.</span></li>
+			<li><b>Type stays loud but scales down</b><span>Hero type drops from 64px to ~40px but keeps its 900 weight and uppercase; body drops to 14px. Never thin the weight to fit.</span></li>
+			<li><b>Marquee still divides</b><span>The stripe divider survives as a single line of repeating text, clipped to the viewport — it is the cheapest brand reminder in the system.</span></li>
+		</ul>
+	</div>
+</div>
+
+<!-- 03 DON'T -->
+<div class="wrap" style="padding-bottom:64px">
+	<div class="section-title"><span class="num">03</span><h2>Off-style, for contrast</h2></div>
+	<div class="compare">
+		<div class="cmp-off"><b>Soft modern card</b>
+			<p style="margin-top:8px">16px radius, hairline border, gradient wash, blurred
+				24px shadow, slate-gray text at 60% opacity.</p>
+			<small>Every choice here is polite. In this system "polite" reads as broken —
+				the outline disappeared, the shadow melted, and the color ran away.</small>
+		</div>
+		<div class="nb-card cmp-on"><b>Same card, on-style</b>
+			<p style="margin-top:8px">4px radius, 2px ink border, flat white fill, hard 4px
+				shadow, near-black text at full strength.</p>
+			<small>The border is visible, the shadow is a shape, and the type shouts.
+				That is the whole material — everything else is decoration.</small>
+		</div>
+	</div>
+	<p class="lede" style="margin-top:18px">Also out: gradients and blur of any kind, white text on saturated
+		fills, 1px hairlines as structure, pastel desaturation, and more than one 8px-shadow
+		hero per screen. When everything shouts, nothing is loud.</p>
+</div>
+
+</body>
+</html>

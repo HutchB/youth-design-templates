@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "cyberpunk",
+	"name": "Cyberpunk",
+	"version": "1.0.0",
+	"order": 95,
+	"category": "retro",
+	"vibe": "dark",
+	"tags": [
+		"retro",
+		"dark"
+	],
+	"blurb": "Synthwave night city: deep violet-black surfaces, neon pink and cyan glow, holographic gradients and retro-future chrome type.",
+	"tagline": {
+		"en": "Neon glow on a synthwave night",
+		"zh": "霓虹夜色，蒸汽波余晖"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"note": "Original spec written for this collection, synthesizing the shared conventions of the cyberpunk/synthwave web revival (neon palette, glow shadows, scanlines)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

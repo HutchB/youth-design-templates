@@ -1,0 +1,22 @@
+/* Supabase — light console with the emerald identity; depth is borders, not shadows. Adapted from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #3ecf8e;
+	--color-primary-foreground: #003a1d;
+	--color-surface: #ffffff;
+	--color-surface-foreground: #1c1c1c;
+	--color-surface-raised: #fafafa;
+	--color-muted: #6b7280;
+	--color-accent: #7c66a1;
+	--color-danger: #e5484d;
+	--color-border: #e5e7eb;
+
+	--radius-sm: 4px;
+	--radius-md: 6px;
+	--radius-lg: 8px;
+	--radius-xl: 12px;
+	--radius-2xl: 16px;
+
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+	--shadow-md: 0 2px 8px rgb(0 0 0 / 0.08);
+	--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.12);
+}

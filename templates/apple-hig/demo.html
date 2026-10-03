@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple HIG — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #007aff;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #f2f2f7;
+		--color-surface-foreground: #000000;
+		--color-surface-raised: #ffffff;
+		--color-muted: rgb(60 60 67 / 0.6);
+		--color-accent: #5856d6;
+		--color-danger: #ff3b30;
+		--color-border: #c6c6c8;
+
+		--radius-sm: 8px;
+		--radius-md: 12px;
+		--radius-lg: 16px;
+		--radius-xl: 20px;
+		--radius-2xl: 28px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+		--shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+		--shadow-lg: 0 12px 32px rgb(0 0 0 / 0.12);
+
+		--hairline: rgb(60 60 67 / 0.29);
+		--green: #34c759;
+		--sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 17px;
+		line-height: 1.45;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+	.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 88px; }
+
+	/* ── Section scaffold ─────────────────────────────────────────── */
+	.section { padding-top: 48px; }
+	.section-label {
+		font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+		color: var(--color-primary); margin-bottom: 6px;
+	}
+	.section h2 { font-size: 28px; }
+	.lede { margin-top: 8px; max-width: 64ch; font-size: 15px; color: var(--color-muted); }
+	.note { margin-top: 16px; font-size: 13px; color: var(--color-muted); }
+
+	/* ── COVER: the product itself — an iOS settings app ──────────── */
+	.stage { padding: 40px 16px 8px; }
+	.iphone {
+		width: 344px; max-width: 100%;
+		margin: 0 auto;
+		border-radius: 44px; /* device shell, not a token */
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		box-shadow: var(--shadow-lg);
+		overflow: hidden;
+	}
+	.statusrow {
+		display: flex; align-items: center; justify-content: space-between;
+		padding: 12px 22px 2px; font-size: 14px; font-weight: 600;
+	}
+	.island { width: 92px; height: 26px; border-radius: 999px; background: #000; }
+	.sb-sig { font-size: 11px; letter-spacing: 1px; }
+	.large-title { font-size: 34px; font-weight: 700; padding: 18px 20px 10px; letter-spacing: -0.02em; }
+
+	.group {
+		background: var(--color-surface-raised);
+		border-radius: 10px;
+		margin: 0 16px 18px;
+		overflow: hidden;
+	}
+	.row { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 8px 14px 8px 14px; font-size: 17px; }
+	.row + .row::before {
+		content: ""; position: absolute; top: 0; left: 46px; right: 0;
+		height: 1px; background: var(--hairline);
+	}
+	.row-id { min-height: 66px; }
+	.row-id + .row::before { left: 14px; }
+	.avatar {
+		width: 52px; height: 52px; border-radius: 50%; flex: none;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		display: grid; place-items: center; font-size: 20px; font-weight: 500;
+	}
+	.row-id b { font-weight: 400; display: block; font-size: 20px; line-height: 1.2; }
+	.row-id small { font-size: 13px; color: var(--color-muted); }
+	.app-ico {
+		width: 30px; height: 30px; border-radius: 7px; flex: none;
+		color: #fff; font-size: 15px; display: grid; place-items: center;
+	}
+	.row-name { flex: 1; min-width: 0; }
+	.row-val { color: var(--color-muted); flex: none; }
+	.chev { color: var(--hairline); flex: none; font-size: 19px; line-height: 1; margin-left: -4px; }
+	.group-foot { margin: -8px 32px 20px; font-size: 13px; color: var(--color-muted); }
+
+	/* iOS switch: green when on, thumb always white. */
+	.switch { width: 51px; height: 31px; border-radius: 999px; background: rgb(120 120 128 / 0.16); position: relative; flex: none; }
+	.switch::after {
+		content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%;
+		background: #fff; box-shadow: 0 2px 5px rgb(0 0 0 / 0.2), 0 0 1px rgb(0 0 0 / 0.15);
+	}
+	.switch.is-on { background: var(--green); }
+	.switch.is-on::after { left: 22px; }
+
+	.homebar { width: 130px; height: 5px; border-radius: 999px; background: #000; margin: 4px auto 10px; }
+
+	/* ── 01 color swatches and the light/dark table ───────────────── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; }
+	.sw .fill { height: 56px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 13px; font-weight: 600; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	.pairs { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; font-size: 13px; }
+	.pairs th, .pairs td { text-align: left; padding: 7px 14px; border-bottom: 1px solid var(--hairline); }
+	.pairs th { font-size: 12px; color: var(--color-muted); font-weight: 600; }
+	.pairs tr:last-child td { border-bottom: 0; }
+	.pairs td:first-child { font-weight: 500; }
+	.pairs .chip { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 8px; }
+	.pairs .mono { font-size: 12px; color: var(--color-muted); }
+
+	/* ── 02 depth: luminance steps and the material recipe ────────── */
+	.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+	.step { border-radius: var(--radius-md); padding: 20px 14px 14px; color: #fff; font-size: 13px; min-height: 96px; display: flex; flex-direction: column; justify-content: flex-end; }
+	.step .mono { font-size: 11px; opacity: 0.7; }
+	.glass-stage {
+		margin-top: 20px; border-radius: var(--radius-lg); overflow: hidden; min-height: 190px;
+		background: linear-gradient(120deg, #ff9500, #ff2d55 35%, #5856d6 70%, #007aff);
+		position: relative; display: flex; flex-direction: column; justify-content: space-between;
+	}
+	.glass-bar {
+		margin: 16px; padding: 10px 16px; border-radius: var(--radius-md);
+		background: rgba(249,249,249,0.75);
+		-webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+		font-size: 15px; font-weight: 600;
+	}
+	.glass-bar.dark { background: rgba(30,30,30,0.75); color: #fff; }
+
+	/* ── 03 controls ──────────────────────────────────────────────── */
+	.demo-group { max-width: 520px; margin-top: 20px; }
+	.seg { display: flex; padding: 2px; border-radius: 9px; background: rgb(118 118 128 / 0.12); margin: 14px; }
+	.seg span { flex: 1; text-align: center; font-size: 13px; padding: 5px 0; border-radius: 7px; }
+	.seg .is-active { background: var(--color-surface-raised); font-weight: 500; box-shadow: 0 1px 3px rgb(0 0 0 / 0.12); }
+	.btnrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+	.btn { font: inherit; font-size: 15px; font-weight: 500; border: 0; border-radius: var(--radius-sm); padding: 8px 16px; cursor: pointer; }
+	.btn-filled { background: var(--color-primary); color: var(--color-primary-foreground); }
+	.btn-tinted { background: rgb(0 122 255 / 0.15); color: var(--color-primary); }
+	.btn-plain { background: transparent; color: var(--color-primary); padding: 8px 6px; }
+	.btn-danger { background: transparent; color: var(--color-danger); padding: 8px 6px; }
+
+	/* ── 04 dynamic type ramp ─────────────────────────────────────── */
+	.ramp { margin-top: 20px; background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; }
+	.ramp .r { display: flex; align-items: baseline; gap: 14px; padding: 7px 16px; border-bottom: 1px solid var(--hairline); }
+	.ramp .r:last-child { border-bottom: 0; }
+	.ramp .sample { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.ramp .tag { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--color-muted); flex: none; width: 118px; }
+	.weight-demo { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 16px; }
+	@media (min-width: 640px) { .weight-demo { grid-template-columns: repeat(2, 1fr); } }
+	.wd { background: var(--color-surface-raised); border-radius: var(--radius-md); padding: 16px; font-size: 17px; }
+	.wd small { display: block; margin-top: 6px; font-size: 12px; color: var(--color-muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+	/* ── 05 mobile ────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.iphone.mini { width: 320px; }
+	.navbar {
+		display: flex; align-items: center; gap: 8px;
+		padding: 10px 14px;
+		background: rgba(249,249,249,0.75);
+		-webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+		border-bottom: 1px solid var(--hairline);
+		font-size: 17px; font-weight: 600;
+	}
+	.navbar .back { color: var(--color-primary); font-weight: 400; }
+	.ax-row { display: flex; align-items: center; gap: 12px; padding: 14px; min-height: 64px; font-size: 20px; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--hairline); font-size: 15px; color: var(--color-muted); display: flex; gap: 14px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 128px; font-size: 14px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 06 off-style comparison ──────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.compare + .compare { margin-top: 14px; }
+	.cmp { padding: 16px; font-size: 15px; }
+	.cmp small { display: block; margin-top: 8px; font-size: 13px; color: var(--color-muted); }
+	.cmp-off {
+		background: #fff; border-radius: 24px;
+		box-shadow: 0 18px 40px rgb(0 0 0 / 0.25), 0 4px 10px rgb(0 0 0 / 0.12);
+		color: var(--color-primary);
+	}
+	.cmp-off b { font-size: 20px; }
+	.cmp-on { background: var(--color-surface-raised); border-radius: var(--radius-md); color: var(--color-surface-foreground); }
+	.cmp-on .hair { border-top: 1px solid var(--hairline); margin: 10px 0; }
+	.allblue b, .allblue span, .allblue i { color: var(--color-primary); font-style: normal; }
+	.allblue .fake-line { height: 1px; background: var(--color-primary); margin: 10px 0; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the product surface itself: a grouped-list settings app.
+     Gray canvas, white groups, hairline dividers, one tint. No hero, no
+     marketing chrome: the first screen IS the interface. -->
+<div class="stage">
+	<div class="iphone">
+		<div class="statusrow"><span>9:41</span><span class="island"></span><span class="sb-sig">▮▮▮ ᛒ ▐▐▐</span></div>
+		<div class="large-title">Settings</div>
+
+		<div class="group">
+			<div class="row row-id">
+				<span class="avatar">KM</span>
+				<span class="row-name"><b>Kai Meyer</b><small>Vetta ID, iCloud, Media &amp; Purchases</small></span>
+				<span class="spacer"></span><span class="chev">›</span>
+			</div>
+		</div>
+
+		<div class="group">
+			<div class="row"><span class="app-ico" style="background:#ff9500">✈&#xFE0E;</span><span class="row-name">Airplane Mode</span><span class="switch"></span></div>
+			<div class="row"><span class="app-ico" style="background:var(--color-primary)">⌇</span><span class="row-name">Wi-Fi</span><span class="spacer"></span><span class="row-val">Vetta-5G</span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:var(--color-primary)">ᛒ</span><span class="row-name">Bluetooth</span><span class="spacer"></span><span class="row-val">On</span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:var(--green)">▮</span><span class="row-name">Mobile Data</span><span class="spacer"></span><span class="chev">›</span></div>
+		</div>
+
+		<div class="group">
+			<div class="row"><span class="app-ico" style="background:var(--color-danger)">◉</span><span class="row-name">Notifications</span><span class="spacer"></span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:#ff2d55">♪</span><span class="row-name">Sounds &amp; Haptics</span><span class="spacer"></span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:var(--color-accent)">☾</span><span class="row-name">Focus</span><span class="spacer"></span><span class="switch is-on"></span></div>
+			<div class="row"><span class="app-ico" style="background:#af52de">◔</span><span class="row-name">Screen Time</span><span class="spacer"></span><span class="chev">›</span></div>
+		</div>
+
+		<div class="group">
+			<div class="row"><span class="app-ico" style="background:#8e8e93">&#x2699;&#xFE0E;</span><span class="row-name">General</span><span class="spacer"></span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:var(--color-primary)">◐</span><span class="row-name">Accessibility</span><span class="spacer"></span><span class="chev">›</span></div>
+			<div class="row"><span class="app-ico" style="background:var(--color-primary)">✱</span><span class="row-name">Privacy &amp; Security</span><span class="spacer"></span><span class="chev">›</span></div>
+		</div>
+		<p class="group-foot">Signed in as kai@vetta.example — iCloud storage 42&nbsp;GB of 200&nbsp;GB used.</p>
+		<div class="homebar"></div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 COLOR -->
+	<section class="section">
+		<p class="section-label">01 — Color roles</p>
+		<h2>A gray canvas, white cards, one tint</h2>
+		<p class="lede">The page is grouped background gray and the cards are white; everything else is
+			ink or secondary ink. Blue marks interaction — links, selected controls, the single filled
+			action. Indigo exists for a genuinely second purpose and appears as rarely as blue.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>systemBlue · the tint</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>systemIndigo · second tint</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--green)"></div><div class="meta"><b>systemGreen</b><span>switches · success</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>systemRed · destructive</span></div></div>
+		</div>
+		<table class="pairs">
+			<thead><tr><th>System color</th><th>Light</th><th>Dark</th></tr></thead>
+			<tbody>
+				<tr><td><span class="chip" style="background:#007aff"></span>systemBlue</td><td class="mono">#007AFF</td><td class="mono">#0A84FF</td></tr>
+				<tr><td><span class="chip" style="background:#34c759"></span>systemGreen</td><td class="mono">#34C759</td><td class="mono">#30D158</td></tr>
+				<tr><td><span class="chip" style="background:#5856d6"></span>systemIndigo</td><td class="mono">#5856D6</td><td class="mono">#5E5CE6</td></tr>
+				<tr><td><span class="chip" style="background:#ff3b30"></span>systemRed</td><td class="mono">#FF3B30</td><td class="mono">#FF453A</td></tr>
+				<tr><td><span class="chip" style="background:#ff9500"></span>systemOrange</td><td class="mono">#FF9500</td><td class="mono">#FF9F0A</td></tr>
+				<tr><td><span class="chip" style="background:#f2f2f7;border:1px solid var(--hairline)"></span>systemGray6 / grouped bg</td><td class="mono">#F2F2F7</td><td class="mono">#1C1C1E</td></tr>
+				<tr><td><span class="chip" style="background:rgb(60 60 67 / 0.6)"></span>secondaryLabel</td><td class="mono">rgba(60,60,67,0.6)</td><td class="mono">rgba(235,235,245,0.6)</td></tr>
+				<tr><td><span class="chip" style="background:rgb(120 120 128 / 0.2);border:1px solid var(--hairline)"></span>systemFill</td><td class="mono">rgba(120,120,128,0.2)</td><td class="mono">rgba(120,120,128,0.36)</td></tr>
+			</tbody>
+		</table>
+		<p class="note">Every pair moves together: a dark-mode color on a light canvas (or the reverse) is
+			one of the few genuinely visible mistakes in this system. Full tables live in DESIGN.md.</p>
+	</section>
+
+	<!-- 02 DEPTH -->
+	<section class="section">
+		<p class="section-label">02 — Shape &amp; depth</p>
+		<h2>Depth is luminance, plus blur for the bars</h2>
+		<p class="lede">Cards float because the canvas around them is gray — not because a shadow lifts
+			them. In dark mode the same idea becomes a brightness ramp: the window darkens, layers step
+			up. Shadows are kept for things that genuinely float, like sheets and popovers.</p>
+		<div class="steps">
+			<div class="step" style="background:#000000">Window base<span class="mono">#000000</span></div>
+			<div class="step" style="background:#1c1c1e">Grouped card<span class="mono">#1C1C1E</span></div>
+			<div class="step" style="background:#2c2c2e">Elevated / input<span class="mono">#2C2C2E</span></div>
+		</div>
+		<div class="glass-stage">
+			<div class="glass-bar">Navbar material — rgba(249,249,249,0.75) + blur(20px) saturate(180%)</div>
+			<div class="glass-bar dark">Dark material — rgba(30,30,30,0.75), same blur recipe</div>
+		</div>
+		<p class="note">Bars blur whatever scrolls beneath them; content never stops abruptly at a bar
+			edge. Radii: 8 for small controls, 12–16 for cards and menus, 20–28 for sheets.</p>
+	</section>
+
+	<!-- 03 CONTROLS -->
+	<section class="section">
+		<p class="section-label">03 — Controls</p>
+		<h2>Platform shapes, never restyled</h2>
+		<p class="lede">Switches are green when on with a white thumb; segmented controls raise a white
+			segment from a gray track; rows keep a 44pt minimum with a trailing value and chevron.
+			Buttons come in filled, tinted and plain — one filled button per view.</p>
+		<div class="group demo-group">
+			<div class="row"><span class="row-name">Notifications</span><span class="spacer"></span><span class="switch is-on"></span></div>
+			<div class="row"><span class="row-name">Sounds &amp; Haptics</span><span class="spacer"></span><span class="switch"></span></div>
+			<div class="seg"><span>Day</span><span class="is-active">Week</span><span>Month</span></div>
+			<div class="row"><span class="row-name">Wi-Fi</span><span class="spacer"></span><span class="row-val">Vetta-5G</span><span class="chev">›</span></div>
+		</div>
+		<div class="btnrow">
+			<button class="btn btn-filled" type="button">Continue</button>
+			<button class="btn btn-tinted" type="button">Add Account</button>
+			<button class="btn btn-plain" type="button">Learn more…</button>
+			<button class="btn btn-danger" type="button">Delete Backup</button>
+		</div>
+		<p class="note">Destructive text is systemRed and lives alone. Secondary actions are tinted or
+			plain — stacking filled buttons competes with the row's own tint logic.</p>
+	</section>
+
+	<!-- 04 TYPE -->
+	<section class="section">
+		<p class="section-label">04 — Dynamic Type</p>
+		<h2>One ramp, weight does the emphasis</h2>
+		<p class="lede">Eleven steps from Caption2 (11) to Large Title (34). Headline is Body's same
+			17px in Semibold — emphasis is a weight change, never a size jump. Nothing goes smaller
+			than 11 or larger than the Large Title on a native surface.</p>
+		<div class="ramp">
+			<div class="r"><span class="sample" style="font-size:34px;font-weight:700;letter-spacing:-0.02em">Large Title</span><span class="tag">34</span></div>
+			<div class="r"><span class="sample" style="font-size:22px;font-weight:700">Title 2</span><span class="tag">22</span></div>
+			<div class="r"><span class="sample" style="font-size:20px;font-weight:600">Title 3</span><span class="tag">20</span></div>
+			<div class="r"><span class="sample" style="font-size:17px;font-weight:600">Headline</span><span class="tag">17 · semibold</span></div>
+			<div class="r"><span class="sample" style="font-size:17px">Body</span><span class="tag">17 · regular</span></div>
+			<div class="r"><span class="sample" style="font-size:16px">Callout</span><span class="tag">16</span></div>
+			<div class="r"><span class="sample" style="font-size:15px">Subhead</span><span class="tag">15</span></div>
+			<div class="r"><span class="sample" style="font-size:13px">Footnote</span><span class="tag">13</span></div>
+			<div class="r"><span class="sample" style="font-size:11px">Caption 2</span><span class="tag">11</span></div>
+		</div>
+		<div class="weight-demo">
+			<div class="wd"><b>Storage almost full</b><small>Headline — 17px semibold</small></div>
+			<div class="wd">Storage almost full<small>Body — 17px regular, same size</small></div>
+		</div>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<p class="section-label">05 — Mobile</p>
+		<h2>This surface is already mobile — so scale the type, not the rules</h2>
+		<p class="lede">The group list survives every size change intact: rows grow with Dynamic Type,
+			the large title collapses into a blurred bar, and the gray canvas keeps breathing through
+			the group gaps. Nothing gets smaller to fit; nothing gets rounder or louder.</p>
+		<div class="mobile">
+			<div class="iphone mini">
+				<div class="statusrow" style="padding:10px 18px 0"><span>9:41</span><span class="island" style="width:78px;height:22px"></span><span class="sb-sig">▮▮▮</span></div>
+				<div class="navbar"><span class="back">‹ Back</span><span class="spacer"></span>Settings<span class="spacer"></span><span style="color:var(--color-primary)">Edit</span></div>
+				<div class="group" style="margin-top:16px">
+					<div class="ax-row"><span class="app-ico" style="background:var(--color-primary)">⌇</span><span class="row-name">Wi-Fi<span style="display:block;font-size:15px;color:var(--color-muted)">Vetta-5G — joined, high signal, this network syncs across every device</span></span><span class="chev">›</span></div>
+					<div class="ax-row"><span class="app-ico" style="background:#8e8e93">&#x2699;&#xFE0E;</span><span class="row-name">General<span style="display:block;font-size:15px;color:var(--color-muted)">About, software update, storage, AirDrop, keyboard</span></span><span class="chev">›</span></div>
+					<div class="ax-row"><span class="app-ico" style="background:var(--green)">▮</span><span class="row-name">Mobile Data<span style="display:block;font-size:15px;color:var(--color-muted)">5G on — 12.4 GB used this month</span></span><span class="chev">›</span></div>
+				</div>
+				<div class="homebar"></div>
+			</div>
+			<ul class="rules">
+				<li><b>Touch targets</b><span>Rows are 44pt at the default size and only grow from there. Icons and chevrons sit inside the row's target — no separate smaller hit areas.</span></li>
+				<li><b>Dynamic Type</b><span>When the user's text size grows, rows stretch and sub-lines wrap; the list re-flows in a single column instead of shrinking type below Caption2.</span></li>
+				<li><b>Collapsed bar</b><span>On scroll the large title gives way to the blurred material bar with a centered 17px title — content keeps sliding under the translucent layer.</span></li>
+				<li><b>No hover</b><span>Hover highlights do not exist on touch; the pressed state is a ~10% foreground fill on the row for as long as the finger stays down.</span></li>
+				<li><b>Regular width</b><span>On iPad the same interface becomes a split view: the list docks left at ~320pt and detail slides in at the right. The rules do not change with it.</span></li>
+				<li><b>Safe areas</b><span>Status and home-indicator zones reserve their insets at every size; the blurred bars let content pass beneath rather than stopping at the edge.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">06 — Off-style, for contrast</p>
+		<h2>What breaks the platform feel</h2>
+		<div class="compare">
+			<div class="cmp cmp-off"><b>Shadow as hierarchy</b>
+				<small>24px radius, a heavy soft glow, blue title on a white card floating over white.
+					Shadowed cards over a same-color page erase the grouped canvas — the system's whole
+					depth cue is background contrast, not elevation.</small></div>
+			<div class="cmp cmp-on"><b>Background as hierarchy</b>
+				<small>10px radius, no shadow, hairline between rows. The card reads as raised because
+					the gray canvas shows around it; in dark mode the same job is done by the #1C1C1E
+					step.</small></div>
+		</div>
+		<div class="compare">
+			<div class="cmp cmp-off allblue"><b>Blue everywhere</b><span>Blue titles, blue labels, blue dividers…</span>
+				<div class="fake-line"></div>
+				<span>Blue values, blue icons, blue buttons in pairs.</span>
+				<small>When every pixel is the tint, nothing reads as tappable and nothing reads as text.</small></div>
+			<div class="cmp cmp-on"><b>Blue means interactive</b>
+				<div class="hair"></div>
+				Labels are ink, values are secondary ink — only <span style="color:var(--color-primary)">Sign Out</span> and the switch are tinted.
+				<small>One tint per role: blue marks the things a finger can act on, gray carries everything the eye reads.</small></div>
+		</div>
+		<p class="note">Also out: downloaded fonts, gradients on controls, rows under 44pt, and
+			decorative color that is neither ink nor a platform tint.</p>
+	</section>
+
+</div>
+</body>
+</html>

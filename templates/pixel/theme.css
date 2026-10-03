@@ -1,0 +1,42 @@
+/* Pixel 8-bit — game-cartridge UI: flat NES palette, thick near-black pixel
+   borders, block shadows made of box-shadow steps, zero radius anywhere.
+   Palette and border conventions checked against NES.css (MIT); no upstream
+   code included. */
+@theme {
+	/* Green is the action color: primary buttons, confirm, HP, positive stats. */
+	--color-primary: #92cc41;
+	/* Ink on any fill is the near-black border color itself — the cartridge
+	   palette has exactly one dark: #212529. */
+	--color-primary-foreground: #212529;
+	--color-surface: #ffffff;
+	--color-surface-foreground: #212529;
+	/* Raised panels are the faint cartridge gray, never a gradient. */
+	--color-surface-raised: #f8f8f8;
+	--color-muted: #999999;
+	/* Yellow is the pickup color: gold, MP, warnings, coin counters. */
+	--color-accent: #f7d51d;
+	--color-danger: #e76e55;
+	/* One border color for the whole world: the near-black ink. */
+	--color-border: #212529;
+
+	/* Two more cartridge hues: blue for secondary actions/links, gray for
+	   pressed bevels and disabled states (NES.css conventions). */
+	--color-blue: #209cee;
+	--color-bevel: #adafbc;
+
+	/* The grid has no curves: every radius is 0. */
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 0px;
+	--radius-xl: 0px;
+	--radius-2xl: 0px;
+
+	/* Block shadows drawn from box-shadow steps — each tier is the full
+	   silhouette offset down-right plus two side copies that fill the corner,
+	   so the shadow is a solid pixel block, not a blur. */
+	--shadow-sm: 2px 2px 0 #212529, 2px 0 0 #212529, 0 2px 0 #212529;
+	--shadow-md: 4px 4px 0 #212529, 4px 0 0 #212529, 0 4px 0 #212529;
+	--shadow-lg: 8px 8px 0 #212529, 8px 0 0 #212529, 0 8px 0 #212529;
+	/* Pressed: the block collapses and the element sits flush on the page. */
+	--shadow-pressed: 0 0 0 #212529;
+}

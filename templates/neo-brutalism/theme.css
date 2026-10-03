@@ -1,0 +1,40 @@
+/* Neo Brutalism — raw anti-polish: 2px black outlines, hard offset shadows, flat
+   saturated blocks, loud uppercase type. Nothing blurs, nothing fades, nothing glows.
+   Proportions checked against neobrutalism.dev (MIT); no upstream code included. */
+@theme {
+	/* Yellow is the workhorse fill: hero blocks, primary buttons, highlights. */
+	--color-primary: #ffdc58;
+	/* Ink on any fill here is near-black — white text never appears on color. */
+	--color-primary-foreground: #111111;
+	--color-surface: #fffdf5;
+	--color-surface-foreground: #111111;
+	/* Cards are pure white so the black outline and hard shadow read at full contrast. */
+	--color-surface-raised: #ffffff;
+	--color-muted: #52525b;
+	/* Pink is the second sticker color: badges, tags, hover fills. */
+	--color-accent: #ffb3c7;
+	--color-danger: #ff5d5d;
+	/* The border IS black: every interactive element is outlined, never tinted. */
+	--color-border: #111111;
+
+	/* Secondary sticker tints. Use one or two per screen, never all at once. */
+	--color-cyan: #a5f3fc;
+	--color-lime: #b8f35a;
+
+	/* The radius scale barely exists: sm 0 / md 4 / lg 6, and xl+ stay at 6 —
+	   corners never get rounder. Pills opt out entirely with --radius-full. */
+	--radius-sm: 0px;
+	--radius-md: 4px;
+	--radius-lg: 6px;
+	--radius-xl: 6px;
+	--radius-2xl: 6px;
+	--radius-full: 9999px;
+
+	/* Hard offset shadows, zero blur, pure ink. The offset IS the elevation. */
+	--shadow-sm: 2px 2px 0 #111111;
+	--shadow-md: 4px 4px 0 #111111;
+	--shadow-lg: 8px 8px 0 #111111;
+	/* Hover pushes the block further from the page; active slams it flat. */
+	--shadow-hover: 6px 6px 0 #111111;
+	--shadow-active: 0 0 0 #111111;
+}

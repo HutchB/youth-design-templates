@@ -1,0 +1,47 @@
+/* Terminal — a phosphor console: near-black glass, one green foreground,
+   monospace everywhere, zero radius, glow instead of shadow.
+   Conventions checked against terminal.css (MIT); no upstream code included. */
+@theme {
+	/* Phosphor green is simultaneously text, primary and chrome. There is no
+	   "brand color" distinct from the only color the CRT can show. */
+	--color-primary: #33ff66;
+	/* Ink on phosphor is the glass itself — text on green inverts to black. */
+	--color-primary-foreground: #0c1210;
+	--color-surface: #0c1210;
+	--color-surface-foreground: #33ff66;
+	/* Panels sit a half-step off the glass, still green-tinted, never gray. */
+	--color-surface-raised: #101b16;
+	/* Dimmed phosphor for prompts, paths and secondary output. Body text is
+	   never muted — if it matters, it burns at full brightness. */
+	--color-muted: #1f7a44;
+	--color-accent: #ffb000;
+	--color-danger: #ff5555;
+	/* Hairlines are dark green; a gray border would break the phosphor fiction. */
+	--color-border: #1d3a2a;
+
+	/* Radius does not exist on a CRT: every token is 0. */
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 0px;
+	--radius-xl: 0px;
+	--radius-2xl: 0px;
+
+	/* Depth is bloom, not cast shadow: a green halo with zero offset.
+	   Amber and red elements bloom in their own phosphor. */
+	--shadow-sm: 0 0 4px rgb(51 255 102 / 0.25);
+	--shadow-md: 0 0 8px rgb(51 255 102 / 0.35);
+	--shadow-lg: 0 0 16px rgb(51 255 102 / 0.45);
+	--shadow-glow-amber: 0 0 8px rgb(255 176 0 / 0.4);
+	--shadow-glow-red: 0 0 8px rgb(255 85 85 / 0.4);
+	/* The blinking block cursor, for prompts and empty inputs. */
+	--shadow-cursor: inset 0 0 0 8px rgb(51 255 102 / 0.9);
+
+	/* Scanlines: the one gradient in the system, laid over the whole page. */
+	--gradient-scanlines: repeating-linear-gradient(
+		0deg,
+		rgb(0 0 0 / 0.22) 0px,
+		rgb(0 0 0 / 0.22) 1px,
+		transparent 1px,
+		transparent 3px
+	);
+}

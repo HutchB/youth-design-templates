@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "raycast",
+	"name": "Raycast",
+	"version": "1.0.0",
+	"order": 48,
+	"category": "dev",
+	"vibe": "dark",
+	"tags": [
+		"dev",
+		"dark"
+	],
+	"blurb": "Launcher-grade dark command bar: layered surface steps instead of shadows, one red accent, crisp keyboard-first density.",
+	"tagline": {
+		"en": "A command bar for everything",
+		"zh": "命令面板的极致质感"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

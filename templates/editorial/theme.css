@@ -1,0 +1,22 @@
+/* Editorial — paper white, ink black, one seal-red accent; hairline print grids. Original curated spec for this collection (MIT). */
+@theme {
+	--color-primary: #c8402f;
+	--color-primary-foreground: #faf7f0;
+	--color-surface: #faf7f0;
+	--color-surface-foreground: #141414;
+	--color-surface-raised: #ffffff;
+	--color-muted: #6b6459;
+	--color-accent: #141414;
+	--color-danger: #b3261e;
+	--color-border: #e2dcd0;
+
+	--radius-sm: 0px;
+	--radius-md: 0px;
+	--radius-lg: 2px;
+	--radius-xl: 2px;
+	--radius-2xl: 2px;
+
+	--shadow-sm: none;
+	--shadow-md: none;
+	--shadow-lg: none;
+}

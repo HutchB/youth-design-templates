@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "zapier",
+	"name": "Zapier",
+	"version": "1.0.0",
+	"order": 221,
+	"category": "productivity",
+	"vibe": "light",
+	"tags": [
+		"productivity",
+		"light"
+	],
+	"blurb": "Automation made friendly: bold orange on warm cream, chunky 12px rounded shapes, connector lines and approachable sans type.",
+	"tagline": {
+		"en": "Connect everything, cheerfully",
+		"zh": "把一切连起来，且轻松"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://github.com/VoltAgent/awesome-design-md",
+		"note": "Vetta-adapted from awesome-design-md (MIT)."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

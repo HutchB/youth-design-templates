@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revolut — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #ffffff;
+		--color-primary-foreground: #000000;
+		--color-surface: #000000;
+		--color-surface-foreground: #ffffff;
+		--color-surface-raised: #16181a;
+		--color-muted: #9ca0ab;
+		--color-accent: #494fdf;
+		--color-danger: #e23b4a;
+		--color-border: #2a2a30;
+
+		--radius-sm: 8px;
+		--radius-md: 12px;
+		--radius-lg: 20px;
+		--radius-xl: 28px;
+		--radius-2xl: 32px;
+
+		--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+		--shadow-md: 0 8px 24px rgb(0 0 0 / 0.55);
+		--shadow-lg: 0 20px 56px rgb(0 0 0 / 0.65);
+
+		--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 14px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+	p { margin: 0; }
+	::selection { background: rgb(73 79 223 / 0.45); }
+	.spacer { flex: 1; }
+	.num { font-variant-numeric: tabular-nums; }
+
+	.shell { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 768px) { .shell { padding: 0 32px; } }
+
+	/* ── App shell: rail + main ───────────────────────────────────── */
+	.frame { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 18px 0 40px; }
+	@media (min-width: 980px) { .frame { grid-template-columns: 200px minmax(0, 1fr) 320px; gap: 36px; padding-top: 28px; } }
+	.rail { display: none; align-content: start; gap: 4px; }
+	@media (min-width: 980px) { .rail { display: grid; } }
+	.glyph { width: 34px; height: 34px; border-radius: 10px; background: var(--color-accent); color: #fff; font-weight: 800; font-size: 17px; display: grid; place-items: center; margin-bottom: 22px; }
+	.rail .item { display: flex; align-items: center; gap: 11px; height: 42px; padding: 0 12px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--color-muted); }
+	.rail .item .ic { width: 16px; height: 16px; border: 1.6px solid currentColor; border-radius: 5px; }
+	.rail .is-active { background: var(--color-surface-raised); color: var(--color-surface-foreground); }
+
+	.mobilebar { display: flex; align-items: center; gap: 12px; padding: 10px 0 4px; }
+	@media (min-width: 980px) { .mobilebar { display: none; } }
+	.mobilebar .glyph { margin: 0; }
+
+	/* ── Balance header + white pill ──────────────────────────────── */
+	.greet { font-size: 13px; color: var(--color-muted); font-weight: 500; }
+	.balance-label { font-size: 13px; color: var(--color-muted); margin-top: 14px; }
+	.balance { font-size: clamp(34px, 7vw, 46px); font-weight: 500; letter-spacing: -0.03em; margin-top: 2px; }
+	.delta { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; font-weight: 600; color: #35c48d; }
+	.hactions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+	.btn {
+		font: inherit; font-size: 15px; font-weight: 600; height: 48px; padding: 0 26px;
+		border: 0; border-radius: 9999px;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		cursor: pointer; transition: background-color 140ms ease;
+	}
+	.btn:hover { background: #e6e6ea; }
+	.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(73 79 223 / 0.55); }
+	.btn-outline { background: transparent; color: var(--color-surface-foreground); border: 1px solid var(--color-surface-foreground); }
+	.btn-outline:hover { background: var(--color-surface-raised); }
+	.btn-soft { background: var(--color-surface-raised); color: var(--color-surface-foreground); }
+	.btn-soft:hover { background: #202226; }
+	.btn-auto { width: auto; }
+
+	/* ── Quick actions ────────────────────────────────────────────── */
+	.actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+	@media (max-width: 520px) { .actions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	.act { background: var(--color-surface-raised); border-radius: var(--radius-md); padding: 13px 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; min-width: 0; }
+	.act .ic { width: 26px; height: 26px; border-radius: 50%; background: var(--color-surface); display: grid; place-items: center; font-size: 12px; flex: none; }
+
+	/* ── Gradient card mockup ─────────────────────────────────────── */
+	.bankcard {
+		margin-top: 24px; border-radius: var(--radius-lg); padding: 22px; min-height: 172px;
+		background: linear-gradient(130deg, #4f55f1 0%, #3a40c4 55%, #23225c 100%);
+		color: #fff; display: flex; flex-direction: column; box-shadow: var(--shadow-lg);
+	}
+	.bankcard .row1 { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+	.bankcard .chip2 { margin-left: auto; width: 30px; height: 21px; border-radius: 5px; background: rgb(255 255 255 / 0.22); }
+	.bankcard .panset { margin-top: auto; display: flex; align-items: baseline; gap: 14px; }
+	.bankcard .pan { font-size: 19px; font-weight: 600; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
+	.bankcard .holder { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(255 255 255 / 0.75); margin-top: 10px; }
+
+	/* ── Transactions ─────────────────────────────────────────────── */
+	.card { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 6px 18px; min-width: 0; }
+	.card .chead { padding: 14px 0 6px; font-size: 16px; font-weight: 500; }
+	.tx { display: flex; align-items: center; gap: 13px; padding: 13px 0; border-top: 1px solid var(--color-border); min-width: 0; }
+	.tx:first-of-type { border-top: 0; }
+	.tx .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #fff; flex: none; }
+	.tx .who { min-width: 0; }
+	.tx .who b { display: block; font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.tx .who span { font-size: 12.5px; color: var(--color-muted); }
+	.tx .amt { margin-left: auto; text-align: right; flex: none; }
+	.tx .amt b { display: block; font-weight: 600; font-variant-numeric: tabular-nums; }
+	.tx .amt span { font-size: 12px; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+	.tx .amt .credit { color: #35c48d; }
+	.tx .amt .fail { color: var(--color-danger); }
+
+	/* ── Analytics column: donut + upsell ─────────────────────────── */
+	.side { display: none; }
+	@media (min-width: 980px) { .side { display: grid; gap: 20px; align-content: start; } }
+	.donut-wrap { display: flex; align-items: center; gap: 20px; }
+	.donut { width: 120px; height: 120px; border-radius: 50%; flex: none;
+		background: conic-gradient(#494fdf 0 38%, #00a87e 38% 61%, #e61e49 61% 79%, #ec7e00 79% 100%);
+		display: grid; place-items: center; }
+	.donut::after { content: ""; width: 74px; height: 74px; border-radius: 50%; background: var(--color-surface-raised); grid-area: 1 / 1; }
+	.legend { font-size: 12.5px; }
+	.legend div { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: var(--color-muted); }
+	.legend i { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+	.legend b { margin-left: auto; color: var(--color-surface-foreground); font-weight: 600; font-variant-numeric: tabular-nums; padding-left: 14px; }
+	.upsell { background: var(--color-accent); border-radius: var(--radius-lg); padding: 20px; color: #fff; }
+	.upsell h3 { font-size: 17px; font-weight: 500; }
+	.upsell p { font-size: 13px; color: rgb(255 255 255 / 0.8); margin-top: 6px; }
+	.upsell .btn { margin-top: 14px; height: 42px; font-size: 13.5px; padding: 0 18px; }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.section { padding: 46px 0; border-top: 1px solid var(--color-border); }
+	@media (min-width: 768px) { .section { padding: 62px 0; } }
+	.section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 12px; }
+	.section h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 500; letter-spacing: -0.03em; }
+	.lede { color: var(--color-muted); margin-top: 12px; max-width: 62ch; font-size: 15px; }
+	.note { margin-top: 16px; font-size: 13.5px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 26px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 288px 1fr; gap: 44px; } }
+	.phone {
+		width: 288px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border); border-radius: 32px;
+		overflow: hidden; background: var(--color-surface); box-shadow: var(--shadow-lg);
+	}
+	.phone-status { display: flex; justify-content: space-between; padding: 11px 18px 4px; font-size: 10px; color: var(--color-muted); }
+	.phone-body { padding: 6px 16px 4px; }
+	.p-bal .greet { font-size: 11px; }
+	.p-bal .balance { font-size: 28px; }
+	.p-bal .delta { font-size: 11px; }
+	.p-acts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 14px; }
+	.p-acts .act { flex-direction: column; justify-content: center; text-align: center; gap: 6px; padding: 10px 4px; font-size: 10.5px; border-radius: var(--radius-sm); }
+	.p-bankcard { margin-top: 12px; min-height: 120px; padding: 14px 16px; border-radius: 14px; }
+	.p-bankcard .pan { font-size: 14px; }
+	.p-tx { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--color-border); font-size: 12px; }
+	.p-tx .ic { width: 28px; height: 28px; font-size: 10px; }
+	.p-tx .who span { font-size: 10.5px; }
+	.p-tabbar { display: flex; border-top: 1px solid var(--color-border); margin-top: 10px; }
+	.p-tabbar div { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--color-muted); padding: 9px 0 12px; }
+	.p-tabbar .is-active { color: var(--color-surface-foreground); }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 13px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules b { display: block; color: var(--color-surface-foreground); font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off { padding: 22px; border-radius: var(--radius-md); background: #0a0a0a; border: 1px solid #232323; box-shadow: 0 18px 40px rgb(73 79 223 / 0.35); font-size: 16px; font-weight: 500; color: #fff; }
+	.cmp-off .fake-btn { display: inline-block; margin-top: 12px; background: linear-gradient(120deg, #494fdf, #00c3ff); color: #fff; border-radius: 10px; padding: 9px 18px; font-size: 13px; font-weight: 600; }
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 10px; line-height: 1.6; }
+	.cmp-on { padding: 22px; border-radius: var(--radius-lg); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: 16px; font-weight: 500; }
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 10px; line-height: 1.6; }
+
+	footer { border-top: 1px solid var(--color-border); padding: 32px 0 56px; font-size: 13px; color: var(--color-muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER — the banking app. True black, luminous cards, a white pill action,
+     the gradient card as the only decorative asset, cobalt spent once. -->
+<div class="shell">
+	<div class="frame">
+		<nav class="rail">
+			<span class="glyph">V</span>
+			<span class="item is-active"><span class="ic"></span>Home</span>
+			<span class="item"><span class="ic"></span>Accounts</span>
+			<span class="item"><span class="ic"></span>Payments</span>
+			<span class="item"><span class="ic"></span>Crypto</span>
+			<span class="item"><span class="ic"></span>Vaults</span>
+		</nav>
+
+		<main>
+			<div class="mobilebar"><span class="glyph">V</span><span class="greet" style="margin-top:2px">Friday, 3 October</span></div>
+			<p class="greet">Good morning, Dana</p>
+			<div class="balance-label">Main balance</div>
+			<div class="balance num">$12,480.60</div>
+			<div class="delta num">▲ +$214.18 this week</div>
+
+			<div class="hactions">
+				<button class="btn">Add money</button>
+				<button class="btn btn-outline btn-auto">Exchange</button>
+			</div>
+
+			<div class="actions">
+				<span class="act"><span class="ic">↑</span>Send</span>
+				<span class="act"><span class="ic">↓</span>Request</span>
+				<span class="act"><span class="ic">⇄</span>Convert</span>
+				<span class="act"><span class="ic">＋</span>Top up</span>
+			</div>
+
+			<div class="bankcard">
+				<div class="row1">Vetta Metal <span class="chip2"></span></div>
+				<div class="panset"><span class="pan">•••• 4021</span><span style="font-size:12px;color:rgb(255 255 255 / 0.7)">12/29</span></div>
+				<div class="holder"><span>DANA M COOPER</span><span>PHYSICAL</span></div>
+			</div>
+
+			<div class="card" style="margin-top: 24px;">
+				<div class="chead">Transactions</div>
+				<div class="tx">
+					<span class="ic" style="background:#00a87e">N</span>
+					<span class="who"><b>Netlight salary</b><span>Income · 9:02 AM</span></span>
+					<span class="amt"><b class="credit num">+$4,820.00</b><span>USD</span></span>
+				</div>
+				<div class="tx">
+					<span class="ic" style="background:#5a5a63">☕</span>
+					<span class="who"><b>Boncafe Roasters</b><span>Restaurants · 8:15 AM</span></span>
+					<span class="amt"><b class="num">−$6.40</b><span>USD</span></span>
+				</div>
+				<div class="tx">
+					<span class="ic" style="background:#e61e49">S</span>
+					<span class="who"><b>Spotify</b><span>Entertainment · Yesterday</span></span>
+					<span class="amt"><b class="num">−$10.99</b><span>USD</span></span>
+				</div>
+				<div class="tx">
+					<span class="ic" style="background:#ec7e00">T</span>
+					<span class="who"><b>Bolt ride</b><span>Transport · Yesterday</span></span>
+					<span class="amt"><b class="fail num">−$14.20</b><span>declined</span></span>
+				</div>
+			</div>
+		</main>
+
+		<aside class="side">
+			<div class="card" style="padding: 18px;">
+				<div class="chead" style="padding-top:0">Spending · September</div>
+				<div class="donut-wrap">
+					<div class="donut" role="img" aria-label="Spending by category: bills 38 percent, groceries 23, dining 18, transport 21"></div>
+					<div class="legend">
+						<div><i style="background:#494fdf"></i>Bills<b class="num">38%</b></div>
+						<div><i style="background:#00a87e"></i>Groceries<b class="num">23%</b></div>
+						<div><i style="background:#e61e49"></i>Dining<b class="num">18%</b></div>
+						<div><i style="background:#ec7e00"></i>Transport<b class="num">21%</b></div>
+					</div>
+				</div>
+			</div>
+			<div class="upsell">
+				<h3>Metal plan</h3>
+				<p>Cashback on everything, a metal card, and priority support — unlock the full wallet.</p>
+				<button class="btn btn-auto">Upgrade</button>
+			</div>
+		</aside>
+	</div>
+</div>
+
+<div class="shell">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — The white pill</p>
+		<h2>The brightest pixel does the work</h2>
+		<p class="lede">On true black, the primary action is a white pill with black text — it needs no color
+			to dominate. Cobalt is a stamp, not a theme: one featured surface per view. Everything else on
+			the screen is luminance, hairlines and white numerals.</p>
+		<div class="row" style="margin-top: 22px;">
+			<button class="btn btn-auto">Add money</button>
+			<button class="btn btn-outline btn-auto">Exchange</button>
+			<button class="btn btn-soft btn-auto">Manage cards</button>
+			<span style="background:var(--color-accent);color:#fff;border-radius:9999px;padding:5px 13px;font-size:12px;font-weight:600">Metal · upgrade</span>
+		</div>
+		<p class="note">If a second cobalt element wants into the viewport, it drops to a raised card — the
+			stamp only works while it is rare.</p>
+	</section>
+
+	<!-- 02 -->
+	<section class="section">
+		<p class="section-label">02 — Dark ladder</p>
+		<h2>Two rungs, plus cobalt</h2>
+		<p class="lede">The surface ladder has exactly three steps: true black canvas, #16181a raised cards,
+			and the cobalt featured surface. Depth comes from those luminance steps and 1px hairlines —
+			never from stacked shadows. The gradient lives only on the card mockup, where the physical
+			product earns it.</p>
+		<div class="row" style="margin-top: 22px;">
+			<span style="width:96px;height:64px;border-radius:var(--radius-md);background:var(--color-surface);border:1px solid var(--color-border);display:inline-block"></span>
+			<span style="width:96px;height:64px;border-radius:var(--radius-md);background:var(--color-surface-raised);border:1px solid var(--color-border);display:inline-block"></span>
+			<span style="width:96px;height:64px;border-radius:var(--radius-md);background:linear-gradient(130deg,#4f55f1,#3a40c4 55%,#23225c);display:inline-block"></span>
+			<span style="width:96px;height:64px;border-radius:var(--radius-md);background:var(--color-surface-raised);border:1px solid var(--color-border);display:inline-grid;place-items:center"><span class="num" style="font-weight:600">−$6.40</span></span>
+		</div>
+		<p class="note">Category color inside charts and icons comes from the narrow illustration palette —
+			teal, pink, orange, cobalt — never as button fills, link text or page tints.</p>
+	</section>
+
+	<!-- 03 MOBILE -->
+	<section class="section">
+		<p class="section-label">03 — Mobile</p>
+		<h2>The phone is the native habitat</h2>
+		<p class="lede">The shell was born on a phone: balance up top, four quick actions, the card mockup as
+			a hero object, transactions below. Desktop just adds a rail and an analytics column — the dark
+			ladder and the white pill never change.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="phone-status"><span>9:41</span><span>5G ▮</span></div>
+				<div class="phone-body">
+					<div class="p-bal">
+						<div class="greet">Good morning, Dana</div>
+						<div class="balance num">$12,480.60</div>
+						<div class="delta num">▲ +$214.18 this week</div>
+					</div>
+					<div class="p-acts">
+						<span class="act"><span class="ic">↑</span>Send</span>
+						<span class="act"><span class="ic">↓</span>Request</span>
+						<span class="act"><span class="ic">⇄</span>Convert</span>
+						<span class="act"><span class="ic">＋</span>Top up</span>
+					</div>
+					<div class="bankcard p-bankcard">
+						<div class="row1" style="font-size:10px">Vetta Metal <span class="chip2"></span></div>
+						<div class="panset"><span class="pan">•••• 4021</span></div>
+						<div class="holder" style="font-size:9px"><span>D M COOPER</span><span>12/29</span></div>
+					</div>
+					<div class="p-tx">
+						<span class="ic" style="background:#00a87e">N</span>
+						<span class="who"><b style="font-size:12.5px">Netlight salary</b><br><span>Income</span></span>
+						<span class="amt" style="margin-left:auto"><b class="credit num" style="font-size:12px">+$4,820.00</b></span>
+					</div>
+					<div class="p-tx">
+						<span class="ic" style="background:#5a5a63">☕</span>
+						<span class="who"><b style="font-size:12.5px">Boncafe Roasters</b><br><span>Restaurants</span></span>
+						<span class="amt" style="margin-left:auto"><b class="num" style="font-size:12px">−$6.40</b></span>
+					</div>
+				</div>
+				<div class="p-tabbar">
+					<div class="is-active">Home</div><div>Payments</div><div>Crypto</div><div>Vaults</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Balance</b>46px → 28px but never lighter than weight 500; the delta chip keeps its mint color at 11px.</li>
+				<li><b>Quick actions</b>The pill tiles compress into a four-up grid of icon-over-label tiles — labels never truncate, they shorten.</li>
+				<li><b>Card mockup</b>The gradient card scales to a 120px hero; pan, expiry and holder stay legible at 14px minimum, spacing tightens before type does.</li>
+				<li><b>Transactions</b>Rows drop the timestamp and keep icon, name, category and signed amount; declined rows keep their red state word.</li>
+				<li><b>Buttons</b>"Add money" stays a 48px white pill pinned to the thumb zone; outlined and soft variants stack under it when needed.</li>
+				<li><b>Rail</b>The desktop nav rail becomes a four-item bottom bar; active state is a raised pill, not a color change.</li>
+				<li><b>Analytics</b>The donut and upsell card move below transactions; the cobalt upsell stays the only saturated block on screen.</li>
+				<li><b>Touch</b>Every row pads to a 44px target; hover highlights become press highlights since touch has no hover.</li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 04 DON'T -->
+	<section class="section">
+		<p class="section-label">04 — Off-style, for contrast</p>
+		<h2>What cheapens the night mode</h2>
+		<div class="compare">
+			<div class="cmp-off">Gradient button on washed black
+				<small>Near-black canvas at #0a0a0a · gradient cobalt-to-cyan CTA · colored glow shadows ·
+				rounded-square buttons. Saturated action colors steal the white pill's job.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>True black canvas, #16181a card with a hairline, white pill action, cobalt spent on the
+				featured surface only. Luminance carries depth; color stays scarce.</small></div>
+		</div>
+		<p class="note">Also out: drop shadows on resting cards, accent colors as link or button fills, white
+			cobalt-on-text pairings in prose, and body type at weight 500.</p>
+	</section>
+</div>
+
+<footer><div class="shell">Vetta design reference — revolut · true black, white pill, one cobalt stamp.</div></footer>
+</body>
+</html>

@@ -1,0 +1,22 @@
+/* Zapier — warm cream canvas, coffee ink, one saturated orange action. Palette derived from awesome-design-md (MIT). */
+@theme {
+	--color-primary: #ff4f00;
+	--color-primary-foreground: #fffefb;
+	--color-surface: #fffefb;
+	--color-surface-foreground: #201515;
+	--color-surface-raised: #f8f4f0;
+	--color-muted: #605d52;
+	--color-accent: #201515;
+	--color-danger: #d0342c;
+	--color-border: #c5c0b1;
+
+	--radius-sm: 6px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-xl: 24px;
+	--radius-2xl: 32px;
+
+	--shadow-sm: 0 1px 2px rgb(32 21 21 / 0.05);
+	--shadow-md: 0 6px 16px rgb(32 21 21 / 0.07);
+	--shadow-lg: 0 16px 40px rgb(32 21 21 / 0.12);
+}

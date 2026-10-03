@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "apple-hig",
+	"name": "Apple HIG",
+	"version": "1.0.0",
+	"order": 35,
+	"category": "native",
+	"vibe": "light",
+	"tags": [
+		"native",
+		"light"
+	],
+	"blurb": "Native iOS app interface flavor: system colors in light/dark pairs, grouped lists, hairline separators, Dynamic Type ramp and material-style blur.",
+	"tagline": {
+		"en": "Calm, platform-true, straight from the HIG",
+		"zh": "原生 App 的克制与秩序"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://developer.apple.com/design/human-interface-guidelines/",
+		"note": "Factual iOS system color values and Dynamic Type point sizes from Apple's public HIG documentation; all descriptions are original. Not affiliated with or endorsed by Apple Inc. No Apple artwork, screenshots, icons or font binaries included."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}

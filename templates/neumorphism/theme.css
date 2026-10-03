@@ -1,0 +1,36 @@
+/* Neumorphism — soft-extruded same-surface UI: one clay-gray material, dual
+   light shadows pressing forms gently out of (or into) the surface.
+   Original curated spec for this collection; dual-shadow convention checked
+   against neumorphism.io (MIT). No upstream code included. */
+@theme {
+	--color-primary: #5b7cfa; /* periwinkle blue — the one saturated voice */
+	--color-primary-foreground: #ffffff;
+	--color-surface: #e0e5ec; /* the classic clay gray — page AND controls share it */
+	--color-surface-foreground: #3d4452; /* slate ink; text never goes lighter than this */
+	/* Same value as surface, on purpose: "raised" is expressed by the dual
+	   shadow, never by a different fill. A lighter or darker card breaks the
+	   single-material illusion. */
+	--color-surface-raised: #e0e5ec;
+	--color-muted: #8a94a6; /* secondary text only — large sizes, never body copy */
+	--color-accent: #29c3be; /* teal — second voice for active/ok states */
+	--color-danger: #e0605e;
+	/* No strokes anywhere: a visible border instantly flattens the extrusion.
+	   Depth is the shadow pair's entire job. */
+	--color-border: #e0e5ec;
+
+	/* Soft extrusion: controls live at pill and circle radii. */
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-xl: 16px;
+	--radius-2xl: 24px;
+	--radius-full: 9999px;
+
+	/* The dual shadow: dark clay (#b9bfca) down-right, white up-left — a form
+	   lit from the top-left, extruded from the same sheet as the page. */
+	--shadow-sm: 2px 2px 5px #b9bfca, -2px -2px 5px #ffffff;
+	--shadow-md: 5px 5px 12px #b9bfca, -5px -5px 12px #ffffff;
+	--shadow-lg: 9px 9px 20px #b9bfca, -9px -9px 20px #ffffff;
+	/* Pressed into the surface: grooves, inputs, active states. */
+	--shadow-inset: inset 2px 2px 5px #b9bfca, inset -2px -2px 5px #ffffff;
+}

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurora — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #7c3aed;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #050510;
+		--color-surface-foreground: #f4f6ff;
+		--color-surface-raised: #0d0d1f;
+		--color-muted: #8b93c7;
+		--color-accent: #00dc82;
+		--color-danger: #ff5470;
+		--color-border: rgb(124 58 237 / 0.25);
+		--gradient-aurora-1: radial-gradient(closest-side, rgb(124 58 237 / 0.5), transparent 72%);
+		--gradient-aurora-2: radial-gradient(closest-side, rgb(0 220 130 / 0.34), transparent 72%);
+		--gradient-aurora-3: radial-gradient(closest-side, rgb(244 114 182 / 0.3), transparent 72%);
+		--blur-aurora: 80px;
+		--color-aurora-pink: #f472b6;
+		--shadow-sm: 0 0 20px rgb(124 58 237 / 0.12);
+		--shadow-md: 0 0 40px rgb(124 58 237 / 0.25);
+		--shadow-lg: 0 0 80px rgb(124 58 237 / 0.3);
+		--shadow-glow-green: 0 0 32px rgb(0 220 130 / 0.28);
+		--shadow-glow-pink: 0 0 32px rgb(244 114 182 / 0.25);
+		--radius-sm: 12px;
+		--radius-md: 14px;
+		--radius-lg: 16px;
+		--radius-xl: 20px;
+		--radius-2xl: 28px;
+		--sans: -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body { margin: 0; background: var(--color-surface); color: var(--color-surface-foreground); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+	h1, h2, h3 { margin: 0; font-weight: 500; letter-spacing: -0.02em; line-height: 1.15; }
+	p { margin: 0; }
+	.spacer { flex: 1; }
+	.wrap { max-width: 1060px; margin: 0 auto; padding: 0 20px 88px; }
+	.section { padding-top: 64px; }
+	.section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 8px; }
+	.section h2 { font-size: 26px; }
+	.lede { margin-top: 8px; max-width: 72ch; font-size: 14px; color: var(--color-muted); }
+	.note { margin-top: 16px; font-size: 13px; color: var(--color-muted); }
+
+	/* ── Aurora light fields: blurred radials anchored to edges ── */
+	.field { position: relative; overflow: hidden; }
+	.blob { position: absolute; border-radius: 50%; filter: blur(var(--blur-aurora)); pointer-events: none; }
+	.blob-violet { background: var(--gradient-aurora-1); }
+	.blob-green { background: var(--gradient-aurora-2); }
+	.blob-pink { background: var(--gradient-aurora-3); }
+
+	/* ── COVER: the SaaS landing page itself ── */
+	.nav { position: relative; z-index: 1; display: flex; align-items: center; gap: 26px; padding: 22px 0; }
+	.wordmark { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -0.01em; }
+	.wordmark .dot { width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); box-shadow: var(--shadow-sm); }
+	.nav a { color: var(--color-muted); font-size: 14px; text-decoration: none; }
+	.nav a:hover { color: var(--color-surface-foreground); }
+	.nav .ghost { padding: 8px 16px; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-surface-foreground); font-size: 13px; }
+	.hero { position: relative; z-index: 1; padding: 72px 0 64px; max-width: 720px; }
+	.kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-accent); }
+	.hero h1 { font-size: 52px; margin-top: 14px; }
+	.grad { background: linear-gradient(90deg, #a78bfa 0%, var(--color-primary) 40%, var(--color-accent) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+	.hero .sub { margin-top: 18px; font-size: 17px; color: var(--color-muted); max-width: 52ch; }
+	.ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+	.btn { font: 500 15px/1 var(--sans); border-radius: 999px; padding: 14px 26px; cursor: pointer; text-decoration: none; display: inline-block; }
+	.btn-fill { background: var(--color-primary); color: var(--color-primary-foreground); box-shadow: var(--shadow-md); }
+	.btn-ghost { color: var(--color-surface-foreground); border: 1px solid var(--color-border); background: rgb(13 13 31 / 0.5); }
+	.stats { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 40px; padding: 26px 0 0; }
+	.stat b { display: block; font-size: 30px; font-weight: 500; letter-spacing: -0.02em; }
+	.stat b.green { color: var(--color-accent); }
+	.stat span { font-size: 13px; color: var(--color-muted); }
+
+	.cards { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 26px; }
+	@media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+	.card { border-radius: var(--radius-lg); padding: 22px; background: rgb(13 13 31 / 0.72); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); }
+	.card .chip { width: 34px; height: 34px; border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 15px; margin-bottom: 14px; }
+	.card h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+	.card p { margin-top: 8px; font-size: 13.5px; color: var(--color-muted); }
+	.card .link { display: inline-block; margin-top: 14px; font-size: 13px; color: var(--color-accent); text-decoration: none; }
+	.ctaband { position: relative; z-index: 1; margin-top: 72px; border-radius: var(--radius-xl); padding: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px; border: 1px solid var(--color-border); background: rgb(13 13 31 / 0.72); box-shadow: var(--shadow-md); }
+	.ctaband h3 { font-size: 24px; max-width: 26ch; }
+	.foot { position: relative; z-index: 1; margin-top: 56px; padding-top: 22px; border-top: 1px solid rgb(124 58 237 / 0.18); display: flex; flex-wrap: wrap; gap: 18px; font-size: 12px; color: var(--color-muted); }
+	.livebadge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; border: 1px solid rgb(0 220 130 / 0.4); border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); box-shadow: var(--shadow-glow-green); }
+	.livebadge i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+
+	/* ── 01 field anatomy ── */
+	.fieldlab { margin-top: 24px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); min-height: 220px; position: relative; overflow: hidden; background: var(--color-surface); }
+	.fieldlab .lbl { position: absolute; z-index: 1; font-size: 12px; color: var(--color-muted); background: rgb(5 5 16 / 0.75); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--color-border); }
+	.hues { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+	.hue { border-radius: var(--radius-lg); height: 96px; position: relative; overflow: hidden; border: 1px solid var(--color-border); }
+	.hue small { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: var(--color-muted); background: rgb(5 5 16 / 0.7); padding: 3px 8px; border-radius: 999px; }
+
+	/* ── 02 swatches ── */
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); }
+	.sw .fill { height: 48px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 12px; font-weight: 600; }
+	.sw span { font-size: 11px; color: var(--color-muted); }
+
+	/* ── 03 controls ── */
+	.controls { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 22px; padding: 24px; border-radius: var(--radius-lg); background: rgb(13 13 31 / 0.72); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); }
+	.input { width: 230px; padding: 11px 14px; font: 400 14px/1 var(--sans); color: var(--color-surface-foreground); background: rgb(5 5 16 / 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+	.input::placeholder { color: var(--color-muted); }
+
+	/* ── 04 mobile ── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 320px 1fr; gap: 40px; } }
+	.phone { width: 320px; max-width: 100%; margin: 0 auto; border-radius: 40px; border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-lg); overflow: hidden; position: relative; }
+	.mnav { display: flex; align-items: center; padding: 16px; position: relative; z-index: 1; }
+	.mnav .burger { margin-left: auto; color: var(--color-muted); font-size: 16px; }
+	.mhero { position: relative; z-index: 1; padding: 20px 20px 26px; }
+	.mhero h1 { font-size: 30px; }
+	.mhero .sub { margin-top: 10px; font-size: 13px; color: var(--color-muted); }
+	.mhero .btn { width: 100%; text-align: center; margin-top: 18px; padding: 15px 0; }
+	.mcards { position: relative; z-index: 1; padding: 4px 14px 18px; display: grid; gap: 10px; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid rgb(124 58 237 / 0.18); font-size: 13px; color: var(--color-muted); display: flex; gap: 14px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); font-weight: 600; flex: none; width: 132px; font-size: 13px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── 05 off-style ── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { border-radius: var(--radius-lg); padding: 20px; font-size: 14px; }
+	.cmp b { font-size: 15px; }
+	.cmp small { display: block; margin-top: 10px; font-size: 12px; line-height: 1.55; }
+	.cmp-off { background: #0b0014; border: 1px solid #ff71ce; box-shadow: 0 0 14px rgb(255 113 206 / 0.6); color: #f8f2ff; position: relative; overflow: hidden; border-radius: 2px; }
+	.cmp-off::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.14) 0px, rgb(0 0 0 / 0.14) 1px, transparent 1px, transparent 3px); pointer-events: none; }
+	.cmp-off h3 { color: #ff71ce; text-shadow: 0 0 12px rgb(255 113 206 / 0.9); }
+	.cmp-off .fake { display: inline-block; margin-top: 12px; padding: 7px 14px; border: 1px solid #01cdfe; color: #01cdfe; box-shadow: 0 0 12px rgb(1 205 254 / 0.55); font-size: 12px; }
+	.cmp-off small { color: #8b7bb8; }
+	.cmp-on { background: rgb(13 13 31 / 0.72); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the system's product form: a SaaS landing page standing in a field
+     of slow aurora light. Violet leads behind the hero, green answers low on
+     the page; cards are translucent steps of the night. -->
+<div class="wrap" style="padding-top:0">
+	<div class="field" style="border-radius:0 0 var(--radius-2xl) var(--radius-2xl); padding-bottom:56px; margin:0 -20px; padding-left:20px; padding-right:20px;">
+		<span class="blob blob-violet" style="width:560px;height:420px;left:-140px;top:-120px"></span>
+		<span class="blob blob-green" style="width:420px;height:360px;right:-120px;top:-60px"></span>
+		<span class="blob blob-pink" style="width:380px;height:320px;left:30%;bottom:-160px"></span>
+
+		<nav class="nav">
+			<span class="wordmark"><span class="dot"></span>Northlight</span>
+			<a href="#">Product</a><a href="#">Docs</a><a href="#">Pricing</a>
+			<span class="spacer"></span>
+			<a href="#" class="ghost">Open console</a>
+			<a href="#" class="btn btn-fill" style="padding:11px 22px;font-size:14px">Start free</a>
+		</nav>
+
+		<div class="hero">
+			<p class="kicker">Northlight 2.0 — general availability</p>
+			<h1>Ship calm software under the <span class="grad">northern lights</span></h1>
+			<p class="sub">Telemetry, deploys and on-call in one quiet pane. Northlight watches the
+				flurry so your team can watch the sky — fewer pages, faster answers, softer nights.</p>
+			<div class="ctas">
+				<a href="#" class="btn btn-fill">Start free — no card</a>
+				<a href="#" class="btn btn-ghost">Read the docs</a>
+			</div>
+			<div class="stats">
+				<span class="stat"><b>99.98%</b><span>uptime, trailing 90 days</span></span>
+				<span class="stat"><b>42ms</b><span>median ingest latency</span></span>
+				<span class="stat"><b class="green">−38%</b><span>pages after one month</span></span>
+			</div>
+		</div>
+
+		<div class="cards">
+			<div class="card">
+				<span class="chip" style="background:rgb(124 58 237 / 0.2);color:#a78bfa">◈</span>
+				<h3>Signals without the noise</h3>
+				<p>Streams are grouped by blast radius, not by service name, so the first card you see is
+					usually the last one you need.</p>
+				<a class="link" href="#">How grouping works →</a>
+			</div>
+			<div class="card">
+				<span class="chip" style="background:rgb(0 220 130 / 0.15);color:var(--color-accent)">⌁</span>
+				<h3>Deploys that announce themselves</h3>
+				<p>Every release posts a quiet diff of what moved — latency, errors, spend — before anyone
+					asks.</p>
+				<a class="link" href="#">Release notes API →</a>
+			</div>
+			<div class="card">
+				<span class="chip" style="background:rgb(244 114 182 / 0.15);color:var(--color-aurora-pink)">☾</span>
+				<h3>On-call that respects sleep</h3>
+				<p>Escalations follow the sun and the roster; the green badge means a human is awake and
+					holding the line.</p>
+				<a class="link" href="#">Rosters and follow-the-sun →</a>
+			</div>
+		</div>
+
+		<div class="ctaband">
+			<h3>Bring the lights indoors — migrate in an afternoon, sleep through the night.</h3>
+			<span class="spacer"></span>
+			<span class="livebadge"><i></i>All regions live</span>
+			<a href="#" class="btn btn-fill">Book a walkthrough</a>
+		</div>
+
+		<div class="foot">
+			<span>© 2026 Northlight Systems</span><span class="spacer"></span>
+			<a href="#">Status</a><a href="#">Privacy</a><a href="#">Security</a>
+		</div>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 FIELD -->
+	<section class="section">
+		<p class="section-label">01 — The aurora field</p>
+		<h2>Light as weather, blurred into the night</h2>
+		<p class="lede">The field is three radial light fields at low alpha, softened with an 80px blur:
+			violet leading (50%), green answering (34%), pink as a breath (30%). They anchor to corners
+			and edges — never centered, never sharp-edged shapes — and the navy always stays visible
+			around them. This is the depth system: panels don't stack on shadows so much as float in
+			glowing air.</p>
+		<div class="fieldlab">
+			<span class="blob blob-violet" style="width:340px;height:260px;left:-80px;top:-70px"></span>
+			<span class="blob blob-green" style="width:260px;height:220px;right:-60px;bottom:-80px"></span>
+			<span class="lbl" style="left:18px;top:18px">violet leads — behind the hero</span>
+			<span class="lbl" style="right:18px;bottom:18px">green answers — lower on the page</span>
+		</div>
+		<div class="hues">
+			<div class="hue" style="background:var(--gradient-aurora-1);background-color:var(--color-surface)"><small>aurora-1 · #7c3aed at 50%</small></div>
+			<div class="hue" style="background:var(--gradient-aurora-2);background-color:var(--color-surface)"><small>aurora-2 · #00dc82 at 34%</small></div>
+			<div class="hue" style="background:var(--gradient-aurora-3);background-color:var(--color-surface)"><small>aurora-3 · #f472b6 at 30%</small></div>
+		</div>
+		<p class="note">At most three fields per viewport, never two hot fields in one corner, and never
+			a saturated full-page gradient — the night must stay navy between the lights.</p>
+	</section>
+
+	<!-- 02 COLOR -->
+	<section class="section">
+		<p class="section-label">02 — Color roles</p>
+		<h2>Violet speaks, green answers, pink stays in the sky</h2>
+		<p class="lede">Violet is the brand voice — buttons, links, the deepest field. Aurora green is the
+			counter-voice: live states, success, one highlight per screen. Pink belongs to the backdrop
+			first and surfaces as UI garnish only. Secondary text is periwinkle #8b93c7, never gray.</p>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>violet · brand voice</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>aurora green · live, success</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-aurora-pink)"></div><div class="meta"><b>aurora-pink</b><span>third hue · backdrop-first</span></div></div>
+			<div class="sw"><div class="fill" style="background:var(--color-surface-raised)"></div><div class="meta"><b>surface-raised</b><span>the card step of night</span></div></div>
+		</div>
+		<p class="note">Borders are violet at 25% alpha — structure is faint until an element is active,
+			then border and glow brighten together. Danger is a soft hot red #ff5470.</p>
+	</section>
+
+	<!-- 03 COMPONENTS -->
+	<section class="section">
+		<p class="section-label">03 — Components</p>
+		<h2>Glass-leaning panels, ambient halos, quiet type</h2>
+		<p class="lede">Cards are translucent steps of the night with hairline borders and a resting
+			violet halo; hover brightens the border and lifts the glow. Buttons are pills — filled violet
+			with a halo, or ghost with a hairline. One gradient-text phrase per page, and glow never
+			touches body copy.</p>
+		<div class="controls">
+			<a href="#" class="btn btn-fill">Start free</a>
+			<a href="#" class="btn btn-ghost">Read the docs</a>
+			<span class="livebadge"><i></i>All regions live</span>
+			<span class="input" contenteditable="false" spellcheck="false">you@team.dev</span>
+		</div>
+		<div class="cards" style="max-width:640px">
+			<div class="card" style="box-shadow:var(--shadow-md)">
+				<h3>A card at rest</h3>
+				<p>Translucent raise, hairline violet border, ambient halo. Nothing square, nothing
+					solid-white — the night shows through.</p>
+			</div>
+		</div>
+		<p class="note">Badges are hairline pills with a status dot; a green dot means live and it never
+			blinks. Inputs are dark wells with hairline borders and a violet focus ring.</p>
+	</section>
+
+	<!-- 04 MOBILE -->
+	<section class="section">
+		<p class="section-label">04 — Mobile</p>
+		<h2>Less field, more night</h2>
+		<p class="lede">On phones the aurora pulls back: fields shrink and anchor to the top, the nav
+			folds to a logo and burger, cards stack into one quiet column, and buttons go full width.
+			What survives is the calm — vast dark space between few elements.</p>
+		<div class="mobile">
+			<div class="phone field">
+				<span class="blob blob-violet" style="width:280px;height:200px;left:-70px;top:-70px"></span>
+				<span class="blob blob-green" style="width:220px;height:180px;right:-60px;top:-40px"></span>
+				<div class="mnav">
+					<span class="wordmark"><span class="dot"></span>Northlight</span>
+					<span class="burger">☰</span>
+				</div>
+				<div class="mhero">
+					<p class="kicker">Northlight 2.0</p>
+					<h1 style="margin-top:8px">Ship calm software under the <span class="grad">northern lights</span></h1>
+					<p class="sub">Telemetry, deploys and on-call in one quiet pane.</p>
+					<a href="#" class="btn btn-fill">Start free</a>
+				</div>
+				<div class="mcards">
+					<div class="card" style="padding:16px">
+						<h3 style="font-size:15px">Signals without the noise</h3>
+						<p style="font-size:12.5px;margin-top:6px">Streams grouped by blast radius — the first
+							card you see is the last one you need.</p>
+					</div>
+					<div class="card" style="padding:16px">
+						<h3 style="font-size:15px">Deploys that announce themselves</h3>
+						<p style="font-size:12.5px;margin-top:6px">Every release posts a quiet diff before
+							anyone asks.</p>
+					</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>The field pulls back</b><span>Light fields shrink and anchor to the top corners; blur stays at the token value but the blobs never reach body text. At most two fields on a phone viewport.</span></li>
+				<li><b>Nav folds to a burger</b><span>Links collapse behind a quiet icon; the filled CTA survives in the header because it is the page's one violet voice.</span></li>
+				<li><b>Cards stack and calm down</b><span>Halos soften (shadow-sm at rest), gaps tighten to 10–12px, and each card keeps its glyph chip so the three hues still read in a column.</span></li>
+				<li><b>Buttons go full width</b><span>48px pill targets, one primary per screen; the ghost button waits in the menu rather than competing in the column.</span></li>
+				<li><b>Hover glow becomes rest glow</b><span>Touch has no hover, so the resting halo already carries the state; pressed states deepen the border instead of lifting the glow.</span></li>
+				<li><b>Type holds its scale</b><span>The hero keeps 30px with its one gradient phrase; nothing shrinks below 13px — space, not size, is what gets cut.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 05 OFF-STYLE -->
+	<section class="section">
+		<p class="section-label">05 — Off-style, for contrast</p>
+		<h2>Neon city is a different system</h2>
+		<div class="compare">
+			<div class="cmp cmp-off"><b>CYBERPUNK CARD — OFF-STYLE</b>
+				<p style="margin-top:8px;font-size:13px">Square corners, a hot pink tube border, scanlines,
+					a glowing cyan chip and hard text glow.</p>
+				<small>Hot glow cores, 0–2px corners, scanline texture, blinking urgency — this is the
+					collection's Cyberpunk entry: the neon city, electric and a little dangerous. It is a
+					great system, and it is not this one.</small>
+			</div>
+			<div class="cmp cmp-on"><span class="blob blob-violet" style="width:220px;height:170px;left:-60px;top:-60px"></span><b style="position:relative">Aurora card — on-style</b>
+				<p style="margin-top:8px;font-size:13px;position:relative">Rounded corners, a faint violet
+					hairline, an ambient halo with no hot core, and calm copy.</p>
+				<small style="position:relative">Light as weather: large soft fields behind, translucent
+					panel in front, no scanlines, no tubes, nothing blinking. The night stays quiet and
+					vast — the whole temperament in one card.</small>
+			</div>
+		</div>
+		<p class="note">Also out: saturated full-page gradient wallpapers, glow on paragraphs, solid-white
+			panels, pure #000, more than three light fields per viewport, and a second gradient-text
+			phrase — the aurora is one voice, slowly spoken.</p>
+	</section>
+
+</div>
+</body>
+</html>

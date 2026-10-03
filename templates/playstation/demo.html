@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayStation — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #0070d1;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #000000;
+		--color-surface-foreground: #ffffff;
+		--color-surface-raised: #181818;
+		--color-muted: #cccccc;
+		--color-accent: #53b1ff;
+		--color-danger: #c81b3a;
+		--color-border: rgb(229 229 229 / 0.2);
+		--color-commerce: #d53b00;
+		--color-ink-elevated: #121314;
+
+		--radius-sm: 4px;
+		--radius-md: 8px;
+		--radius-lg: 16px;
+		--radius-xl: 24px;
+		--radius-2xl: 9999px;
+
+		--shadow-sm: 0 2px 8px rgb(0 0 0 / 0.3);
+		--shadow-md: 0 4px 12px rgb(0 0 0 / 0.16);
+		--shadow-lg: 0 8px 24px rgb(0 0 0 / 0.5);
+
+		--gold-a: #ffce21;
+		--gold-b: #f5a623;
+		--gold-c: #ee8e00;
+		--sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 16px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	/* Display is weight 300; buttons carry the only heavy weight. */
+	h1, h2, h3 { margin: 0; font-weight: 300; line-height: 1.25; letter-spacing: 0.1px; }
+	p { margin: 0; }
+	a { color: var(--color-accent); text-decoration: none; }
+	::selection { background: rgb(0 112 209 / 0.5); }
+	.spacer { flex: 1; }
+	.muted { color: var(--color-muted); }
+
+	/* ── Primary nav: 48px black bar ──────────────────────────────── */
+	.nav {
+		display: flex; align-items: center; gap: 20px;
+		height: 48px; padding: 0 24px; background: var(--color-surface);
+	}
+	.mark { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+	.mark .glyph { width: 20px; height: 20px; border-radius: 4px; background: var(--color-primary); display: grid; place-items: center; font-size: 10px; font-weight: 700; color: #fff; }
+	.navlinks { display: none; gap: 20px; font-size: 14px; font-weight: 500; letter-spacing: 0.4px; }
+	@media (min-width: 900px) { .navlinks { display: flex; } }
+	.navlinks a { color: #fff; }
+	.navlinks a:hover { color: var(--color-accent); }
+	.nicon { width: 32px; height: 32px; border-radius: var(--radius-2xl); background: var(--color-ink-elevated); display: grid; place-items: center; font-size: 13px; color: var(--color-muted); }
+
+	/* ── Hero band: full-bleed dark, key art owns the frame ───────── */
+	.hero {
+		background: linear-gradient(180deg, var(--color-ink-elevated) 0%, var(--color-surface) 100%);
+		padding: 40px 24px 0;
+	}
+	@media (min-width: 768px) { .hero { padding: 64px 48px 0; } }
+	.hero-grid { max-width: 1280px; margin: 0 auto; display: grid; gap: 28px; align-items: center; }
+	@media (min-width: 900px) { .hero-grid { grid-template-columns: 5fr 7fr; gap: 48px; } }
+	.badge {
+		display: inline-block; background: var(--color-primary); color: var(--color-primary-foreground);
+		font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+		border-radius: var(--radius-2xl); padding: 4px 10px;
+	}
+	.hero h1 { font-size: 34px; margin: 14px 0 10px; }
+	@media (min-width: 768px) { .hero h1 { font-size: 44px; } }
+	.hero .sub { color: var(--color-muted); font-size: 18px; max-width: 46ch; }
+	.hero-actions { display: flex; gap: 14px; margin-top: 24px; flex-wrap: wrap; }
+
+	/* The two pills: blue = act, orange = store. Same geometry always. */
+	.pill {
+		display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+		height: 48px; padding: 0 28px; border: 0; cursor: pointer;
+		font: 700 18px/1.25 var(--sans); letter-spacing: 0.45px;
+		border-radius: var(--radius-2xl); background: var(--color-primary); color: var(--color-primary-foreground);
+	}
+	.pill.commerce { background: var(--color-commerce); }
+	.pill.ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1px var(--color-border); font-size: 16px; height: 44px; padding: 0 22px; }
+	.pill[disabled] { background: var(--color-surface-raised); color: rgb(204 204 204 / 0.5); cursor: default; }
+
+	/* Key art placeholder: layered gradients stand in for the render. */
+	.keyart {
+		aspect-ratio: 16 / 9; border-radius: var(--radius-md); overflow: hidden; position: relative;
+		background:
+			radial-gradient(120% 90% at 78% 18%, rgb(83 177 255 / 0.55), transparent 55%),
+			radial-gradient(90% 70% at 15% 90%, rgb(0 112 209 / 0.5), transparent 60%),
+			linear-gradient(160deg, #101c30 10%, #05070d 85%);
+	}
+	.keyart .ship {
+		position: absolute; left: 50%; top: 52%; width: 38%; height: 12%;
+		background: linear-gradient(180deg, #dfe9f5, #7f93ad);
+		clip-path: polygon(0 60%, 30% 0, 72% 8%, 100% 62%, 62% 100%, 18% 92%);
+		filter: drop-shadow(0 0 18px rgb(83 177 255 / 0.55));
+	}
+	.keyart .caption { position: absolute; left: 14px; bottom: 12px; font-size: 12px; color: var(--color-muted); }
+
+	/* ── Filter pills ─────────────────────────────────────────────── */
+	.filters { display: flex; gap: 10px; flex-wrap: wrap; max-width: 1280px; margin: 0 auto; padding: 40px 24px 8px; }
+	.fpill {
+		height: 40px; padding: 0 16px; display: inline-flex; align-items: center;
+		border-radius: var(--radius-2xl); font: 700 14px/1.25 var(--sans); letter-spacing: 0.3px;
+		color: var(--color-muted); background: rgb(245 247 250 / 0.12);
+	}
+	.fpill.on { background: #fff; color: var(--color-surface-foreground); }
+
+	/* ── Game tiles: 16:9 at 8px radius, flat until pressed ───────── */
+	.rail { max-width: 1280px; margin: 0 auto; padding: 16px 24px 56px; }
+	.tiles { display: grid; grid-template-columns: 1fr; gap: 20px; }
+	@media (min-width: 640px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+	@media (min-width: 1024px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+	.tile { background: var(--color-surface-raised); border-radius: var(--radius-md); overflow: hidden; }
+	.tile .art { aspect-ratio: 16 / 9; position: relative; }
+	.tile .art.a1 { background: radial-gradient(110% 80% at 20% 15%, rgb(83 177 255 / 0.5), transparent 55%), linear-gradient(150deg, #0d1b2e, #04060b); }
+	.tile .art.a2 { background: radial-gradient(110% 80% at 80% 20%, rgb(255 90 60 / 0.4), transparent 55%), linear-gradient(150deg, #221014, #070304); }
+	.tile .art.a3 { background: radial-gradient(110% 80% at 50% 0%, rgb(255 206 33 / 0.28), transparent 55%), linear-gradient(150deg, #1c1a08, #080703); }
+	.tile .art.a4 { background: radial-gradient(110% 80% at 20% 85%, rgb(60 220 160 / 0.35), transparent 55%), linear-gradient(150deg, #08201a, #030a08); }
+	.tile .meta { padding: 12px 14px 14px; }
+	.tile .meta b { display: block; font-size: 16px; font-weight: 500; }
+	.tile .meta span { font-size: 13px; color: var(--color-muted); }
+	.tile .tag { position: absolute; left: 10px; bottom: 10px; background: var(--color-primary); color: #fff; font-size: 11px; font-weight: 700; border-radius: var(--radius-2xl); padding: 3px 9px; }
+	.tile .tag.pre { background: var(--color-commerce); }
+
+	/* Progress: thin track, blue fill, tabular percent. */
+	.dl { padding: 10px 14px 14px; border-top: 1px solid var(--color-border); }
+	.track { height: 4px; border-radius: 2px; background: rgb(229 229 229 / 0.18); overflow: hidden; }
+	.track .fill { display: block; height: 100%; background: var(--color-primary); }
+	.dl .row { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-muted); margin-bottom: 6px; }
+
+	/* ── PS Plus banner: inset panel, gold tier bar, one blue pill ── */
+	.plus { max-width: 1280px; margin: 0 auto; padding: 0 24px 72px; }
+	.plus-panel {
+		background: var(--color-ink-elevated); border-radius: var(--radius-md); overflow: hidden;
+		padding: 40px 28px 44px;
+	}
+	@media (min-width: 768px) { .plus-panel { padding: 56px 40px; } }
+	.plus-panel .bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--gold-a), var(--gold-b), var(--gold-c)); }
+	.plus-panel h2 { font-size: 28px; margin: 22px 0 8px; }
+	.plus-panel p { color: var(--color-muted); max-width: 56ch; }
+	.plus-panel .pill { margin-top: 22px; }
+
+	/* ── Footer: the full-bleed blue close ────────────────────────── */
+	.footer { background: var(--color-primary); color: var(--color-primary-foreground); padding: 48px 24px 40px; }
+	.footer .cols { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 24px; }
+	@media (min-width: 820px) { .footer .cols { grid-template-columns: repeat(4, 1fr); } }
+	.footer h3 { font-weight: 700; font-size: 14px; letter-spacing: 0.3px; margin-bottom: 10px; }
+	.footer a { display: block; color: rgb(255 255 255 / 0.85); font-size: 14px; padding: 4px 0; }
+	.footer .fine { max-width: 1280px; margin: 28px auto 0; font-size: 12px; color: rgb(255 255 255 / 0.7); }
+
+	/* ── Reference sections ───────────────────────────────────────── */
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 90px; }
+	.section { padding-top: 56px; }
+	.section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px; }
+	.section h2 { font-size: 30px; }
+	.lede { color: var(--color-muted); margin-top: 12px; max-width: 64ch; font-size: 16px; }
+	.note { margin-top: 18px; font-size: 14px; color: var(--color-muted); }
+	.row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 24px; }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw .fill { height: 60px; border-radius: var(--radius-md); }
+	.sw b { display: block; font-size: 13px; font-weight: 700; margin-top: 8px; }
+	.sw span { font-size: 12px; color: var(--color-muted); }
+
+	/* ── Mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 28px; align-items: start; }
+	@media (min-width: 860px) { .mobile { grid-template-columns: 286px 1fr; gap: 44px; } }
+	.phone {
+		width: 286px; max-width: 100%; margin: 0 auto; border-radius: 28px; overflow: hidden;
+		background: var(--color-surface); border: 1px solid var(--color-border);
+	}
+	.p-nav { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--color-surface); }
+	.p-hero { padding: 16px 14px 18px; background: linear-gradient(180deg, var(--color-ink-elevated), var(--color-surface)); }
+	.p-hero h4 { margin: 8px 0 4px; font-size: 24px; font-weight: 300; line-height: 1.2; }
+	.p-hero .sub { font-size: 13px; color: var(--color-muted); }
+	.p-hero .pill { height: 42px; font-size: 15px; padding: 0 20px; margin-top: 14px; }
+	.p-art { aspect-ratio: 16 / 10; border-radius: var(--radius-md); margin: 12px 0 4px;
+		background: radial-gradient(120% 90% at 78% 18%, rgb(83 177 255 / 0.5), transparent 55%), linear-gradient(160deg, #101c30, #05070d); }
+	.p-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 8px 14px 14px; }
+	.p-tiles .tile .meta b { font-size: 12px; }
+	.p-tabs { display: flex; background: var(--color-ink-elevated); border-top: 1px solid var(--color-border); }
+	.p-tabs div { flex: 1; text-align: center; font-size: 10px; color: var(--color-muted); padding: 9px 0 13px; font-weight: 700; }
+	.p-tabs .on { color: #fff; }
+	.p-tabs .g { display: block; font-size: 14px; margin-bottom: 3px; }
+
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 14px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-muted); }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { display: block; color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+
+	/* ── Off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 24px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp-off {
+		padding: 22px; border-radius: 20px; color: #fff; font-size: 15px; font-weight: 700;
+		background: linear-gradient(140deg, #0b3f7a, #53b1ff 130%);
+		box-shadow: 0 14px 34px rgb(83 177 255 / 0.25), 0 4px 12px rgb(0 0 0 / 0.4);
+	}
+	.cmp-off small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+	.cmp-on {
+		padding: 22px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700;
+		background: var(--color-surface-raised);
+	}
+	.cmp-on small { display: block; font-weight: 400; font-size: 13px; color: var(--color-muted); margin-top: 8px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the store front: black chapters, one blue pill, one orange pill,
+     16:9 tiles, gold-tier banner, blue footer close. -->
+<div class="nav">
+	<span class="mark"><span class="glyph">PS</span></span>
+	<nav class="navlinks">
+		<a href="#games">Games</a><a href="#ps5">PS5</a><a href="#ps4">PS4</a><a href="#accessories">Accessories</a><a href="#subs">Subscriptions</a><a href="#support">Support</a>
+	</nav>
+	<span class="spacer"></span>
+	<span class="nicon">⌕</span><span class="nicon">▢</span>
+</div>
+
+<div class="hero">
+	<div class="hero-grid">
+		<div>
+			<span class="badge">Pre-order</span>
+			<h1>Starfall Odyssey<br>arrives February 14</h1>
+			<p class="sub">Chart a derelict galaxy in single-player, or bring three friends along for
+				the full drift. Pre-order now to unlock the Pioneer pack at launch.</p>
+			<div class="hero-actions">
+				<button class="pill">Find out more</button>
+				<button class="pill commerce">Pre-order</button>
+			</div>
+		</div>
+		<div class="keyart">
+			<div class="ship"></div>
+			<div class="caption">Starfall Odyssey · key art placeholder</div>
+		</div>
+	</div>
+</div>
+
+<div class="filters">
+	<span class="fpill on">All</span><span class="fpill">PS5</span><span class="fpill">PS4</span><span class="fpill">PS VR2</span><span class="fpill">Coming soon</span>
+</div>
+
+<div class="rail">
+	<div class="tiles">
+		<div class="tile">
+			<div class="art a1"><span class="tag">Download · 68%</span></div>
+			<div class="meta"><b>Starfall Odyssey</b><span>PS5 · Pre-order installed</span>
+				<div class="dl"><div class="row"><span>Downloading</span><span>17.2 / 25.4 GB</span></div>
+					<div class="track"><span class="fill" style="width:68%"></span></div></div>
+			</div>
+		</div>
+		<div class="tile">
+			<div class="art a2"><span class="tag pre">New</span></div>
+			<div class="meta"><b>Neon Circuit 7</b><span>PS5 · Racing</span></div>
+		</div>
+		<div class="tile">
+			<div class="art a3"></div>
+			<div class="meta"><b>Sable Kingdom</b><span>PS5, PS4 · RPG</span></div>
+		</div>
+		<div class="tile">
+			<div class="art a4"></div>
+			<div class="meta"><b>Mossheart Valley</b><span>PS VR2 · Adventure</span></div>
+		</div>
+	</div>
+</div>
+
+<div class="plus">
+	<div class="plus-panel">
+		<div class="bar"></div>
+		<h2>Discover PlayStation Plus</h2>
+		<p>Monthly games, online multiplayer and cloud saves across three tiers — pick the plan that
+			matches how you play, change it whenever you like.</p>
+		<button class="pill">Compare plans</button>
+	</div>
+</div>
+
+<div class="footer">
+	<div class="cols">
+		<div><h3>Shop</h3><a href="#consoles">Consoles</a><a href="#games">Games</a><a href="#accessories">Accessories</a><a href="#deals">Deals</a></div>
+		<div><h3>Account</h3><a href="#profile">Profile</a><a href="#wallet">Wallet</a><a href="#subs">Subscriptions</a><a href="#downloads">Downloads</a></div>
+		<div><h3>Support</h3><a href="#help">Help center</a><a href="#repair">Repair</a><a href="#safety">Safety</a><a href="#status">Network status</a></div>
+		<div><h3>Company</h3><a href="#about">About</a><a href="#careers">Careers</a><a href="#press">Press</a><a href="#terms">Terms</a></div>
+	</div>
+	<div class="fine">©2026 Sony Interactive Entertainment-style reference layout · All content placeholders are fictional.</div>
+</div>
+
+<div class="wrap">
+
+	<!-- 01 -->
+	<section class="section">
+		<p class="section-label">01 — The blue rule</p>
+		<h2>Blue acts, orange sells, nothing decorates</h2>
+		<p class="lede">PlayStation Blue fills the primary pill, the active filter chip, small badges
+			and the footer band — one full-bleed blue moment per page. Commerce orange only ever
+			carries a store verb. Everything else stays black, white and hairlines.</p>
+		<div class="row">
+			<button class="pill">Add to library</button>
+			<button class="pill commerce">Buy now</button>
+			<button class="pill ghost">Watch trailer</button>
+			<button class="pill" disabled>Coming soon</button>
+		</div>
+		<div class="swatches">
+			<div class="sw"><div class="fill" style="background: var(--color-primary)"></div><b>primary</b><span>#0070d1 · CTA + footer band</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-commerce)"></div><b>commerce</b><span>#d53b00 · store verbs only</span></div>
+			<div class="sw"><div class="fill" style="background: var(--color-surface-raised)"></div><b>raised</b><span>#181818 · tiles, dark cards</span></div>
+			<div class="sw"><div class="fill" style="background: linear-gradient(90deg, var(--gold-a), var(--gold-b), var(--gold-c))"></div><b>tier gold</b><span>PS Plus banner only</span></div>
+		</div>
+		<p class="note">Cards rest flat on the canvas; the only shadow appears under a pressed control
+			(0 4px 12px at 16%). Depth is the band-to-band surface change, not elevation.</p>
+	</section>
+
+	<!-- 02 MOBILE -->
+	<section class="section">
+		<p class="section-label">02 — Mobile</p>
+		<h2>One column, two tiles, same trailer logic</h2>
+		<p class="lede">The chapter rhythm survives the phone: hero art above copy, the tile rail drops
+			to two-up, and the nav folds into a drawer while search and account stay on the bar.</p>
+		<div class="mobile">
+			<div class="phone">
+				<div class="p-nav">
+					<span style="font-size:18px">≡</span>
+					<span class="mark" style="font-size:13px"><span class="glyph" style="width:16px;height:16px;font-size:8px">PS</span></span>
+					<span class="spacer"></span>
+					<span style="font-size:15px">⌕</span><span style="font-size:15px">▢</span>
+				</div>
+				<div class="p-hero">
+					<span class="badge" style="font-size:10px;padding:3px 8px">Pre-order</span>
+					<h4>Starfall Odyssey</h4>
+					<div class="sub">Out February 14 · PS5</div>
+					<div class="p-art"></div>
+					<div style="display:flex;gap:10px">
+						<button class="pill">Pre-order</button>
+						<button class="pill ghost" style="height:42px">Trailer</button>
+					</div>
+				</div>
+				<div class="p-tiles">
+					<div class="tile"><div class="art a2"><span class="tag pre" style="font-size:9px;padding:2px 7px">New</span></div><div class="meta"><b>Neon Circuit 7</b><span>PS5</span></div></div>
+					<div class="tile"><div class="art a3"></div><div class="meta"><b>Sable Kingdom</b><span>PS5, PS4</span></div></div>
+				</div>
+				<div class="p-tabs">
+					<div class="on"><span class="g">⌂</span>Home</div>
+					<div><span class="g">⌕</span>Search</div>
+					<div><span class="g">▢</span>Library</div>
+					<div><span class="g">?:</span>Account</div>
+				</div>
+			</div>
+			<ul class="rules">
+				<li><b>Hierarchy flips</b><span>Key art moves above the headline so the 16:9 crop keeps its subject; the badge, title and pills follow in the same order as desktop.</span></li>
+				<li><b>Headline scale</b><span>44px → 24px, still weight 300. It never bolds to compensate — the lightness is the voice at every size.</span></li>
+				<li><b>Tiles 4-up → 2-up</b><span>The rail keeps 16:9 art, 8px radius and its platform tag; the progress row hides until a download is actually running.</span></li>
+				<li><b>Pills stay 42px+</b><span>Buttons keep pill geometry and never shrink below 42px height; the ghost variant loses its label count instead of its tap target.</span></li>
+				<li><b>Nav folds</b><span>The link row becomes a drawer; search and account stay visible. The blue footer band keeps its place as the page close.</span></li>
+				<li><b>One blue per screen</b><span>The pre-order badge and the blue pill would fight on a narrow hero — on touch the badge goes orange (store verb) so blue stays singular.</span></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 03 DON'T -->
+	<section class="section">
+		<p class="section-label">03 — Off-style, for contrast</p>
+		<h2>What breaks the night</h2>
+		<div class="compare">
+			<div class="cmp-off">Blue gradient panel
+				<small>Gradient chrome · big blue glow · 20px rounded card · blue text everywhere. The
+					blue spends itself until nothing reads as the primary action.</small></div>
+			<div class="cmp-on">Same content, on-style
+				<small>Flat #181818 tile · 8px radius · no resting shadow · blue reserved for the pill.
+					The band change is the divider, the surface step is the depth.</small></div>
+		</div>
+		<p class="note">Also out: bold display headlines, a second full-bleed blue band, orange on
+			marketing chrome, and the gold gradient anywhere but the tier banner.</p>
+	</section>
+
+</div>
+
+</body>
+</html>

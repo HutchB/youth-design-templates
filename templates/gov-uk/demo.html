@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOV.UK — component reference</title>
+<style>
+	/* Mirrors theme.css. Plain custom properties so this file opens standalone. */
+	:root {
+		--color-primary: #1d70b8;
+		--color-primary-foreground: #ffffff;
+		--color-surface: #ffffff;
+		--color-surface-foreground: #0b0c0c;
+		--color-surface-raised: #f3f2f1;
+		--color-muted: #505a5f;
+		--color-accent: #ffdd00;
+		--color-danger: #d4351c;
+		--color-border: #b1b4b6;
+
+		--radius-sm: 0px;
+		--radius-md: 0px;
+		--radius-lg: 0px;
+		--radius-xl: 0px;
+		--radius-2xl: 0px;
+
+		--shadow-sm: none;
+		--shadow-md: none;
+		--shadow-lg: none;
+
+		--green: #00703c;
+		--sans: "GDS Transport", Arial, "Segoe UI", system-ui, -apple-system, sans-serif;
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--color-surface);
+		color: var(--color-surface-foreground);
+		font-family: var(--sans);
+		font-size: 19px;
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3 { margin: 0; font-weight: 700; }
+	p { margin: 0; }
+	a { color: var(--color-primary); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+	a:hover { text-decoration-thickness: 3px; }
+	.spacer { flex: 1; }
+
+	.inner { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+	@media (min-width: 900px) { .inner { max-width: 960px; } }
+	.content { max-width: 660px; margin: 0 auto; padding: 0 20px; }
+
+	/* ── Header, phase banner, footer: full-bleed, everything else in the column ── */
+	.header { background: var(--color-surface-foreground); }
+	.header .inner { display: flex; align-items: center; padding-top: 14px; padding-bottom: 14px; }
+	.govlogo { color: #fff; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+	.govlogo .crownblock { width: 26px; height: 26px; background: var(--color-accent); display: inline-block; }
+	.header .inner a.servicename { color: #fff; font-size: 18px; margin-left: 4px; text-underline-offset: 3px; }
+	.phase { background: var(--color-surface-raised); border-bottom: 1px solid var(--color-border); }
+	.phase .content { padding-top: 10px; padding-bottom: 10px; font-size: 16px; color: var(--color-muted); }
+	.ptag { display: inline-block; background: var(--color-primary); color: var(--color-primary-foreground); font-weight: 700; padding: 2px 8px; margin-right: 10px; font-size: 16px; }
+	.footer { background: var(--color-surface-foreground); margin-top: 56px; }
+	.footer .inner { padding: 28px 20px; font-size: 16px; }
+	.footer a { color: #fff; }
+	.footer p { color: #fff; }
+
+	/* ── COVER: the product — a government service page ───────────── */
+	.crumbs { padding-top: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--color-border); font-size: 16px; }
+	.page-title { font-size: 40px; letter-spacing: -0.02em; padding-top: 24px; line-height: 1.15; }
+	.lede { margin-top: 16px; font-size: 19px; }
+	.inset { border-left: 10px solid var(--color-surface-foreground); padding: 6px 0 6px 18px; margin: 24px 0; color: var(--color-muted); }
+	.warning { display: flex; gap: 14px; align-items: flex-start; background: var(--color-accent); padding: 16px 18px; margin: 24px 0; font-weight: 700; }
+	.warning .bang { width: 32px; height: 32px; border-radius: 50%; background: var(--color-accent); border: 3px solid var(--color-surface-foreground); color: var(--color-surface-foreground); display: grid; place-items: center; font-weight: 800; flex: none; font-size: 18px; }
+
+	.tasklist { margin: 28px 0; }
+	.tasklist h2 { font-size: 24px; padding-bottom: 8px; }
+	.tgroup { font-weight: 700; font-size: 19px; margin: 20px 0 4px; }
+	.trow { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--color-border); font-size: 19px; }
+	.trow .spacer { flex: 1; }
+	.ttag { flex: none; padding: 4px 10px; color: #fff; font-size: 16px; font-weight: 400; }
+	.ttag.done { background: var(--green); }
+	.ttag.pending { background: #6f777b; }
+	.ttag.late { background: var(--color-danger); }
+
+	.panel-done { background: var(--green); color: #fff; padding: 30px 28px; margin: 28px 0; }
+	.panel-done h2 { font-size: 32px; color: #fff; letter-spacing: -0.02em; }
+	.panel-done p { margin-top: 10px; font-size: 19px; }
+	.panel-done .ref { letter-spacing: 0.05em; }
+
+	/* ── Buttons: rectangles with a 2px pressed edge instead of shadow ── */
+	.btnrow { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 26px 0; }
+	.govbtn {
+		display: inline-block; padding: 10px 18px;
+		font: inherit; font-size: 19px;
+		background: var(--color-primary); color: var(--color-primary-foreground);
+		border: 0; cursor: pointer; text-decoration: none;
+		box-shadow: 0 2px 0 #0f3d63;
+	}
+	.govbtn:hover { background: #165c9c; }
+	.govbtn-green { background: var(--green); box-shadow: 0 2px 0 #002d18; }
+	.govbtn-green:hover { background: #005a30; }
+	.govbtn-secondary { background: var(--color-surface-raised); color: var(--color-surface-foreground); box-shadow: 0 2px 0 var(--color-border); }
+	.govbtn-disabled { background: var(--color-border); color: #fff; box-shadow: none; cursor: not-allowed; }
+	/* Focus: the 3px yellow + black outline is this system's elevation. */
+	.govbtn.is-focus { position: relative; }
+	.govbtn.is-focus::after { content: ""; position: absolute; inset: -7px; border: 2px solid var(--color-surface-foreground); outline: 3px solid var(--color-accent); pointer-events: none; }
+	a.is-focus { box-shadow: 0 0 0 3px var(--color-accent); outline: 2px solid var(--color-surface-foreground); outline-offset: 0; color: var(--color-surface-foreground); }
+
+	/* ── Sections ─────────────────────────────────────────────────── */
+	.wrap { padding-bottom: 24px; }
+	.section { padding-top: 48px; }
+	.section-label { font-size: 16px; font-weight: 700; color: var(--color-primary); margin-bottom: 6px; }
+	.section h2 { font-size: 24px; }
+	.lede-p { margin-top: 10px; max-width: 66ch; color: var(--color-muted); font-size: 18px; }
+	.note { margin-top: 14px; font-size: 16px; color: var(--color-muted); }
+
+	.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+	.sw { border: 1px solid var(--color-border); }
+	.sw .fill { height: 52px; }
+	.sw .meta { padding: 8px 12px 10px; }
+	.sw b { display: block; font-size: 16px; }
+	.sw span { font-size: 14px; color: var(--color-muted); display: block; }
+
+	/* ── type scale ───────────────────────────────────────────────── */
+	.typerows { margin-top: 20px; border-top: 1px solid var(--color-border); }
+	.typerow { display: flex; align-items: baseline; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--color-border); }
+	.typerow .sample { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.typerow .tag { font-size: 14px; color: var(--color-muted); flex: none; width: 132px; }
+
+	/* ── mobile ───────────────────────────────────────────────────── */
+	.mobile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
+	@media (min-width: 880px) { .mobile { grid-template-columns: 300px 1fr; gap: 40px; } }
+	.phone {
+		width: 300px; max-width: 100%; margin: 0 auto;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface); overflow: hidden;
+	}
+	.phone .m-header { background: var(--color-surface-foreground); color: #fff; font-weight: 700; font-size: 18px; padding: 10px 14px; }
+	.phone .m-phase { background: var(--color-surface-raised); font-size: 12px; color: var(--color-muted); padding: 8px 14px; border-bottom: 1px solid var(--color-border); }
+	.phone .m-phase .ptag { font-size: 12px; padding: 1px 6px; margin-right: 6px; }
+	.phone .m-body { padding: 12px 14px 20px; }
+	.phone h1 { font-size: 28px; line-height: 1.2; }
+	.phone .trow { font-size: 16px; padding: 10px 0; gap: 10px; }
+	.phone .ttag { font-size: 14px; padding: 3px 8px; }
+	.phone .govbtn { display: block; text-align: center; font-size: 17px; padding: 12px 18px; }
+	.phone .m-note { border-left: 6px solid var(--color-surface-foreground); padding-left: 12px; color: var(--color-muted); font-size: 14px; margin-top: 14px; }
+	.rules { margin: 0; padding: 0; list-style: none; }
+	.rules li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 18px; color: var(--color-muted); display: flex; gap: 12px; }
+	.rules li:last-child { border-bottom: 0; }
+	.rules b { color: var(--color-surface-foreground); flex: none; width: 128px; font-size: 17px; }
+	@media (max-width: 540px) { .rules li { display: block; } .rules b { width: auto; margin-bottom: 2px; } }
+
+	/* ── off-style ────────────────────────────────────────────────── */
+	.compare { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 20px; }
+	@media (min-width: 720px) { .compare { grid-template-columns: repeat(2, 1fr); } }
+	.cmp { padding: 18px; font-size: 18px; }
+	.cmp small { display: block; margin-top: 8px; font-size: 15px; color: var(--color-muted); }
+	.cmp-off {
+		border-radius: 16px;
+		background: linear-gradient(135deg, #1d70b8, #005a30);
+		box-shadow: 0 18px 40px rgb(11 12 12 / 0.3);
+		color: #fff; font-size: 22px; font-weight: 700;
+	}
+	.cmp-on { border: 1px solid var(--color-border); }
+	.plainlink { color: var(--color-primary); text-decoration: none; }
+	.plainlink:hover { color: var(--color-danger); }
+	.iconstatus { color: var(--color-danger); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- COVER — the product: a public service page. Black header, BETA banner,
+     black-on-white task list, green completion panel, square everything. -->
+<header class="header">
+	<div class="inner">
+		<span class="govlogo"><span class="crownblock"></span>GOV.UK</span>
+		<span class="spacer"></span>
+		<a class="servicename" href="#">Vetta Services</a>
+	</div>
+</header>
+<div class="phase">
+	<div class="content"><span class="ptag">BETA</span>This is a new service — your <a href="#">feedback</a> will help us improve it.</div>
+</div>
+
+<div class="content">
+	<div class="crumbs"><a href="#">Home</a> / <a href="#">Passports, travel and living abroad</a> / Renewals</div>
+	<h1 class="page-title">Renew or replace a passport</h1>
+	<p class="lede">Renewals take up to 3 weeks from when we receive your documents. Most people renewing an adult passport do not need a new photo counter-signature.</p>
+
+	<div class="warning"><span class="bang">!</span><span>Apply online up to 3 months before you travel. Appointments in September are filling quickly.</span></div>
+
+	<h1 class="page-title" style="font-size:24px;padding-top:8px">Your application</h1>
+	<div class="tasklist">
+		<div class="tgroup">Section 1 of 3 — About you</div>
+		<div class="trow"><a href="#">Confirm your personal details</a><span class="spacer"></span><span class="ttag done">Completed</span></div>
+		<div class="trow"><a href="#">Add your current passport</a><span class="spacer"></span><span class="ttag done">Completed</span></div>
+		<div class="tgroup">Section 2 of 3 — Documents</div>
+		<div class="trow"><a href="#">Upload your photo</a><span class="spacer"></span><span class="ttag late">Incomplete</span></div>
+		<div class="trow"><a href="#">Countersignatory details</a><span class="spacer"></span><span class="ttag pending">Not started</span></div>
+		<div class="tgroup">Section 3 of 3 — Pay and send</div>
+		<div class="trow"><a href="#">Pay the £88.50 fee</a><span class="spacer"></span><span class="ttag pending">Cannot start yet</span></div>
+	</div>
+
+	<p class="inset">You cannot send documents until every section above is marked Completed.</p>
+
+	<div class="panel-done">
+		<h2>Application complete</h2>
+		<p>Your reference number<br><strong class="ref">VP-4029-1187</strong></p>
+	</div>
+
+	<div class="btnrow">
+		<a class="govbtn" href="#">Continue</a>
+		<a class="govbtn govbtn-green is-focus" href="#">Start now</a>
+		<a class="govbtn govbtn-secondary" href="#">Save and return later</a>
+		<button class="govbtn govbtn-disabled" type="button" disabled>Submit</button>
+	</div>
+	<p class="note">The yellow-and-black ring is the focus state — keyboard users get the loudest
+		signal on the page, which is deliberate.</p>
+</div>
+
+<footer class="footer">
+	<div class="inner">
+		<p><a href="#">Contact us</a> · <a href="#">Privacy</a> · <a href="#">Accessibility statement</a></p>
+		<p style="color:#b1b4b6">Built by Vetta Digital Services — all content available under the Open Government Licence v3.0.</p>
+	</div>
+</footer>
+
+<div class="wrap">
+
+	<!-- 01 COLOR -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">01 — Colour</p>
+			<h2>Four working colours and a lot of black on white</h2>
+			<p class="lede-p">Blue is interactive, green is success, red is error, yellow is focus and
+				warning. Everything else is ink on white — body copy stays at full contrast, and the grey
+				fill only marks chrome like banners, panels and hovers.</p>
+			<div class="swatches">
+				<div class="sw"><div class="fill" style="background:var(--color-primary)"></div><div class="meta"><b>primary</b><span>links &amp; buttons</span></div></div>
+				<div class="sw"><div class="fill" style="background:var(--green)"></div><div class="meta"><b>success green</b><span>completed, panels</span></div></div>
+				<div class="sw"><div class="fill" style="background:var(--color-accent)"></div><div class="meta"><b>accent</b><span>focus &amp; warnings</span></div></div>
+				<div class="sw"><div class="fill" style="background:var(--color-danger)"></div><div class="meta"><b>danger</b><span>errors</span></div></div>
+			</div>
+			<p class="note">Every state also carries a word or a shape — "Completed", a tag fill, a 4px
+				red rule — because color alone is never the message, and 1px #b1b4b6 draws every line
+				that needs drawing.</p>
+		</div>
+	</section>
+
+	<!-- 02 TYPE -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">02 — Typography</p>
+			<h2>A small bold ramp on a system stack</h2>
+			<p class="lede-p">Sizes sit on a 16/19/24/36/48 scale. Page titles are bold without
+				decoration, body is 19px at 1.5 (16px on mobile), and emphasis is bold — italic and
+				display faces are left out entirely. GDS Transport stays official-only; the theme uses
+				the system stack.</p>
+			<div class="typerows">
+				<div class="typerow"><span class="sample" style="font-size:40px;font-weight:700;letter-spacing:-0.02em">Renew a passport</span><span class="tag">40 · page title</span></div>
+				<div class="typerow"><span class="sample" style="font-size:36px;font-weight:700">Your application</span><span class="tag">36 · title</span></div>
+				<div class="typerow"><span class="sample" style="font-size:24px;font-weight:700">Section 2 of 3</span><span class="tag">24 · heading</span></div>
+				<div class="typerow"><span class="sample" style="font-size:19px">Renewals take up to 3 weeks from when we receive your documents.</span><span class="tag">19 · body</span></div>
+				<div class="typerow"><span class="sample" style="font-size:16px;color:var(--color-muted)">Apply online up to 3 months before you travel.</span><span class="tag">16 · secondary</span></div>
+			</div>
+			<p class="note">Long measure caps around 66 characters, which is why the reading column stays
+				narrow while banners run full width.</p>
+		</div>
+	</section>
+
+	<!-- 03 FOCUS -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">03 — Buttons &amp; focus</p>
+			<h2>The yellow ring is the elevation system</h2>
+			<p class="lede-p">Buttons are 44px rectangles with a 2px darker bottom edge — the closest
+				thing to depth in the whole system. Focus is drawn the same way everywhere: a 3px yellow
+				highlight with a black outline, over links and buttons alike.</p>
+			<div class="btnrow">
+				<a class="govbtn" href="#">Continue</a>
+				<a class="govbtn govbtn-green" href="#">Start now</a>
+				<a class="govbtn govbtn-secondary" href="#">Save and return later</a>
+				<a class="govbtn is-focus" href="#">Focused button</a>
+				<a class="is-focus" href="#">A focused link reads black on yellow</a>
+			</div>
+			<p class="note">Links keep their underline at rest and thicken to 3px on hover — hovering
+				never changes hue, so nothing shifts meaning under the pointer.</p>
+		</div>
+	</section>
+
+	<!-- 04 FEEDBACK -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">04 — Status &amp; feedback</p>
+			<h2>Words first, then colour</h2>
+			<p class="lede-p">The task list pairs each link with a square tag that says the state out
+				loud. Errors add a 4px red rule above the question, a red border on the field and red
+				text; guidance sits behind a 10px black inset bar; warnings get the yellow.</p>
+			<div class="warning"><span class="bang">!</span><span>Your photo must be less than 1 month old.</span></div>
+			<p class="inset">Check the name on your passport matches the one on your council tax bill.</p>
+			<div class="trow" style="max-width:520px"><a href="#">Upload your photo</a><span class="spacer"></span><span class="ttag late" style="font-size:16px">Incomplete</span></div>
+			<div class="trow" style="max-width:520px"><a href="#">Pay the fee</a><span class="spacer"></span><span class="ttag done" style="font-size:16px">Completed</span></div>
+			<p class="note">Red never appears without its rule and its words, and grey "Not started" is
+				deliberately quieter than red "Incomplete" — urgency is spent, not sprayed.</p>
+		</div>
+	</section>
+
+	<!-- 05 MOBILE -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">05 — Mobile</p>
+			<h2>The column narrows; nothing else gives</h2>
+			<p class="lede-p">The service drops to one full-width column with 16px body text, buttons
+				stretch edge to edge, and the task list keeps its tags — they wrap under the link rather
+				than disappearing. Corners stay square and the focus ring stays loud.</p>
+			<div class="mobile">
+				<div class="phone">
+					<div class="m-header"><span style="color:var(--color-accent)">▮</span> GOV.UK</div>
+					<div class="m-phase"><span class="ptag">BETA</span>A new service</div>
+					<div class="m-body">
+						<h1>Renew or replace a passport</h1>
+						<div class="tasklist" style="margin-top:12px">
+							<div class="trow"><a href="#">Confirm your personal details</a><span class="ttag done">Completed</span></div>
+							<div class="trow"><a href="#">Upload your photo</a><span class="ttag late">Incomplete</span></div>
+							<div class="trow"><a href="#">Countersignatory details</a><span class="ttag pending">Not started</span></div>
+						</div>
+						<p class="m-note">You cannot send documents until every section is Completed.</p>
+						<a class="govbtn" href="#" style="margin-top:16px">Continue</a>
+						<a class="govbtn govbtn-green" href="#" style="margin-top:10px">Start now</a>
+					</div>
+				</div>
+				<ul class="rules">
+					<li><b>Column</b><span>The 660px reading column becomes the full viewport minus 15px side margins; banners and the header keep running full-bleed with the same padding.</span></li>
+					<li><b>Type</b><span>Body drops from 19px to 16px, page titles from 40px to 28–32px, and line length self-limits — the scale survives, only the steps step down.</span></li>
+					<li><b>Buttons</b><span>Full-width at 44px+ height for thumbs; the 2px pressed edge stays. Secondary actions stack below the primary in the same order as on desktop.</span></li>
+					<li><b>Task list</b><span>Tags keep their 14px floor and wrap onto their own line under long links — state is never truncated to fit.</span></li>
+					<li><b>Touch</b><span>Hover underline thickening has no equivalent; pressed rows and buttons take the grey #f3f2f1 fill for the duration of the press.</span></li>
+					<li><b>Errors</b><span>The error summary jumps to the top of the page and each link in it anchors to the field — on mobile this order matters more, not less.</span></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 06 OFF-STYLE -->
+	<section class="section">
+		<div class="content">
+			<p class="section-label">06 — Off-style, for contrast</p>
+			<h2>What breaks the trust</h2>
+			<div class="compare">
+				<div class="cmp cmp-off">A marketing hero
+					<small>16px corners, a blue-to-green gradient, a heavy drop shadow, white display
+						type. Nothing here is wrong on any other page — and everything here costs credibility
+						on a service page.</small></div>
+				<div class="cmp cmp-on">Same content, on-style
+					<small>Black on white, 1px border, a blue underlined link and a green button. The page
+						looks official because nothing is trying to look exciting.</small></div>
+			</div>
+			<div class="compare">
+				<div class="cmp cmp-off"><span class="iconstatus">⚠ 3</span> &nbsp;<span class="plainlink">Upload your photo</span>
+					<small>A bare red number for status and an underline-free link that only turns red on
+						hover: state without words, and interaction signalled by color change alone.</small></div>
+				<div class="cmp cmp-on"><span class="ttag late" style="font-size:16px">Incomplete</span> &nbsp;<a href="#">Upload your photo</a>
+					<small>The tag says the state, the underline marks the link, and the color supports
+						both. Hue is never the only carrier.</small></div>
+			</div>
+			<p class="note">Also out: rounded corners, shadows, gradients, gray body copy, icons standing
+				in for labels, and any hue doing a job that already belongs to blue, green, red or yellow.</p>
+		</div>
+	</section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"kind": "design-system",
+	"slug": "fluent-2",
+	"name": "Fluent 2",
+	"version": "1.0.0",
+	"order": 109,
+	"category": "native",
+	"vibe": "light",
+	"tags": [
+		"native",
+		"light"
+	],
+	"blurb": "Windows 11 productivity: layered mica grays, acrylic flyouts, Segoe type, soft 8px corners and one calm Fluent blue.",
+	"tagline": {
+		"en": "Layered calm for getting things done",
+		"zh": "Windows 11 的层次与从容"
+	},
+	"license": "MIT",
+	"origin": {
+		"type": "curated",
+		"upstream": "https://fluent2.microsoft.design/",
+		"note": "Adapted from Microsoft Fluent 2 design guidance; factual token values with original descriptions. Not affiliated with or endorsed by Microsoft."
+	},
+	"assets": {
+		"spec": "DESIGN.md",
+		"theme": "theme.css",
+		"demo": "demo.html"
+	},
+	"collectedAt": "2026-10-04"
+}
